@@ -22,6 +22,8 @@
         self.title = NSLocalizedString(@"Map", @"Map");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
         mapRegion.center = CLLocationCoordinate2DMake(100, 100);
+        pathNr = 0;
+        userPath = [NSMutableArray arrayWithCapacity:100];
     }
     return self;
 }
@@ -65,7 +67,10 @@
     mapView.showsUserLocation = YES;
     if (CLLocationCoordinate2DIsValid(mapRegion.center)) mapView.region = mapRegion;
     shownPins = nil;
-//    NSLog(@"load");
+    UIButton * pinButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    [pinButton addTarget:self action:@selector(pinButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [mapView addSubview:pinButton];
+     //    NSLog(@"load");
 }
 
 - (void)viewDidUnload
@@ -85,6 +90,25 @@
         [mapView setRegion:[ergometerViewController.track region] animated:YES];
     [self copyPinData];
 //    NSLog(@"appear");
+}
+
+-(void)updateUserPath {
+    if (pathNr>1) {
+        CLLocationCoordinate2D * points = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), pathNr);
+        for (int i=0; i<pathNr; i++) points[i] = [[userPath objectAtIndex:i] coordinate];
+        MKPolyline * p = [MKPolyline polylineWithCoordinates:points count:pathNr];
+        free(points);
+        [mapView addOverlay:p];
+    }    
+}
+
+-(void)pinButtonPressed:(id)sender {
+    PathAnnotation * new = [[PathAnnotation alloc] initWithID:pathNr];
+    new.coordinate = mapView.centerCoordinate;
+    [mapView addAnnotation:new];
+    // keep a copy
+    [userPath insertObject:new atIndex:pathNr];
+    pathNr++;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -137,10 +161,25 @@
     } else {
         pin.annotation = annotation;
     }
-    pin.pinColor = MKPinAnnotationColorRed;
-    pin.animatesDrop = NO;
-    pin.canShowCallout = YES;
+    if ([annotation isKindOfClass:[PathAnnotation class]]) {
+        pin.pinColor = MKPinAnnotationColorPurple;
+        pin.animatesDrop = YES;
+        pin.canShowCallout = YES;
+        pin.draggable = YES;
+    } else {
+        pin.pinColor = MKPinAnnotationColorRed;
+        pin.animatesDrop = NO;
+        pin.canShowCallout = YES;
+        pin.draggable = NO;
+    }
     return pin;
+}
+
+-(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
+    if (newState == MKAnnotationViewDragStateEnding) {
+        NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
+        [self updateUserPath];
+    }
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -151,5 +190,23 @@
 }
 
 
+
+@end
+
+@implementation PathAnnotation;
+
+-(id)initWithID:(int)i {
+    self = [self init];
+    if (self) ID = i;
+    self.title = [NSString stringWithFormat:@"%d", i+1];
+    return self;
+}
+
+/* 
+ -(void)setCoordinate:(CLLocationCoordinate2D)c {
+    NSLog(@"new coordinate");
+    coordinate = c;
+}
+  */ 
 
 @end

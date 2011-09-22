@@ -17,12 +17,19 @@
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
     NSArray * shownPins;
+    int pathNr;
+    NSMutableArray * userPath;
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;
 @property (strong, nonatomic) MKMapView * mapView;
 @property (strong, nonatomic) NSArray * shownPins;
 
--(void)addPin:(CLLocation*)loc;
+@end
+
+@interface PathAnnotation : MKPointAnnotation {
+    int ID;
+}
+-(id)initWithID:(int)i;
 
 @end
