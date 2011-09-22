@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
+#import "ErgometerViewController.h"
+
+
+@interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
+    ErgometerViewController * ergometerViewController;
+}
 
 @property (strong, nonatomic) UIWindow *window;
 

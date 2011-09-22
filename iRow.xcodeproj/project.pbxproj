@@ -13,14 +13,24 @@
 		6319A67B14263D590035EB18 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6319A67914263D590035EB18 /* InfoPlist.strings */; };
 		6319A67D14263D590035EB18 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A67C14263D590035EB18 /* main.m */; };
 		6319A68114263D590035EB18 /* iRowAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68014263D590035EB18 /* iRowAppDelegate.m */; };
-		6319A68414263D590035EB18 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68314263D590035EB18 /* FirstViewController.m */; };
+		6319A68414263D590035EB18 /* ErgometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68314263D590035EB18 /* ErgometerViewController.m */; };
 		6319A68614263D590035EB18 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68514263D590035EB18 /* first.png */; };
 		6319A68814263D590035EB18 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68714263D590035EB18 /* first@2x.png */; };
-		6319A68B14263D590035EB18 /* SecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68A14263D590035EB18 /* SecondViewController.m */; };
+		6319A68B14263D590035EB18 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68A14263D590035EB18 /* MapViewController.m */; };
 		6319A68D14263D590035EB18 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68C14263D590035EB18 /* second.png */; };
 		6319A68F14263D590035EB18 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68E14263D590035EB18 /* second@2x.png */; };
-		6319A69214263D590035EB18 /* FirstViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* FirstViewController.xib */; };
-		6319A69514263D590035EB18 /* SecondViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69314263D590035EB18 /* SecondViewController.xib */; };
+		6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* ErgometerViewController.xib */; };
+		6319A69514263D590035EB18 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69314263D590035EB18 /* MapViewController.xib */; };
+		634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F68142647270001BF57 /* CoreLocation.framework */; };
+		634A7F711427311F0001BF57 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F701427311F0001BF57 /* Track.m */; };
+		634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F771427564C0001BF57 /* MapKit.framework */; };
+		634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F821427DC8B0001BF57 /* CoreMotion.framework */; };
+		634A7F861427DFE90001BF57 /* Stroke.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F851427DFE90001BF57 /* Stroke.m */; };
+		634A7F8C1428B19A0001BF57 /* stroke.filt in Resources */ = {isa = PBXBuildFile; fileRef = 634A7F8B1428B19A0001BF57 /* stroke.filt */; };
+		634A7F8F1428B2240001BF57 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F8E1428B2240001BF57 /* Filter.m */; };
+		634A7F981428B3C10001BF57 /* Vector.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F961428B3C10001BF57 /* Vector.m */; };
+		634A7F9E1429CA880001BF57 /* Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F9D1429CA880001BF57 /* Matrix.m */; };
+		634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7FA01429CF5B0001BF57 /* Matrix+operations.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,22 +38,38 @@
 		6319A67014263D590035EB18 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6319A67214263D590035EB18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6319A67414263D590035EB18 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		6319A67814263D590035EB18 /* iRow-Info.plist */ = {isa = PBXFileReference; path = "iRow-Info.plist"; sourceTree = "<group>"; };
+		6319A67814263D590035EB18 /* iRow-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "iRow-Info.plist"; sourceTree = "<group>"; };
 		6319A67A14263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6319A67C14263D590035EB18 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		6319A67E14263D590035EB18 /* iRow-Prefix.pch */ = {isa = PBXFileReference; path = "iRow-Prefix.pch"; sourceTree = "<group>"; };
-		6319A67F14263D590035EB18 /* iRowAppDelegate.h */ = {isa = PBXFileReference; path = iRowAppDelegate.h; sourceTree = "<group>"; };
+		6319A67E14263D590035EB18 /* iRow-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "iRow-Prefix.pch"; sourceTree = "<group>"; };
+		6319A67F14263D590035EB18 /* iRowAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = iRowAppDelegate.h; sourceTree = "<group>"; };
 		6319A68014263D590035EB18 /* iRowAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iRowAppDelegate.m; sourceTree = "<group>"; };
-		6319A68214263D590035EB18 /* FirstViewController.h */ = {isa = PBXFileReference; path = FirstViewController.h; sourceTree = "<group>"; };
-		6319A68314263D590035EB18 /* FirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FirstViewController.m; sourceTree = "<group>"; };
+		6319A68214263D590035EB18 /* ErgometerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErgometerViewController.h; sourceTree = "<group>"; };
+		6319A68314263D590035EB18 /* ErgometerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ErgometerViewController.m; sourceTree = "<group>"; };
 		6319A68514263D590035EB18 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		6319A68714263D590035EB18 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		6319A68914263D590035EB18 /* SecondViewController.h */ = {isa = PBXFileReference; path = SecondViewController.h; sourceTree = "<group>"; };
-		6319A68A14263D590035EB18 /* SecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecondViewController.m; sourceTree = "<group>"; };
+		6319A68914263D590035EB18 /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		6319A68A14263D590035EB18 /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		6319A68C14263D590035EB18 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		6319A68E14263D590035EB18 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
-		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FirstViewController.xib; sourceTree = "<group>"; };
-		6319A69414263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SecondViewController.xib; sourceTree = "<group>"; };
+		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ErgometerViewController.xib; sourceTree = "<group>"; };
+		6319A69414263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController.xib; sourceTree = "<group>"; };
+		634A7F68142647270001BF57 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		634A7F6F1427311F0001BF57 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		634A7F701427311F0001BF57 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		634A7F771427564C0001BF57 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		634A7F821427DC8B0001BF57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		634A7F841427DFE90001BF57 /* Stroke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stroke.h; sourceTree = "<group>"; };
+		634A7F851427DFE90001BF57 /* Stroke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stroke.m; sourceTree = "<group>"; };
+		634A7F8B1428B19A0001BF57 /* stroke.filt */ = {isa = PBXFileReference; lastKnownFileType = file; path = stroke.filt; sourceTree = "<group>"; };
+		634A7F8D1428B2240001BF57 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		634A7F8E1428B2240001BF57 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
+		634A7F961428B3C10001BF57 /* Vector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Vector.m; path = ../../iSTI/Vector.m; sourceTree = "<group>"; };
+		634A7F971428B3C10001BF57 /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector.h; path = ../../iSTI/Vector.h; sourceTree = "<group>"; };
+		634A7F9C1429CA880001BF57 /* Matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Matrix.h; path = ../../iSTI/Matrix.h; sourceTree = "<group>"; };
+		634A7F9D1429CA880001BF57 /* Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Matrix.m; path = ../../iSTI/Matrix.m; sourceTree = "<group>"; };
+		634A7F9F1429CF5B0001BF57 /* Matrix+operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Matrix+operations.h"; sourceTree = "<group>"; };
+		634A7FA01429CF5B0001BF57 /* Matrix+operations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Matrix+operations.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +77,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */,
+				634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */,
+				634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */,
 				6319A67114263D590035EB18 /* UIKit.framework in Frameworks */,
 				6319A67314263D590035EB18 /* Foundation.framework in Frameworks */,
 				6319A67514263D590035EB18 /* CoreGraphics.framework in Frameworks */,
@@ -64,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				6319A67614263D590035EB18 /* iRow */,
+				634A7F871428AF840001BF57 /* signal processing */,
 				6319A66F14263D590035EB18 /* Frameworks */,
 				6319A66D14263D590035EB18 /* Products */,
 			);
@@ -80,6 +110,9 @@
 		6319A66F14263D590035EB18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				634A7F821427DC8B0001BF57 /* CoreMotion.framework */,
+				634A7F771427564C0001BF57 /* MapKit.framework */,
+				634A7F68142647270001BF57 /* CoreLocation.framework */,
 				6319A67014263D590035EB18 /* UIKit.framework */,
 				6319A67214263D590035EB18 /* Foundation.framework */,
 				6319A67414263D590035EB18 /* CoreGraphics.framework */,
@@ -92,16 +125,16 @@
 			children = (
 				6319A67F14263D590035EB18 /* iRowAppDelegate.h */,
 				6319A68014263D590035EB18 /* iRowAppDelegate.m */,
-				6319A68214263D590035EB18 /* FirstViewController.h */,
-				6319A68314263D590035EB18 /* FirstViewController.m */,
-				6319A68514263D590035EB18 /* first.png */,
-				6319A68714263D590035EB18 /* first@2x.png */,
-				6319A68914263D590035EB18 /* SecondViewController.h */,
-				6319A68A14263D590035EB18 /* SecondViewController.m */,
-				6319A68C14263D590035EB18 /* second.png */,
-				6319A68E14263D590035EB18 /* second@2x.png */,
-				6319A69014263D590035EB18 /* FirstViewController.xib */,
-				6319A69314263D590035EB18 /* SecondViewController.xib */,
+				6319A68214263D590035EB18 /* ErgometerViewController.h */,
+				6319A68314263D590035EB18 /* ErgometerViewController.m */,
+				634A7F841427DFE90001BF57 /* Stroke.h */,
+				634A7F851427DFE90001BF57 /* Stroke.m */,
+				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
+				634A7F6F1427311F0001BF57 /* Track.h */,
+				634A7F701427311F0001BF57 /* Track.m */,
+				6319A68914263D590035EB18 /* MapViewController.h */,
+				6319A68A14263D590035EB18 /* MapViewController.m */,
+				6319A69314263D590035EB18 /* MapViewController.xib */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
 			path = iRow;
@@ -110,12 +143,33 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				634A7F8B1428B19A0001BF57 /* stroke.filt */,
+				6319A68514263D590035EB18 /* first.png */,
+				6319A68714263D590035EB18 /* first@2x.png */,
+				6319A68C14263D590035EB18 /* second.png */,
+				6319A68E14263D590035EB18 /* second@2x.png */,
 				6319A67814263D590035EB18 /* iRow-Info.plist */,
 				6319A67914263D590035EB18 /* InfoPlist.strings */,
 				6319A67C14263D590035EB18 /* main.m */,
 				6319A67E14263D590035EB18 /* iRow-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		634A7F871428AF840001BF57 /* signal processing */ = {
+			isa = PBXGroup;
+			children = (
+				634A7F9C1429CA880001BF57 /* Matrix.h */,
+				634A7F9D1429CA880001BF57 /* Matrix.m */,
+				634A7F971428B3C10001BF57 /* Vector.h */,
+				634A7F961428B3C10001BF57 /* Vector.m */,
+				634A7F8D1428B2240001BF57 /* Filter.h */,
+				634A7F8E1428B2240001BF57 /* Filter.m */,
+				634A7F9F1429CF5B0001BF57 /* Matrix+operations.h */,
+				634A7FA01429CF5B0001BF57 /* Matrix+operations.m */,
+			);
+			name = "signal processing";
+			path = iRow;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,8 +227,9 @@
 				6319A68814263D590035EB18 /* first@2x.png in Resources */,
 				6319A68D14263D590035EB18 /* second.png in Resources */,
 				6319A68F14263D590035EB18 /* second@2x.png in Resources */,
-				6319A69214263D590035EB18 /* FirstViewController.xib in Resources */,
-				6319A69514263D590035EB18 /* SecondViewController.xib in Resources */,
+				6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */,
+				6319A69514263D590035EB18 /* MapViewController.xib in Resources */,
+				634A7F8C1428B19A0001BF57 /* stroke.filt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -187,8 +242,14 @@
 			files = (
 				6319A67D14263D590035EB18 /* main.m in Sources */,
 				6319A68114263D590035EB18 /* iRowAppDelegate.m in Sources */,
-				6319A68414263D590035EB18 /* FirstViewController.m in Sources */,
-				6319A68B14263D590035EB18 /* SecondViewController.m in Sources */,
+				6319A68414263D590035EB18 /* ErgometerViewController.m in Sources */,
+				6319A68B14263D590035EB18 /* MapViewController.m in Sources */,
+				634A7F711427311F0001BF57 /* Track.m in Sources */,
+				634A7F861427DFE90001BF57 /* Stroke.m in Sources */,
+				634A7F8F1428B2240001BF57 /* Filter.m in Sources */,
+				634A7F981428B3C10001BF57 /* Vector.m in Sources */,
+				634A7F9E1429CA880001BF57 /* Matrix.m in Sources */,
+				634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,20 +264,20 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		6319A69014263D590035EB18 /* FirstViewController.xib */ = {
+		6319A69014263D590035EB18 /* ErgometerViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6319A69114263D590035EB18 /* en */,
 			);
-			name = FirstViewController.xib;
+			name = ErgometerViewController.xib;
 			sourceTree = "<group>";
 		};
-		6319A69314263D590035EB18 /* SecondViewController.xib */ = {
+		6319A69314263D590035EB18 /* MapViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
 				6319A69414263D590035EB18 /* en */,
 			);
-			name = SecondViewController.xib;
+			name = MapViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -242,7 +303,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -260,7 +321,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -308,6 +369,7 @@
 				6319A69A14263D590035EB18 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

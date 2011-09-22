@@ -12,3 +12,9 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+// needed for Filter.h...  Not very pretty...
+typedef double real_t;
+typedef double sample_t;
+typedef double coef_t;
+#define MALLOC(t,v,s) v=(t*) calloc(s,sizeof(t))

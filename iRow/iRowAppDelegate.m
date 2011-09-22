@@ -8,9 +8,8 @@
 
 #import "iRowAppDelegate.h"
 
-#import "FirstViewController.h"
 
-#import "SecondViewController.h"
+#import "MapViewController.h"
 
 @implementation iRowAppDelegate
 
@@ -21,12 +20,15 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    UIViewController *viewController1 = [[FirstViewController alloc] initWithNibName:@"FirstViewController" bundle:nil];
-    UIViewController *viewController2 = [[SecondViewController alloc] initWithNibName:@"SecondViewController" bundle:nil];
+    ergometerViewController = [[ErgometerViewController alloc] initWithNibName:@"ErgometerViewController" bundle:nil];
+    MapViewController *mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
+    ergometerViewController.mapViewController = mapViewController;
+    mapViewController.ergometerViewController = ergometerViewController;
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:viewController1, viewController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    
     return YES;
 }
 
@@ -36,6 +38,7 @@
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
+    [ergometerViewController.locationManager stopUpdatingLocation];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -58,6 +61,7 @@
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
+    [ergometerViewController.locationManager startUpdatingLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
