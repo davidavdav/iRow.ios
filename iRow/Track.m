@@ -15,6 +15,7 @@
 @implementation Track
 
 @synthesize locationManager;
+@synthesize delegate;
 @synthesize locations, pins;
 
 - (id)initWithPeriod:(double)p
@@ -31,6 +32,10 @@
     }
     
     return self;
+}
+
+-(void)inspectLocation:(id)sender {
+    if (delegate) [delegate locationUpdate:self];
 }
 
 -(void)add:(CLLocation*)loc {

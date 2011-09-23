@@ -37,14 +37,16 @@ enum {
     if (self) {
         self.title = NSLocalizedString(@"Ergometer", @"Ergometer");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
-        // location
+        // location tracking
         dTlocation = 1.0;
         lastStrokeTime = 0;
-        // tracking
-        track = [[Track alloc] init];
+        track = [[Track alloc] initWithPeriod:dTlocation];
+        track.delegate = self;
+        // stroke counting
         dTmotion = 0.1;
         stroke = [[Stroke alloc] initWithPeriod:dTmotion duration:kStrokeAveragingDuration];
         stroke.delegate=self;
+        // init of vars
         started = NO;
         speedUnit = kSpeedTimePer500m;
         curSpeed = -1; // invalid
@@ -146,13 +148,29 @@ enum {
 	[super viewDidDisappear:animated];
 }
 
+-(void)locationUpdate:(id)sender {
+    CLLocation * here = track.locationManager.location;
+    // current speed
+    distanceUnitLabel.text = [NSString stringWithFormat:@"(%1.0f)    m",here.horizontalAccuracy];
+    curSpeed = here.speed;
+    unsigned int mask = kCurrentLocation;
+    if (started) {
+        [track add:here];
+        distance = track.totalDistance;
+        CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
+        totalTime = now - startTime;
+        mask |= kCumulatives;
+    }
+    [self updateValues:mask];
+}
+
 -(IBAction)startPressed:(id)sender {
     if (!started) {
         started = YES;
         startTime = CFAbsoluteTimeGetCurrent();
         startStroke = stroke.strokes;
         [track reset];
-        [self inspectLocation:self];
+        [self locationUpdate:self];
         [track addPin:@"start" atLocation:track.startLocation];
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     } else {
@@ -167,22 +185,6 @@ enum {
     [self setButtonAppearance];
 }
 
-
--(void)locationUpdate:(Track*)sender {
-    CLLocation * here = sender.locationManager.location;
-    // current speed
-    distanceUnitLabel.text = [NSString stringWithFormat:@"(%1.0f)    m",here.horizontalAccuracy];
-    curSpeed = here.speed;
-    unsigned int mask = kCurrentLocation;
-    if (started) {
-        [track add:here];
-        distance = track.totalDistance;
-        CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
-        totalTime = now - startTime;
-        mask |= kCumulatives;
-    }
-    [self updateValues:mask];
-}
 
 
 #pragma mark StrokeDelegate

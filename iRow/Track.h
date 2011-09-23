@@ -20,14 +20,17 @@
     CLLocationManager * locationManager;
     NSTimer * locationTimer;
     float period;
+    id<TrackDelegate> delegate;
     NSMutableArray * locations;
     NSMutableArray * pins;
 }
 
 @property (strong, nonatomic) CLLocationManager * locationManager;
+@property (strong, nonatomic) id<TrackDelegate> delegate;
 @property (strong, readonly) NSMutableArray *  locations;
 @property (strong, readonly) NSMutableArray *  pins;
 
+-(id)initWithPeriod:(double)period;
 -(void)add:(CLLocation*)loc;
 -(void)addPin:(NSString*)name atLocation:(CLLocation*)loc;
 
