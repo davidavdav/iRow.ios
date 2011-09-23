@@ -28,7 +28,6 @@ enum {
 @synthesize timeLabel, distanceLabel, distanceUnitLabel;
 
 @synthesize track, started;
-@synthesize locationManager;
 
 @synthesize mapViewController;
 
@@ -39,10 +38,7 @@ enum {
         self.title = NSLocalizedString(@"Ergometer", @"Ergometer");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
         // location
-        locationManager = [[CLLocationManager alloc] init];
-        [locationManager startUpdatingLocation];
         dTlocation = 1.0;
-        locationTimer = [NSTimer scheduledTimerWithTimeInterval:dTlocation target:self selector:@selector(inspectLocation:) userInfo:nil repeats:YES];
         lastStrokeTime = 0;
         // tracking
         track = [[Track alloc] init];
@@ -172,8 +168,8 @@ enum {
 }
 
 
--(void)inspectLocation:(id)sender {
-    CLLocation * here = locationManager.location;
+-(void)locationUpdate:(Track*)sender {
+    CLLocation * here = sender.locationManager.location;
     // current speed
     distanceUnitLabel.text = [NSString stringWithFormat:@"(%1.0f)    m",here.horizontalAccuracy];
     curSpeed = here.speed;

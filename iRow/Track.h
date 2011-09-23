@@ -10,11 +10,21 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+@protocol TrackDelegate <NSObject>
+
+-(void)locationUpdate:(id)sender;
+
+@end
+
 @interface Track : NSObject {
+    CLLocationManager * locationManager;
+    NSTimer * locationTimer;
+    float period;
     NSMutableArray * locations;
     NSMutableArray * pins;
 }
 
+@property (strong, nonatomic) CLLocationManager * locationManager;
 @property (strong, readonly) NSMutableArray *  locations;
 @property (strong, readonly) NSMutableArray *  pins;
 

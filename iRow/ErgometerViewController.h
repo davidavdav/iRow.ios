@@ -21,7 +21,7 @@ enum {
     kSpeedMilesPerHour,
 } speedUnit;
 
-@interface ErgometerViewController : UIViewController <StrokeDelegate> {
+@interface ErgometerViewController : UIViewController <TrackDelegate, StrokeDelegate> {
     // interface
     IBOutlet UIButton * startButton;
     IBOutlet UILabel * curSpeedLabel;
@@ -36,9 +36,7 @@ enum {
     // button colors/images
     UIImage * buttonImage[4];
     // location
-    CLLocationManager * locationManager;
     BOOL started;
-    NSTimer * locationTimer;
     float dTlocation;
     Track * track;
     Stroke * stroke;
@@ -69,7 +67,6 @@ enum {
 @property (strong, nonatomic) IBOutlet UILabel * distanceUnitLabel;
 
 
-@property (strong, nonatomic) CLLocationManager * locationManager;
 @property (strong, nonatomic) Track * track;
 @property (readonly) BOOL started;
 

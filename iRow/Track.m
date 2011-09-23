@@ -10,16 +10,22 @@
 
 // minimum span of the map region, in meters.
 #define kMinMapSize (250)
+#define kMargin (1.1)
 
 @implementation Track
 
+@synthesize locationManager;
 @synthesize locations, pins;
 
-- (id)init
+- (id)initWithPeriod:(double)p
 {
     self = [super init];
     if (self) {
         // Initialization code here.
+        locationManager = [[CLLocationManager alloc] init];
+        [locationManager startUpdatingLocation];
+        period = p;
+        locationTimer = [NSTimer scheduledTimerWithTimeInterval:p target:self selector:@selector(inspectLocation:) userInfo:nil repeats:YES];
         locations = [NSMutableArray arrayWithCapacity:1000];
         pins = [NSMutableArray arrayWithCapacity:10];
     }
@@ -114,8 +120,8 @@
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake((top+bottom)/2, (left+right)/2), 
         leftC = CLLocationCoordinate2DMake((top+bottom)/2, left), 
         topC = CLLocationCoordinate2DMake(top, (left+right)/2);
-    CLLocationDistance width = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(leftC))*2,
-        height = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(topC)) * 2;
+    CLLocationDistance width = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(leftC))*2*kMargin,
+        height = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(topC)) * 2 * kMargin;
     return MKCoordinateRegionMakeWithDistance(center, MAX(height, kMinMapSize), MAX(width, kMinMapSize));
 }
 
