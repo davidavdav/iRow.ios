@@ -57,6 +57,8 @@ enum {
         aveStrokeFreq = 0;
         totalStrokes = 0;
         totalTime = 0;
+        NSArray * imageNames = [NSArray arrayWithObjects:@"start-button", @"start-button-highlighted", @"stop-button", @"stop-button-highlighted", nil];
+        for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[imageNames objectAtIndex:i]];
         // mapviewcontroller must be set from appdelegate
     }
     return self;
@@ -103,6 +105,13 @@ enum {
     }
 }
 
+// this updates the button according to the recordingstate
+-(void)setButtonAppearance {
+    [startButton setBackgroundImage:buttonImage[2*started] forState:UIControlStateNormal];
+    [startButton setBackgroundImage:buttonImage[2*started+1] forState:UIControlStateHighlighted];    
+    [startButton setTitle: started ? @"stop":@"start" forState:UIControlStateNormal];
+}
+
 #pragma mark - View lifecycle
 
 // this may also be called after another tab was selected.  Or not. 
@@ -111,7 +120,7 @@ enum {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     [self updateValues:kCurrentLocation | kCurrentStroke | kCumulatives];
-    [startButton setTitle: started ? @"stop":@"start" forState:UIControlStateNormal];
+    [self setButtonAppearance];
 }
 
 - (void)viewDidUnload
@@ -147,21 +156,19 @@ enum {
         startTime = CFAbsoluteTimeGetCurrent();
         startStroke = stroke.strokes;
         [track reset];
-        [startButton setTitle:@"stop" forState:UIControlStateNormal];
         [self inspectLocation:self];
-        [mapViewController.mapView removeAnnotations:mapViewController.mapView.annotations];
         [track addPin:@"start" atLocation:track.startLocation];
         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     } else {
         started = NO;
-        totalStrokes = stroke.strokes - startStroke;
         totalTime = CFAbsoluteTimeGetCurrent() - startTime;
+        totalStrokes = stroke.strokes - startStroke;
         distance = track.totalDistance;
-        [startButton setTitle:@"start" forState:UIControlStateNormal];
         [track addPin:@"stop" atLocation:track.stopLocation];
         [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 
     }
+    [self setButtonAppearance];
 }
 
 

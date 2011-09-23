@@ -33,6 +33,8 @@ enum {
     IBOutlet UILabel * distanceLabel;
     IBOutlet UILabel * distanceUnitLabel;
     MapViewController * mapViewController;
+    // button colors/images
+    UIImage * buttonImage[4];
     // location
     CLLocationManager * locationManager;
     BOOL started;
