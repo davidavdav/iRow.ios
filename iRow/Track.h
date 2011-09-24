@@ -16,7 +16,9 @@
 
 @end
 
-@interface Track : NSObject {
+@class TrackPolyline;
+
+@interface Track : NSObject <NSCoding> {
     CLLocationManager * locationManager;
     NSTimer * locationTimer;
     float period;
@@ -37,10 +39,16 @@
 -(void)reset;
 -(CLLocationDistance)totalDistance;
 -(CLLocationSpeed)averageSpeed;
--(int)newTrackData:(CLLocationCoordinate2D**)trackdataPtr;
+-(MKPolyline*)trackData;
 -(CLLocation*)startLocation;
 -(CLLocation*)stopLocation;
 -(MKCoordinateRegion)region;
 -(int)count;
 
+@end
+
+@interface TrackPolyline : MKPolyline {
+@private
+    int ID;
+}
 @end

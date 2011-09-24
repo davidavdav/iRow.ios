@@ -97,6 +97,19 @@
     return n;
 }
 
+-(MKPolyline*)trackData {
+    CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
+    int n=0;
+    for (CLLocation * l in locations) {
+        if (l.horizontalAccuracy>0) {
+            trackdata[n++] = l.coordinate;
+        }
+    }
+    MKPolyline * polyline = [MKPolyline polylineWithCoordinates:trackdata count:n];
+    free(trackdata);
+    return polyline;
+}
+
 -(NSArray*)pinData {
     return pins;
 }
@@ -134,6 +147,26 @@
     return locations.count;
 }
 
+-(void)encodeWithCoder:(NSCoder *)enc {
+    [enc encodeDouble:period forKey:@"period"];
+    [enc encodeObject:locations forKey:@"locations"];
+    [enc encodeObject:pins forKey:@"pins"];
+}
 
+-(id)initWithCoder:(NSCoder *)dec {
+	self = [super init];
+	if (self != nil) {
+		period = [[dec valueForKey:@"period"] doubleValue];
+        locations = [dec valueForKey:@"locations"];
+        pins = [dec valueForKey:@"pins"];
+    }
+    return self;
+}
+
+
+@end
+
+
+@implementation TrackPolyline
 
 @end
