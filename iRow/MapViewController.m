@@ -14,6 +14,7 @@
 @synthesize ergometerViewController;
 @synthesize mapView;
 @synthesize shownPins;
+@synthesize currentTrackPolyLine, currentRoutePolyline;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,14 +36,11 @@
 }
 
 -(int)copyTrackData {
-    CLLocationCoordinate2D * trackData;
-    int n = [ergometerViewController.track newTrackData:&trackData];
-    MKPolyline * trackPolyline = [MKPolyline polylineWithCoordinates:trackData count:n];
-    NSArray * old = mapView.overlays;
-    [mapView addOverlay:trackPolyline];
-    [mapView removeOverlays:old];
-    free(trackData);
-    return n;
+    MKPolyline * old = currentTrackPolyLine;
+    currentTrackPolyLine = [ergometerViewController.track trackData];
+    [mapView addOverlay:currentTrackPolyLine];
+    if (old!=nil) [mapView removeOverlay:old];
+    return currentTrackPolyLine.pointCount;
 }
 
 -(void)copyPinData {
@@ -69,7 +67,20 @@
     shownPins = nil;
     UIButton * pinButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [pinButton addTarget:self action:@selector(pinButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    CGFloat size = pinButton.bounds.size.width;
     [mapView addSubview:pinButton];
+    saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [saveButton addTarget:self action:@selector(saveButton:) forControlEvents:UIControlEventTouchUpInside];
+    [saveButton setTitle:@"save" forState:UIControlStateNormal];
+    saveButton.frame = CGRectMake(40, 0, 50, size);
+    saveButton.hidden = YES;
+    [mapView addSubview:saveButton];
+    clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [clearButton setImage:[UIImage imageNamed:@"GKClearButton"] forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(mapView.bounds.size.width - size, 0, size, size);
+    clearButton.hidden = YES;
+    [clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [mapView addSubview:clearButton];
      //    NSLog(@"load");
 }
 
@@ -93,12 +104,16 @@
 }
 
 -(void)updateUserPath {
-    if (pathNr>1) {
-        CLLocationCoordinate2D * points = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), pathNr);
-        for (int i=0; i<pathNr; i++) points[i] = [[userPath objectAtIndex:i] coordinate];
-        MKPolyline * p = [MKPolyline polylineWithCoordinates:points count:pathNr];
-        free(points);
-        [mapView addOverlay:p];
+    if (currentRoutePolyline != nil || userPath.count>1) {
+        MKPolyline * old = currentRoutePolyline;
+        if (userPath.count>1) {
+            CLLocationCoordinate2D * points = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), userPath.count);
+            for (int i=0; i<userPath.count; i++) points[i] = [[userPath objectAtIndex:i] coordinate];
+            currentRoutePolyline = [MKPolyline polylineWithCoordinates:points count:userPath.count];
+            free(points);
+            [mapView addOverlay:currentRoutePolyline];
+        }
+        [mapView removeOverlay:old];
     }    
 }
 
@@ -107,8 +122,24 @@
     new.coordinate = mapView.centerCoordinate;
     [mapView addAnnotation:new];
     // keep a copy
-    [userPath insertObject:new atIndex:pathNr];
+    [userPath addObject:new];
     pathNr++;
+    [self updateUserPath];
+    saveButton.hidden = userPath.count<2;
+}
+
+-(void)clearButtonPressed:(id)sender {
+    NSArray * selected = mapView.selectedAnnotations;
+    NSLog(@"%@", mapView.selectedAnnotations);
+    if (selected.count) {
+        for (MKPointAnnotation * a in selected) {
+            [userPath removeObject:a];
+            [mapView removeAnnotation:a];
+            NSLog(@"%@", userPath);
+        }
+    }
+    [self updateUserPath];
+    saveButton.hidden = userPath.count<2;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -140,11 +171,17 @@
 // this draws the track
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-    if ([overlay isKindOfClass:[MKPolyline class]]) {
+    if (overlay == currentTrackPolyLine) {
         MKPolylineView * trackView = [[MKPolylineView alloc] initWithPolyline:overlay];
         trackView.strokeColor = [UIColor purpleColor];
         trackView.lineWidth = 5;
         return trackView;
+    }
+    if (overlay == currentRoutePolyline) {
+        MKPolylineView * routeView = [[MKPolylineView alloc] initWithPolyline:overlay];
+        routeView.strokeColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+        routeView.lineWidth = 15;
+        return routeView;
     }
     return nil;
 }
@@ -162,12 +199,12 @@
         pin.annotation = annotation;
     }
     if ([annotation isKindOfClass:[PathAnnotation class]]) {
-        pin.pinColor = MKPinAnnotationColorPurple;
+        pin.pinColor = MKPinAnnotationColorGreen;
         pin.animatesDrop = YES;
         pin.canShowCallout = YES;
         pin.draggable = YES;
     } else {
-        pin.pinColor = MKPinAnnotationColorRed;
+        pin.pinColor = MKPinAnnotationColorPurple;
         pin.animatesDrop = NO;
         pin.canShowCallout = YES;
         pin.draggable = NO;
@@ -175,10 +212,25 @@
     return pin;
 }
 
+// not even a delegate
+
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
         NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
         [self updateUserPath];
+    }
+}
+
+-(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
+    if ([view.annotation isKindOfClass:[PathAnnotation class]]) {
+        clearButton.hidden = NO;
+        NSLog(@"%@", mapView.selectedAnnotations);
+    }
+}
+
+-(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
+    if ([view.annotation isKindOfClass:[PathAnnotation class]]) {
+        clearButton.hidden = YES;        
     }
 }
 

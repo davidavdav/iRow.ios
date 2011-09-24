@@ -14,16 +14,20 @@
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
     MKMapView * mapView;
+    UIButton * saveButton, *clearButton;
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
     NSArray * shownPins;
     int pathNr;
     NSMutableArray * userPath;
+    MKPolyline * currentTrackPolyLine;
+    MKPolyline * currentRoutePolyline; 
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;
 @property (strong, nonatomic) MKMapView * mapView;
 @property (strong, nonatomic) NSArray * shownPins;
+@property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentRoutePolyline;
 
 @end
 
