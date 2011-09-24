@@ -178,7 +178,7 @@ enum {
         totalTime = CFAbsoluteTimeGetCurrent() - startTime;
         totalStrokes = stroke.strokes - startStroke;
         distance = track.totalDistance;
-        [track addPin:@"stop" atLocation:track.stopLocation];
+        [track addPin:@"end" atLocation:track.stopLocation];
         [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 
     }
