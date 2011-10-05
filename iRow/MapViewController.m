@@ -135,8 +135,8 @@ enum {
 //    [courseButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [mapView addSubview:courseButton];
     clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [clearButton setImage:[UIImage imageNamed:@"GKClearButton"] forState:UIControlStateNormal];
-    clearButton.frame = CGRectMake(w - pinHeight, 0, pinHeight, pinHeight);
+    [clearButton setImage:[UIImage imageNamed:@"PLBlueMinus"] forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(w - pinHeight - 10, 10, pinHeight, pinHeight);
     clearButton.hidden = YES;
     [clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [mapView addSubview:clearButton];
