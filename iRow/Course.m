@@ -67,7 +67,7 @@
     return self;
 }
 
--(void) updateNormals {
+-(void) update {
     if (waypoints.count < 2) return;
     [normals removeAllObjects];
     CLLocationCoordinate2D from = [[waypoints objectAtIndex:0] coordinate];
@@ -96,7 +96,7 @@
     waypointNr++;
     new.title = [NSString stringWithFormat:@"%d",waypointNr];
     [waypoints addObject:new];
-    [self updateNormals];
+    [self update];
     return new;
 }
 
@@ -171,7 +171,7 @@
         finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
         startNormal = [[Normal alloc] init];
         normals = [NSMutableArray arrayWithCapacity:11];
-        [self updateNormals];
+        [self update];
     }
     return self;
 }

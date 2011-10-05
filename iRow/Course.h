@@ -37,6 +37,7 @@
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc;
 -(void)removeWaypoint:(MKPointAnnotation*)point;
+-(void)update;
 -(int)count;
 -(BOOL)isValid;
 -(MKPolyline*)polyline;
