@@ -27,7 +27,7 @@ enum {
 @synthesize strokeFreqLabel, aveStrokeFreqLabel, totalStrokesLabel;
 @synthesize timeLabel, distanceLabel, distanceUnitLabel;
 
-@synthesize track, started;
+@synthesize track, trackingState;
 
 @synthesize mapViewController;
 
@@ -47,7 +47,7 @@ enum {
         stroke = [[Stroke alloc] initWithPeriod:dTmotion duration:kStrokeAveragingDuration];
         stroke.delegate=self;
         // init of vars
-        started = NO;
+        trackingState = kTrackingStateStopped;
         speedUnit = kSpeedTimePer500m;
         curSpeed = -1; // invalid
         aveSpeed = -1;
@@ -89,7 +89,8 @@ enum {
         [self displaySpeed:curSpeed atLabel:curSpeedLabel];
         aveSpeed = distance / totalTime;
         [self displaySpeed:aveSpeed atLabel:aveSpeedLabel];
-        distanceLabel.text = [NSString stringWithFormat:@"%4.0f", distance];
+        distanceLabel.text = [[NSString stringWithFormat:@"%4.0f", distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
+        distanceLabel.textColor = distance < 0 ? [UIColor redColor] : mapViewController.validCourse && trackingState==kTrackingStateTracking ? [UIColor blueColor] : [UIColor blackColor];
     }
     if (mask & kCurrentStroke) {
         strokeFreqLabel.text = [NSString stringWithFormat:@"%2.0f ", strokeFreq];
@@ -105,9 +106,27 @@ enum {
 
 // this updates the button according to the recordingstate
 -(void)setButtonAppearance {
+    int started=0;
+    NSString * title;
+    switch (trackingState) {
+        case kTrackingStateStopped:
+            started=0;
+            title = mapViewController.outsideCourse ? @"Start at kick-off" : @"Start";
+            break;
+        case kTrackingStateWaiting:
+            started=0;
+            title = @"Waiting for start";
+            break;
+        case kTrackingStateTracking:
+            started=1;
+            title = @"Finish";
+            break;
+        default:
+            break;
+    }
     [startButton setBackgroundImage:buttonImage[2*started] forState:UIControlStateNormal];
-    [startButton setBackgroundImage:buttonImage[2*started+1] forState:UIControlStateHighlighted];    
-    [startButton setTitle: started ? @"stop":@"start" forState:UIControlStateNormal];
+    [startButton setBackgroundImage:buttonImage[2*started+1] forState:UIControlStateHighlighted];  
+    [startButton setTitle:title forState:UIControlStateNormal];
 }
 
 #pragma mark - View lifecycle
@@ -131,6 +150,7 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    [self setButtonAppearance];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -150,38 +170,70 @@ enum {
 
 -(void)locationUpdate:(id)sender {
     CLLocation * here = track.locationManager.location;
+    if (here==nil) return;
     // current speed
     distanceUnitLabel.text = [NSString stringWithFormat:@"(%1.0f)    m",here.horizontalAccuracy];
     curSpeed = here.speed;
     unsigned int mask = kCurrentLocation;
-    if (started) {
-        [track add:here];
-        distance = track.totalDistance;
-        CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
-        totalTime = now - startTime;
-        mask |= kCumulatives;
+    Course * cc = mapViewController.currentCourse;
+    switch (trackingState) {
+        case kTrackingStateTracking:
+            [track add:here];
+            if (mapViewController.validCourse) {
+                distance = [cc distanceToFinish:here.coordinate];
+                if (distance==0) [self startPressed:self];
+            } else 
+                distance = track.totalDistance;
+            CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
+            totalTime = now - startTime;
+            mask |= kCumulatives;
+            break;
+        case kTrackingStateWaiting:
+            if (mapViewController.validCourse) {
+                distance = -[cc distanceToStart:here.coordinate];
+                if (distance>0) {
+                    [self startPressed:self];
+                }
+            }
+            break;
+        case kTrackingStateStopped:
+            break;
+        default:
+            break;
     }
     [self updateValues:mask];
 }
 
 -(IBAction)startPressed:(id)sender {
-    if (!started) {
-        started = YES;
-        startTime = CFAbsoluteTimeGetCurrent();
-        startStroke = stroke.strokes;
-        [track reset];
-        [self locationUpdate:self];
-        [track addPin:@"start" atLocation:track.startLocation];
-        [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
-    } else {
-        started = NO;
-        totalTime = CFAbsoluteTimeGetCurrent() - startTime;
-        totalStrokes = stroke.strokes - startStroke;
-        distance = track.totalDistance;
-        [track addPin:@"end" atLocation:track.stopLocation];
-        [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
-
+    Course * cc = mapViewController.currentCourse;
+    BOOL outsideCourse = [cc outsideCourse:track.locationManager.location.coordinate];
+    switch (trackingState) {
+        case kTrackingStateStopped:
+            if (mapViewController.courseMode && cc.isValid && outsideCourse) {
+                trackingState = kTrackingStateWaiting;
+                break;
+            } // else fall through
+        case kTrackingStateWaiting:
+            trackingState = kTrackingStateTracking;
+            startTime = CFAbsoluteTimeGetCurrent();
+            startStroke = stroke.strokes;
+            [track reset];
+            [self locationUpdate:self];
+            [track addPin:@"start" atLocation:track.startLocation];
+            [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+            break;
+        case kTrackingStateTracking:
+            trackingState = kTrackingStateStopped;
+            totalTime = CFAbsoluteTimeGetCurrent() - startTime;
+            totalStrokes = stroke.strokes - startStroke;
+            distance = track.totalDistance;
+            [track addPin:@"finish" atLocation:track.stopLocation];
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+            break;
+        default:
+            break;
     }
+    
     [self setButtonAppearance];
 }
 
@@ -189,7 +241,7 @@ enum {
 
 #pragma mark StrokeDelegate
 -(void)stroke:(id)sender {
-    if (started) totalStrokes = stroke.strokes - startStroke;
+    if (trackingState) totalStrokes = stroke.strokes - startStroke;
     CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
     if (lastStrokeTime>0) {
         CFTimeInterval period = now - lastStrokeTime;

@@ -21,6 +21,12 @@ enum {
     kSpeedMilesPerHour,
 } speedUnit;
 
+enum {
+    kTrackingStateStopped=0,
+    kTrackingStateWaiting,
+    kTrackingStateTracking
+};
+
 @interface ErgometerViewController : UIViewController <TrackDelegate, StrokeDelegate> {
     // interface
     IBOutlet UIButton * startButton;
@@ -36,7 +42,7 @@ enum {
     // button colors/images
     UIImage * buttonImage[4];
     // location
-    BOOL started;
+    int trackingState;
     float dTlocation;
     Track * track;
     Stroke * stroke;
@@ -68,7 +74,7 @@ enum {
 
 
 @property (strong, nonatomic) Track * track;
-@property (readonly) BOOL started;
+@property (readonly) int trackingState;
 
 @property (strong, nonatomic) MapViewController * mapViewController;
 
