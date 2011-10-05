@@ -36,6 +36,8 @@
 -(void)add:(CLLocation*)loc;
 -(void)addPin:(NSString*)name atLocation:(CLLocation*)loc;
 
+-(void)startTimer;
+-(void)stopTimer;
 -(void)reset;
 -(CLLocationDistance)totalDistance;
 -(CLLocationSpeed)averageSpeed;

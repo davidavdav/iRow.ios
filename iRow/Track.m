@@ -26,9 +26,9 @@
         locationManager = [[CLLocationManager alloc] init];
         [locationManager startUpdatingLocation];
         period = p;
-        locationTimer = [NSTimer scheduledTimerWithTimeInterval:p target:self selector:@selector(inspectLocation:) userInfo:nil repeats:YES];
         locations = [NSMutableArray arrayWithCapacity:1000];
         pins = [NSMutableArray arrayWithCapacity:10];
+        [self startTimer];
     }
     
     return self;
@@ -48,6 +48,14 @@
     p.coordinate = loc.coordinate;
     p.title = name;
     if (loc!= nil) [pins addObject:p];
+}
+
+-(void)startTimer {
+    locationTimer = [NSTimer scheduledTimerWithTimeInterval:period target:self selector:@selector(inspectLocation:) userInfo:nil repeats:YES];    
+}
+
+-(void)stopTimer {
+    [locationTimer invalidate];
 }
 
 -(void)reset {
