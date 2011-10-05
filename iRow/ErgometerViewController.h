@@ -56,7 +56,7 @@ enum {
     double strokeFreq, aveStrokeFreq;
     int totalStrokes;
     CFTimeInterval totalTime;
-    double distance;
+    double totalDistance, finishDistance;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton * startButton;
