@@ -8,13 +8,22 @@
 
 #import "MapViewController.h"
 #import "ErgometerViewController.h"
+#import "Settings.h"
+
+enum {
+    kZoomModeHere=0,
+    kZoomModeTrack,
+    kZoomModeCourse,
+    kZoomModeNone
+};
 
 @implementation MapViewController
 
 @synthesize ergometerViewController;
 @synthesize mapView;
 @synthesize shownPins;
-@synthesize currentTrackPolyLine, currentRoutePolyline;
+@synthesize currentTrackPolyLine, currentCoursePolyline;
+@synthesize currentCourse, courseMode;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -22,9 +31,14 @@
     if (self) {
         self.title = NSLocalizedString(@"Map", @"Map");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
-        mapRegion.center = CLLocationCoordinate2DMake(100, 100);
-        pathNr = 0;
-        userPath = [NSMutableArray arrayWithCapacity:100];
+        mapRegion.center = CLLocationCoordinate2DMake(100, 100); // anything not valid
+        NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentCourse"];
+        if (data) 
+            currentCourse = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        else 
+            currentCourse = [[Course alloc] init];
+        NSArray * images = [NSArray arrayWithObjects:@"gray-normal", @"gray-highlighted", @"green-normal", @"green-highlighted", nil];
+        for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[images objectAtIndex:i]];
     }
     return self;
 }
@@ -35,6 +49,7 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+// copies the track from currentTrack
 -(int)copyTrackData {
     MKPolyline * old = currentTrackPolyLine;
     currentTrackPolyLine = [ergometerViewController.track trackData];
@@ -43,6 +58,7 @@
     return currentTrackPolyLine.pointCount;
 }
 
+// copies the start/stop pins from the currentTrack
 -(void)copyPinData {
     NSArray * new = ergometerViewController.track.pins;
     if ([new isEqualToArray:shownPins]) {
@@ -53,6 +69,43 @@
     self.shownPins = [new copy];
 }
 
+-(NSString*)dispLength:(CLLocationDistance)l {
+    // metric
+    NSString * s;
+    if (l>1e4) 
+        s = [NSString stringWithFormat:@"4.1 km",l/1000];
+    else 
+        s = [NSString stringWithFormat:@"%4.0f m",l];
+    return s;
+}
+
+-(void)updateCourse {
+    if (currentCoursePolyline != nil || currentCourse.isValid) {
+        MKPolyline * old = currentCoursePolyline;
+        if (currentCourse.isValid) {
+            currentCoursePolyline = [currentCourse polyline];
+            [mapView addOverlay:currentCoursePolyline];
+            distanceLabel.text = [self dispLength:currentCourse.length];
+//            distanceLabel.hidden = NO;
+        } else {
+//            distanceLabel.hidden = YES;
+            distanceLabel.text = @"";
+        }
+        [mapView removeOverlay:old];
+    }   
+}
+
+-(void)updateButtons {
+    [courseButton setBackgroundImage:buttonImage[2*courseMode] forState:UIControlStateNormal];
+    [courseButton setBackgroundImage:buttonImage[2*courseMode+1] forState:UIControlStateHighlighted];
+    distanceLabel.hidden = !courseMode;
+    if (courseMode) {
+        pinButton.hidden = NO;
+    } else {
+        pinButton.hidden = YES;
+    }
+}
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -60,28 +113,61 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:mapView];
+    CGFloat h = mapView.bounds.size.height;
+    CGFloat w = mapView.bounds.size.width;
+    [self.view insertSubview:mapView atIndex:0];
     mapView.delegate = self;
     mapView.showsUserLocation = YES;
     if (CLLocationCoordinate2DIsValid(mapRegion.center)) mapView.region = mapRegion;
     shownPins = nil;
-    UIButton * pinButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
+    // add Pin button
+    pinButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [pinButton addTarget:self action:@selector(pinButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    CGFloat size = pinButton.bounds.size.width;
+    CGFloat pinHeight = pinButton.bounds.size.height;
+    pinButton.center = CGPointMake(10+pinHeight/2, 10+pinHeight/2);
     [mapView addSubview:pinButton];
-    saveButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [saveButton addTarget:self action:@selector(saveButton:) forControlEvents:UIControlEventTouchUpInside];
-    [saveButton setTitle:@"save" forState:UIControlStateNormal];
-    saveButton.frame = CGRectMake(40, 0, 50, size);
-    saveButton.hidden = YES;
-    [mapView addSubview:saveButton];
+    // course button
+    courseButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [courseButton addTarget:self action:@selector(courseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [courseButton setTitle:@"course" forState:UIControlStateNormal];
+//    courseButton.center = CGPointMake(w/2, pinHeight/2+10);
+    courseButton.frame = CGRectMake((w-84)/2, 10, 84, pinHeight);
+//    [courseButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [mapView addSubview:courseButton];
     clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton setImage:[UIImage imageNamed:@"GKClearButton"] forState:UIControlStateNormal];
-    clearButton.frame = CGRectMake(mapView.bounds.size.width - size, 0, size, size);
+    clearButton.frame = CGRectMake(w - pinHeight, 0, pinHeight, pinHeight);
     clearButton.hidden = YES;
     [clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [mapView addSubview:clearButton];
      //    NSLog(@"load");
+    [mapView addAnnotations:currentCourse.annotations];
+    // calloutbuttons on the track
+    leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage * image = [UIImage imageNamed:@"rightarrow"];
+    leftButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [leftButton setImage:image forState:UIControlStateNormal];
+    [leftButton addTarget:self action:@selector(leftPressed:) forControlEvents:UIControlEventTouchUpInside];
+    rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    image = [UIImage imageNamed:@"leftarrow"];
+    rightButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+    [rightButton setImage:image forState:UIControlStateNormal];
+    [rightButton addTarget:self action:@selector(rightPressed:) forControlEvents:UIControlEventTouchUpInside];
+    // distance label
+    distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(mapView.bounds.size.width - 100, mapView.bounds.size.height - 20, 100, 20)];
+    distanceLabel.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
+    distanceLabel.textAlignment = UITextAlignmentRight;
+    [mapView addSubview:distanceLabel];
+    // navigator arrow
+    zoomModeControl= [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:[UIImage imageNamed:@"UIButtonBarLocate"], @"track", @"course", @"none",nil]];
+    zoomModeControl.frame = CGRectMake((w-200)/2, h-60, 200, 30);
+    zoomModeControl.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
+    zoomModeControl.segmentedControlStyle = UISegmentedControlStyleBar;
+    [zoomModeControl addTarget:self action:@selector(zoomChanged:) forControlEvents:UIControlEventValueChanged];
+    [mapView addSubview:zoomModeControl];
+    zoomMode = 0;
+    [self updateButtons];
+    [self updateCourse];
 }
 
 - (void)viewDidUnload
@@ -103,29 +189,12 @@
 //    NSLog(@"appear");
 }
 
--(void)updateUserPath {
-    if (currentRoutePolyline != nil || userPath.count>1) {
-        MKPolyline * old = currentRoutePolyline;
-        if (userPath.count>1) {
-            CLLocationCoordinate2D * points = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), userPath.count);
-            for (int i=0; i<userPath.count; i++) points[i] = [[userPath objectAtIndex:i] coordinate];
-            currentRoutePolyline = [MKPolyline polylineWithCoordinates:points count:userPath.count];
-            free(points);
-            [mapView addOverlay:currentRoutePolyline];
-        }
-        [mapView removeOverlay:old];
-    }    
-}
 
 -(void)pinButtonPressed:(id)sender {
-    PathAnnotation * new = [[PathAnnotation alloc] initWithID:pathNr];
-    new.coordinate = mapView.centerCoordinate;
+    MKPointAnnotation * new = [currentCourse addWaypoint:mapView.centerCoordinate];
     [mapView addAnnotation:new];
-    // keep a copy
-    [userPath addObject:new];
-    pathNr++;
-    [self updateUserPath];
-    saveButton.hidden = userPath.count<2;
+    [self updateCourse];
+    courseButton.hidden = currentCourse.count<2;
 }
 
 -(void)clearButtonPressed:(id)sender {
@@ -133,13 +202,27 @@
     NSLog(@"%@", mapView.selectedAnnotations);
     if (selected.count) {
         for (MKPointAnnotation * a in selected) {
-            [userPath removeObject:a];
+            [currentCourse removeWaypoint:a];
             [mapView removeAnnotation:a];
-            NSLog(@"%@", userPath);
         }
     }
-    [self updateUserPath];
-    saveButton.hidden = userPath.count<2;
+    [self updateCourse];
+    courseButton.hidden = currentCourse.count<2;
+}
+
+-(void)courseButtonPressed:(id)sender {
+//    NSString * path = [[NSBundle mainBundle] pathForResource:@"course" ofType:@"data"];
+//    [[Settings sharedInstance] setObject:currentCourse forKey:@"currentCourse"];
+    courseMode = !courseMode;
+    [self updateButtons];
+}
+
+-(BOOL)validCourse {
+    return courseMode && currentCourse != nil && currentCourse.count>1;
+}
+
+-(BOOL)outsideCourse {
+    return [self validCourse] && [currentCourse outsideCourse:mapView.userLocation.coordinate];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -157,15 +240,35 @@
 	[super viewDidDisappear:animated];
 }
 
+-(void)zoom {
+    MKUserLocation * here = mapView.userLocation;
+    switch (zoomMode) {
+        case kZoomModeHere:
+            if (here.location.horizontalAccuracy>0) 
+                [mapView setCenterCoordinate:here.coordinate animated:YES];
+            break;
+        case kZoomModeTrack:
+            if (ergometerViewController.track.count > 0) 
+                [mapView setRegion:[ergometerViewController.track region] animated:YES];
+            break;
+        case kZoomModeCourse:
+            if (currentCourse.count>0) 
+                [mapView setRegion:[currentCourse region] animated:YES];
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark mkmapviewdelegate
 // centers the map as soon as location is found
 -(void)mapView:(MKMapView *)mv didUpdateUserLocation:(MKUserLocation *)userLocation {
     static BOOL centered = NO;
-    if ([self copyTrackData]) 
-        [mv setRegion:[ergometerViewController.track region] animated:YES];
-    else if (!centered) 
+    if (!centered) 
         [mv setRegion:MKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 1000, 1000)];
-    centered=YES;
+    centered = YES;
+    [self copyTrackData];
+    [self zoom];
 }
 
 // this draws the track
@@ -177,7 +280,7 @@
         trackView.lineWidth = 5;
         return trackView;
     }
-    if (overlay == currentRoutePolyline) {
+    if (overlay == currentCoursePolyline) {
         MKPolylineView * routeView = [[MKPolylineView alloc] initWithPolyline:overlay];
         routeView.strokeColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
         routeView.lineWidth = 15;
@@ -198,11 +301,13 @@
     } else {
         pin.annotation = annotation;
     }
-    if ([annotation isKindOfClass:[PathAnnotation class]]) {
-        pin.pinColor = MKPinAnnotationColorGreen;
+    if ([annotation isKindOfClass:[CourseAnnotation class]]) {
+        pin.pinColor = annotation == currentCourse.start || annotation == currentCourse.finish ? MKPinAnnotationColorPurple : MKPinAnnotationColorGreen;
         pin.animatesDrop = YES;
         pin.canShowCallout = YES;
         pin.draggable = YES;
+        pin.leftCalloutAccessoryView = leftButton;
+        pin.rightCalloutAccessoryView = rightButton;
     } else {
         pin.pinColor = MKPinAnnotationColorPurple;
         pin.animatesDrop = NO;
@@ -212,26 +317,36 @@
     return pin;
 }
 
+-(void)leftPressed:(id)sender {
+//    NSLog(@"%@", sender);
+    currentCourse.start = mapView.selectedAnnotations.lastObject;
+}
+
 // not even a delegate
 
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
         NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
-        [self updateUserPath];
+        [self updateCourse];
     }
 }
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
-    if ([view.annotation isKindOfClass:[PathAnnotation class]]) {
+    if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = NO;
-        NSLog(@"%@", mapView.selectedAnnotations);
+//        NSLog(@"%@", mapView.selectedAnnotations);
     }
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
-    if ([view.annotation isKindOfClass:[PathAnnotation class]]) {
+    if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = YES;        
     }
+}
+
+-(void)zoomChanged:(id)sender {
+    zoomMode = [sender selectedSegmentIndex];
+    [self zoom];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -242,23 +357,5 @@
 }
 
 
-
-@end
-
-@implementation PathAnnotation;
-
--(id)initWithID:(int)i {
-    self = [self init];
-    if (self) ID = i;
-    self.title = [NSString stringWithFormat:@"%d", i+1];
-    return self;
-}
-
-/* 
- -(void)setCoordinate:(CLLocationCoordinate2D)c {
-    NSLog(@"new coordinate");
-    coordinate = c;
-}
-  */ 
 
 @end

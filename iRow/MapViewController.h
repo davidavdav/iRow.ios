@@ -11,29 +11,33 @@
 @class ErgometerViewController;
 
 #import "Track.h"
+#import "Course.h"
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
     MKMapView * mapView;
-    UIButton * saveButton, *clearButton;
+    UIButton * courseButton, *pinButton, *clearButton;
+    UIImage * buttonImage[4];
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
     NSArray * shownPins;
-    int pathNr;
-    NSMutableArray * userPath;
     MKPolyline * currentTrackPolyLine;
-    MKPolyline * currentRoutePolyline; 
+    Course * currentCourse;
+    MKPolyline * currentCoursePolyline; 
+    UIButton * leftButton, * rightButton;
+    UILabel * distanceLabel;
+    UISegmentedControl * zoomModeControl;
+    int zoomMode;
+    BOOL courseMode;
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;
 @property (strong, nonatomic) MKMapView * mapView;
 @property (strong, nonatomic) NSArray * shownPins;
-@property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentRoutePolyline;
+@property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentCoursePolyline;
+@property (strong, nonatomic) Course * currentCourse;
+@property (readonly) BOOL courseMode;
 
-@end
-
-@interface PathAnnotation : MKPointAnnotation {
-    int ID;
-}
--(id)initWithID:(int)i;
+-(BOOL)validCourse;
+-(BOOL)outsideCourse;
 
 @end
