@@ -21,7 +21,7 @@ enum {
 
 @synthesize ergometerViewController;
 @synthesize mapView;
-@synthesize shownPins;
+@synthesize trackPins, coursePins;
 @synthesize currentTrackPolyLine, currentCoursePolyline;
 @synthesize currentCourse, courseMode;
 
@@ -49,7 +49,7 @@ enum {
     // Release any cached data, images, etc that aren't in use.
 }
 
-// copies the track from currentTrack
+// copies the track from currentTrack into an overlay
 -(int)copyTrackData {
     MKPolyline * old = currentTrackPolyLine;
     currentTrackPolyLine = [ergometerViewController.track trackData];
@@ -58,17 +58,18 @@ enum {
     return currentTrackPolyLine.pointCount;
 }
 
-// copies the start/stop pins from the currentTrack
--(void)copyPinData {
+// copies the start/stop pins from the currentTrack into annotations
+-(void)copyTrackPins {
     NSArray * new = ergometerViewController.track.pins;
-    if ([new isEqualToArray:shownPins]) {
+    if ([new isEqualToArray:trackPins]) {
         return;
     }
-    [mapView removeAnnotations:shownPins];
+    [mapView removeAnnotations:trackPins];
     [mapView addAnnotations:new];
-    self.shownPins = [new copy];
+    self.trackPins = [new copy];
 }
 
+// this is all very metric
 -(NSString*)dispLength:(CLLocationDistance)l {
     // metric
     NSString * s;
@@ -79,9 +80,13 @@ enum {
     return s;
 }
 
+// this method updates the course polyline and distance label
 -(void)updateCourse {
+    // first save the current course...
+    [[Settings sharedInstance] setObject:currentCourse forKey:@"currentCourse"];
     if (currentCoursePolyline != nil || currentCourse.isValid) {
         MKPolyline * old = currentCoursePolyline;
+        
         if (currentCourse.isValid) {
             currentCoursePolyline = [currentCourse polyline];
             [mapView addOverlay:currentCoursePolyline];
@@ -95,15 +100,24 @@ enum {
     }   
 }
 
+-(void)updateCoursePins {
+    if (showCoursePins) {
+        NSMutableArray * shown = [NSMutableArray arrayWithArray:[mapView annotations]];
+        for (MKPointAnnotation * a in shown) if (![a isKindOfClass:[CourseAnnotation class]]) [shown removeObject:a];
+        for (MKPointAnnotation * a in currentCourse.annotations) if (![shown containsObject:a]) 
+            [mapView addAnnotation:a];
+    } else {
+        for (MKPointAnnotation * a in mapView.annotations) if ([a isKindOfClass:[CourseAnnotation class]]) [mapView removeAnnotation:a];
+    }
+}
+
 -(void)updateButtons {
     [courseButton setBackgroundImage:buttonImage[2*courseMode] forState:UIControlStateNormal];
     [courseButton setBackgroundImage:buttonImage[2*courseMode+1] forState:UIControlStateHighlighted];
     distanceLabel.hidden = !courseMode;
-    if (courseMode) {
-        pinButton.hidden = NO;
-    } else {
-        pinButton.hidden = YES;
-    }
+    showCoursePins = courseMode;
+    [self updateCoursePins];
+    pinButton.hidden = !courseMode;
 }
 
 #pragma mark - View lifecycle
@@ -119,7 +133,7 @@ enum {
     mapView.delegate = self;
     mapView.showsUserLocation = YES;
     if (CLLocationCoordinate2DIsValid(mapRegion.center)) mapView.region = mapRegion;
-    shownPins = nil;
+    trackPins = nil;
     // add Pin button
     pinButton = [UIButton buttonWithType:UIButtonTypeContactAdd];
     [pinButton addTarget:self action:@selector(pinButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -183,9 +197,8 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if ([self copyTrackData]) 
-        [mapView setRegion:[ergometerViewController.track region] animated:YES];
-    [self copyPinData];
+    [self copyTrackData];
+    [self copyTrackPins];
 //    NSLog(@"appear");
 }
 
@@ -289,7 +302,7 @@ enum {
     return nil;
 }
 
-// this adds start/stop points
+// this adds start/stop points, and the course pins
 - (MKAnnotationView *) mapView: (MKMapView *) mv viewForAnnotation:(id<MKAnnotation>) annotation
 {  
     // the home location
@@ -306,8 +319,8 @@ enum {
         pin.animatesDrop = YES;
         pin.canShowCallout = YES;
         pin.draggable = YES;
-        pin.leftCalloutAccessoryView = leftButton;
-        pin.rightCalloutAccessoryView = rightButton;
+//        pin.leftCalloutAccessoryView = leftButton;
+//        pin.rightCalloutAccessoryView = rightButton;
     } else {
         pin.pinColor = MKPinAnnotationColorPurple;
         pin.animatesDrop = NO;
@@ -327,6 +340,7 @@ enum {
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
         NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
+        [currentCourse update];
         [self updateCourse];
     }
 }

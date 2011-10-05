@@ -19,7 +19,7 @@
     UIImage * buttonImage[4];
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
-    NSArray * shownPins;
+    NSArray * trackPins, * coursePins;
     MKPolyline * currentTrackPolyLine;
     Course * currentCourse;
     MKPolyline * currentCoursePolyline; 
@@ -28,11 +28,12 @@
     UISegmentedControl * zoomModeControl;
     int zoomMode;
     BOOL courseMode;
+    BOOL showCoursePins;
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;
 @property (strong, nonatomic) MKMapView * mapView;
-@property (strong, nonatomic) NSArray * shownPins;
+@property (strong, nonatomic) NSArray * trackPins, * coursePins;
 @property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentCoursePolyline;
 @property (strong, nonatomic) Course * currentCourse;
 @property (readonly) BOOL courseMode;
