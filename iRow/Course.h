@@ -10,25 +10,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
-@interface Normal : NSObject {
-    CLLocationCoordinate2D point;
-    double x, y; // normal
-    CLLocationDistance dist; // remaining distance from this point...
-}
-@property CLLocationDistance dist;
-@property CLLocationCoordinate2D point;
--(id)initFrom:(CLLocationCoordinate2D)from to:(CLLocationCoordinate2D)to;
--(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here;
--(void)reverse;
-@end
-
 @class CourseAnnotation;
 
 @interface Course : NSObject <NSCoding> {
     int waypointNr;
     NSMutableArray * waypoints, *normals;
     CourseAnnotation * start, * finish;
-    Normal * startNormal, * finishNormal;
+//    Normal * startNormal, * finishNormal;
     CLLocationDistance length;
 }
 
@@ -50,7 +38,17 @@
 @end
 
 @interface CourseAnnotation : MKPointAnnotation <NSCoding> {
-//    CLLocationCoordinate2D location;
+    double nx[2];
+    double ny[2]; // normals from this point
+    CLLocationDistance dist[2]; // distances to either endpoint
 }
-//@property CLLocationCoordinate2D location;
+-(double*) nx;
+-(double*) ny;
+-(CLLocationDistance*)dist;
+
+-(void)connectingFrom:(CourseAnnotation*)from direction:(int)dir;
+-(void)resetDistanceInDirection:(int)dir;
+-(void)copyNormalToDirection:(int)dir;
+-(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here direction:(int)dir;
+
 @end

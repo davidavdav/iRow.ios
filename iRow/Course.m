@@ -13,43 +13,6 @@
 #define kMinMapSize (250)
 #define kMargin (1.1)
 
-@implementation Normal
-@synthesize point, dist;
-
-// this function places a normal originating in `to', and having direction `to-from', i.e., form `from' to `to' 
--(id)initFrom:(CLLocationCoordinate2D)from to:(CLLocationCoordinate2D)to
-{
-    self = [super init];
-    if (self) {
-        point = to;
-        MKMapPoint t = MKMapPointForCoordinate(to);
-        MKMapPoint f = MKMapPointForCoordinate(from);
-        x = t.x-f.x;
-        y = t.y-f.y;
-        double r = sqrt(x*x+y*y);
-        x /= r; y /= r;
-        dist = 0;
-    
-    }
-    return self;
-}
-
--(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here {
-    MKMapPoint h = MKMapPointForCoordinate(here);
-    MKMapPoint p = MKMapPointForCoordinate(point);
-    double dx = p.x-h.x, dy=p.y-h.y;
-    CLLocationDistance d = (dx*x + dy*y) * MKMetersPerMapPointAtLatitude(point.latitude);
-    return d;
-    
-}
-
--(void)reverse {
-    x *= -1;
-    y *= -1;
-}
-
-@end
-
 @implementation Course
 
 @synthesize start, finish, length;
@@ -61,7 +24,7 @@
         // Initialization code here.
         waypoints = [NSMutableArray arrayWithCapacity:10];
         waypointNr = 0;
-        normals = [NSMutableArray arrayWithCapacity:11];
+//        normals = [NSMutableArray arrayWithCapacity:11];
     }
     
     return self;
@@ -69,25 +32,20 @@
 
 -(void) update {
     if (waypoints.count < 2) return;
-    [normals removeAllObjects];
-    CLLocationCoordinate2D from = [[waypoints objectAtIndex:0] coordinate];
-    // first the odd one out...
-    startNormal = [[Normal alloc] initFrom:[[waypoints objectAtIndex:1] coordinate] to:from];
-    [startNormal reverse];
-    [normals addObject:startNormal];
+    [[waypoints objectAtIndex:0] resetDistanceInDirection:0];
     for (int i=1; i<waypoints.count; i++) {
-        CLLocationCoordinate2D to = [[waypoints objectAtIndex:i] coordinate];
-        Normal * n = [[Normal alloc] initFrom:from to:to];
-        [normals addObject:n];
-        from = to;
+        [[waypoints objectAtIndex:i] connectingFrom:[waypoints objectAtIndex:i-1] direction:0];
+//        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i] dist][0]);
     }
-    // total course distance
-    double d = 0;
+    [[waypoints lastObject] resetDistanceInDirection:1];
     for (int i=waypoints.count-1; i>0; i--) {
-        d += MKMetersBetweenMapPoints(MKMapPointForCoordinate([[waypoints objectAtIndex:i] coordinate]), MKMapPointForCoordinate([[waypoints objectAtIndex:i-1] coordinate]));
-        [[normals objectAtIndex:i-1] setDist:d];
-    }
-    length = d;
+        [[waypoints objectAtIndex:i-1] connectingFrom:[waypoints objectAtIndex:i] direction:1];
+//        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i-1] dist][1]);
+    }        
+    [[waypoints objectAtIndex:0] copyNormalToDirection:0];
+    [[waypoints lastObject] copyNormalToDirection:1];
+    length = [(CourseAnnotation*)[waypoints lastObject] dist][1];
+    return;
 }
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc {
@@ -126,22 +84,29 @@
 
 -(double)distanceToStart:(CLLocationCoordinate2D)here  {
     if (waypoints.count<2) return 0;
-    return [startNormal distanceFrom:here];
+    double d = [[waypoints objectAtIndex:0] distanceFrom:here direction:0];
+//    NSLog(@"%f", d);
+    return d;
 }
 
 -(double)distanceToFinish:(CLLocationCoordinate2D)here  {
     if (waypoints.count<2) return 0;
-    for (int i=0; i<normals.count; i++) {
-        Normal * n = [normals objectAtIndex:i];
-        CLLocationDistance d = [n distanceFrom:here];
-        if (d>0) return n.dist + d;
+    for (int i=0; i<waypoints.count; i++) {
+        CourseAnnotation * a = [waypoints objectAtIndex:i];
+        CLLocationDistance d = [a distanceFrom:here direction:0];
+//        NSLog(@"%f", d);
+        if (d>0) return a.dist[0] + d;
     }
     return 0;
 }
 
+// This tells us where we are w.r.t. the start- and finishline. 
+// <0: before start >0: after finish. 
 -(BOOL)outsideCourse:(CLLocationCoordinate2D)here {
-    double d = [self distanceToFinish:here];
-    return d==0 || d>length;
+    double ds = [[waypoints objectAtIndex:0] distanceFrom:here direction:0];
+    double df = [[waypoints lastObject] distanceFrom:here direction:1];
+//    NSLog(@"%f %f", ds, df);
+    return df>0 ? 1 : ds>0 ? -1 : 0;
 }
 
 -(MKCoordinateRegion)region {
@@ -169,8 +134,8 @@
         waypointNr = [dec decodeIntForKey:@"waypointNr"];
         start = (CourseAnnotation*) [dec decodeObjectForKey:@"start"];
         finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
-        startNormal = [[Normal alloc] init];
-        normals = [NSMutableArray arrayWithCapacity:11];
+//        startNormal = [[Normal alloc] init];
+//        normals = [NSMutableArray arrayWithCapacity:11];
         [self update];
     }
     return self;
@@ -186,7 +151,45 @@
 @end
 
 @implementation CourseAnnotation
-//@synthesize location;
+-(double*)nx {return nx;};
+-(double*)ny {return ny;};
+-(double*)dist {return dist;};
+
+// for this to work, the distance from `from' needs to be known...
+// d=0: forwad, d=1: backward
+-(void)connectingFrom:(CourseAnnotation *)from direction:(int)dir{
+    dir = MAX(0, MIN(dir, 1));
+    int other = 1-dir;
+    MKMapPoint t = MKMapPointForCoordinate(self.coordinate);
+    MKMapPoint f = MKMapPointForCoordinate(from.coordinate);
+    double x = t.x-f.x;
+    double y = t.y-f.y;
+    double r = sqrt(x*x+y*y);
+    nx[dir] = x/r; ny[dir] = y/r;
+    dist[other] = from.dist[other] + MKMetersBetweenMapPoints(f, t);    
+}
+
+-(void)resetDistanceInDirection:(int)dir{
+    dir = MAX(0, MIN(dir, 1));
+    dist[1-dir]=0;
+}
+
+-(void)copyNormalToDirection:(int)dir {
+    dir = MAX(0, MIN(dir, 1));
+    int other = 1-dir;
+    nx[dir] = -nx[other];
+    ny[dir] = -ny[other];
+}
+
+-(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here direction:(int)dir {
+    dir = MAX(0, MIN(dir, 1));
+    MKMapPoint h = MKMapPointForCoordinate(here);
+    MKMapPoint p = MKMapPointForCoordinate(self.coordinate);
+    double dx = p.x-h.x, dy=p.y-h.y;
+    CLLocationDistance d = (dx*nx[dir] + dy*ny[dir]) * MKMetersPerMapPointAtLatitude(self.coordinate.latitude);
+    return d;
+    
+}
 
 -(void)encodeWithCoder:(NSCoder *) enc {
     [enc encodeDouble:self.coordinate.longitude forKey:@"longitude"];
