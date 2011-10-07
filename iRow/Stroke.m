@@ -91,9 +91,4 @@
 }
 
 
-
--(CMAcceleration)xyAccel {
-    
-}
-
 @end
