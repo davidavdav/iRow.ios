@@ -31,6 +31,24 @@
 		634A7F981428B3C10001BF57 /* Vector.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F961428B3C10001BF57 /* Vector.m */; };
 		634A7F9E1429CA880001BF57 /* Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F9D1429CA880001BF57 /* Matrix.m */; };
 		634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7FA01429CF5B0001BF57 /* Matrix+operations.m */; };
+		6354A904142C7CCA00562991 /* start-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A902142C7CCA00562991 /* start-button.png */; };
+		6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A903142C7CCA00562991 /* start-button-highlight.png */; };
+		6354A909142C7EC800562991 /* stop-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A907142C7EC800562991 /* stop-button.png */; };
+		6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A908142C7EC800562991 /* stop-button-highlight.png */; };
+		63AE97071430492100C63178 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97061430492100C63178 /* Course.m */; };
+		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
+		63AE97171439817A00C63178 /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97151439817A00C63178 /* leftarrow.png */; };
+		63AE97181439817A00C63178 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97161439817A00C63178 /* rightarrow.png */; };
+		63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */; };
+		63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE971F143BA50600C63178 /* UIButtonBarLocate.png */; };
+		63AE9728143CD66E00C63178 /* green-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9725143CD66D00C63178 /* green-normal.png */; };
+		63AE9729143CD66E00C63178 /* green-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9726143CD66D00C63178 /* green-highlighted.png */; };
+		63AE972A143CD66E00C63178 /* green-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9727143CD66D00C63178 /* green-disabled.png */; };
+		63AE9736143CF9D300C63178 /* gray-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9733143CF9D200C63178 /* gray-normal.png */; };
+		63AE9737143CF9D300C63178 /* gray-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9734143CF9D200C63178 /* gray-highlighted.png */; };
+		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
+		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
+		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +88,26 @@
 		634A7F9D1429CA880001BF57 /* Matrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Matrix.m; path = ../../iSTI/Matrix.m; sourceTree = "<group>"; };
 		634A7F9F1429CF5B0001BF57 /* Matrix+operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Matrix+operations.h"; sourceTree = "<group>"; };
 		634A7FA01429CF5B0001BF57 /* Matrix+operations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Matrix+operations.m"; sourceTree = "<group>"; };
+		6354A902142C7CCA00562991 /* start-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start-button.png"; path = "lib/start-button.png"; sourceTree = SOURCE_ROOT; };
+		6354A903142C7CCA00562991 /* start-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start-button-highlight.png"; path = "lib/start-button-highlight.png"; sourceTree = SOURCE_ROOT; };
+		6354A907142C7EC800562991 /* stop-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button.png"; path = "lib/stop-button.png"; sourceTree = SOURCE_ROOT; };
+		6354A908142C7EC800562991 /* stop-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button-highlight.png"; path = "lib/stop-button-highlight.png"; sourceTree = SOURCE_ROOT; };
+		63AE97051430492100C63178 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
+		63AE97061430492100C63178 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
+		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
+		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
+		63AE97151439817A00C63178 /* leftarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leftarrow.png; path = "../../../../Desktop/iPhone Simulator 5.0 artwork/EventKitUI framework/leftarrow.png"; sourceTree = "<group>"; };
+		63AE97161439817A00C63178 /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rightarrow.png; path = "../../../../Desktop/iPhone Simulator 5.0 artwork/EventKitUI framework/rightarrow.png"; sourceTree = "<group>"; };
+		63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLBlueMinus@2x.png"; sourceTree = "<group>"; };
+		63AE971F143BA50600C63178 /* UIButtonBarLocate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonBarLocate.png; sourceTree = "<group>"; };
+		63AE9725143CD66D00C63178 /* green-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-normal.png"; sourceTree = "<group>"; };
+		63AE9726143CD66D00C63178 /* green-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-highlighted.png"; sourceTree = "<group>"; };
+		63AE9727143CD66D00C63178 /* green-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-disabled.png"; sourceTree = "<group>"; };
+		63AE9733143CF9D200C63178 /* gray-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-normal.png"; sourceTree = "<group>"; };
+		63AE9734143CF9D200C63178 /* gray-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-highlighted.png"; sourceTree = "<group>"; };
+		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
+		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
+		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,11 +167,15 @@
 				6319A68314263D590035EB18 /* ErgometerViewController.m */,
 				634A7F841427DFE90001BF57 /* Stroke.h */,
 				634A7F851427DFE90001BF57 /* Stroke.m */,
-				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
 				634A7F6F1427311F0001BF57 /* Track.h */,
 				634A7F701427311F0001BF57 /* Track.m */,
+				63AE97051430492100C63178 /* Course.h */,
+				63AE97061430492100C63178 /* Course.m */,
 				6319A68914263D590035EB18 /* MapViewController.h */,
 				6319A68A14263D590035EB18 /* MapViewController.m */,
+				63AE97081430E48E00C63178 /* Settings.h */,
+				63AE97091430E48E00C63178 /* Settings.m */,
+				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
 				6319A69314263D590035EB18 /* MapViewController.xib */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
@@ -143,6 +185,22 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63AE9733143CF9D200C63178 /* gray-normal.png */,
+				63AE9734143CF9D200C63178 /* gray-highlighted.png */,
+				63AE9735143CF9D300C63178 /* gray-disabled.png */,
+				63AE9725143CD66D00C63178 /* green-normal.png */,
+				63AE9726143CD66D00C63178 /* green-highlighted.png */,
+				63AE9727143CD66D00C63178 /* green-disabled.png */,
+				63AE971F143BA50600C63178 /* UIButtonBarLocate.png */,
+				63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */,
+				63AE97151439817A00C63178 /* leftarrow.png */,
+				63AE97161439817A00C63178 /* rightarrow.png */,
+				63B7D5D2142E4B600068BB62 /* GKClearButton.png */,
+				63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */,
+				6354A907142C7EC800562991 /* stop-button.png */,
+				6354A908142C7EC800562991 /* stop-button-highlight.png */,
+				6354A902142C7CCA00562991 /* start-button.png */,
+				6354A903142C7CCA00562991 /* start-button-highlight.png */,
 				634A7F8B1428B19A0001BF57 /* stroke.filt */,
 				6319A68514263D590035EB18 /* first.png */,
 				6319A68714263D590035EB18 /* first@2x.png */,
@@ -230,6 +288,22 @@
 				6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */,
 				6319A69514263D590035EB18 /* MapViewController.xib in Resources */,
 				634A7F8C1428B19A0001BF57 /* stroke.filt in Resources */,
+				6354A904142C7CCA00562991 /* start-button.png in Resources */,
+				6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */,
+				6354A909142C7EC800562991 /* stop-button.png in Resources */,
+				6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */,
+				63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */,
+				63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */,
+				63AE97171439817A00C63178 /* leftarrow.png in Resources */,
+				63AE97181439817A00C63178 /* rightarrow.png in Resources */,
+				63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */,
+				63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */,
+				63AE9728143CD66E00C63178 /* green-normal.png in Resources */,
+				63AE9729143CD66E00C63178 /* green-highlighted.png in Resources */,
+				63AE972A143CD66E00C63178 /* green-disabled.png in Resources */,
+				63AE9736143CF9D300C63178 /* gray-normal.png in Resources */,
+				63AE9737143CF9D300C63178 /* gray-highlighted.png in Resources */,
+				63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -250,6 +324,8 @@
 				634A7F981428B3C10001BF57 /* Vector.m in Sources */,
 				634A7F9E1429CA880001BF57 /* Matrix.m in Sources */,
 				634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */,
+				63AE97071430492100C63178 /* Course.m in Sources */,
+				63AE970A1430E48E00C63178 /* Settings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +365,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -304,6 +381,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -314,6 +392,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -323,6 +402,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
