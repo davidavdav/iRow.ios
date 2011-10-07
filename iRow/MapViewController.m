@@ -103,7 +103,7 @@ enum {
 -(void)updateCoursePins {
     if (showCoursePins) {
         NSMutableArray * shown = [NSMutableArray arrayWithArray:[mapView annotations]];
-        for (MKPointAnnotation * a in shown) if (![a isKindOfClass:[CourseAnnotation class]]) [shown removeObject:a];
+        for (MKPointAnnotation * a in mapView.annotations) if (![a isKindOfClass:[CourseAnnotation class]]) [shown removeObject:a];
         for (MKPointAnnotation * a in currentCourse.annotations) if (![shown containsObject:a]) 
             [mapView addAnnotation:a];
     } else {
