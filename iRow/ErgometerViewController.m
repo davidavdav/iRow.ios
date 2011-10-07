@@ -16,10 +16,6 @@ enum {
     kCumulatives=0x4
 };
 
-@interface ErgometerViewController ()
--(void)inspectLocation:(id)sender;
-@end
-
 @implementation ErgometerViewController
 
 @synthesize startButton;
@@ -209,8 +205,8 @@ enum {
             break;
         case kTrackingStateWaiting:
             if (mapViewController.validCourse) {
-                finishDistance = -[cc distanceToStart:here.coordinate];
-                if (finishDistance>0) {
+                finishDistance = [cc distanceToStart:here.coordinate];
+                if (finishDistance<0) {
                     [self startPressed:self];
                 }
             }
