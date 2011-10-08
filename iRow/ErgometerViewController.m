@@ -16,12 +16,15 @@ enum {
     kCumulatives=0x4
 };
 
+#define kSpeedFactorKmph (3.6)
+#define kSpeedFactorMph (2.237415)
+
 @implementation ErgometerViewController
 
 @synthesize startButton;
 @synthesize curSpeedLabel, aveSpeedLabel;
 @synthesize strokeFreqLabel, aveStrokeFreqLabel, totalStrokesLabel;
-@synthesize timeLabel, distanceLabel, distanceUnitLabel;
+@synthesize timeLabel, distanceLabel, distanceUnitLabel, totalOrLeft;
 
 @synthesize track, trackingState;
 
@@ -51,8 +54,9 @@ enum {
         aveStrokeFreq = 0;
         totalStrokes = 0;
         totalTime = 0;
-        NSArray * imageNames = [NSArray arrayWithObjects:@"start-button", @"start-button-highlighted", @"stop-button", @"stop-button-highlighted", nil];
-        for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[imageNames objectAtIndex:i]];
+        NSArray * imageNames = [NSArray arrayWithObjects:@"start-button", @"start-button-highlighted", @"wait-button", @"wait-button-highlighted", @"stop-button", @"stop-button-highlighted", nil];
+        for (int i=0; i<6; i++) buttonImage[i] = [UIImage imageNamed:[imageNames objectAtIndex:i]];
+        NSLog(@"%f %f", buttonImage[0].size.width, buttonImage[0].size.height);
         // mapviewcontroller must be set from appdelegate
     }
     return self;
@@ -75,12 +79,30 @@ enum {
 }
 
 -(void)displaySpeed:(CLLocationSpeed)speed atLabel:(UILabel*)label {
-    NSTimeInterval timePer500 = 500.0/speed;
-    label.text = speed>0 ? [self hms:timePer500] : @"––:––"; // en-dash
+    switch (speedUnit) {
+        case kSpeedTimePer500m:
+            ;
+            NSTimeInterval timePer500 = 500.0/speed;
+            label.text = speed>0 ? [self hms:timePer500] : @"––:––"; // en-dash
+            break;
+        case kSpeedMeterPerSecond:
+             label.text = [NSString stringWithFormat:@"%3.1f",speed];
+            break;
+        case kSpeedKMPerHour:
+             label.text = [NSString stringWithFormat:@"%3.1f",speed*kSpeedFactorKmph];
+            break;
+        case kSpeedMilesPerHour:
+            label.text = [NSString stringWithFormat:@"%3.1f",speed*kSpeedFactorMph];
+            break;
+        default:
+            break;
+    }
     
 }
 
+// this updates the values of the ergometer display
 -(void)updateValues:(uint)mask {
+    CFTimeInterval dur=totalTime;
     if (mask & kCurrentLocation) {
         [self displaySpeed:curSpeed atLabel:curSpeedLabel];
         aveSpeed = totalDistance / totalTime;
@@ -90,19 +112,23 @@ enum {
             case kTrackingStateStopped:
                 distance = totalDistance;
                 distanceLabel.textColor = [UIColor blackColor];
-                break;
+                totalOrLeft.text = @"Total";
+                 break;
             case kTrackingStateWaiting:
-                distance = finishDistance;
+                distance = -finishDistance;
                 distanceLabel.textColor = [UIColor redColor];
+                totalOrLeft.text = @"Still to go…";
+                dur = 0;
                 break;
             case kTrackingStateTracking:
                 if (mapViewController.validCourse) {
                     distance =  finishDistance;
                     distanceLabel.textColor = [UIColor blueColor];
+                    dur = distance / aveSpeed;
                 } else {
                     distance = totalDistance;
                     distanceLabel.textColor = [UIColor blackColor];
-                }
+                 }
         }
         distanceLabel.text = [[NSString stringWithFormat:@"%4.0f", distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
 //        distanceLabel.textColor = totalDistance < 0 ? [UIColor redColor] : mapViewController.validCourse && trackingState==kTrackingStateTracking ? [UIColor blueColor] : [UIColor blackColor];
@@ -111,11 +137,13 @@ enum {
         strokeFreqLabel.text = [NSString stringWithFormat:@"%2.0f ", strokeFreq];
         aveStrokeFreqLabel.text = totalTime>0 ? [NSString stringWithFormat:@"%4.1f", 60 * totalStrokes / totalTime] :
         @"–"; // en-dash
-        totalStrokesLabel.text = [NSString stringWithFormat:@"%d",totalStrokes];
+        int strokes=totalStrokes;
+        if (trackingState == kTrackingStateTracking && mapViewController.validCourse) 
+            strokes = totalStrokes * finishDistance/totalDistance;
+        totalStrokesLabel.text = [NSString stringWithFormat:@"%d",strokes];
     }
     if (mask & kCumulatives) {
-        // average speed since start
-        timeLabel.text = [self hms:totalTime];
+        timeLabel.text = [self hms:dur];
     }
 }
 
@@ -126,14 +154,14 @@ enum {
     switch (trackingState) {
         case kTrackingStateStopped:
             started=0;
-            title = mapViewController.outsideCourse ? @"Start at kick-off" : @"Start";
+            title = mapViewController.outsideCourse ? @"Prepare for start" : @"Start";
             break;
         case kTrackingStateWaiting:
-            started=0;
-            title = @"Waiting for start";
+            started=1;
+            title = @"Waiting to cross start line";
             break;
         case kTrackingStateTracking:
-            started=1;
+            started=2;
             title = @"Finish";
             break;
         default:
@@ -206,7 +234,7 @@ enum {
         case kTrackingStateWaiting:
             if (mapViewController.validCourse) {
                 finishDistance = [cc distanceToStart:here.coordinate];
-                if (finishDistance<0) {
+                if (finishDistance<=0) {
                     [self startPressed:self];
                 }
             }
@@ -221,11 +249,12 @@ enum {
 
 -(IBAction)startPressed:(id)sender {
     Course * cc = mapViewController.currentCourse;
-    BOOL outsideCourse = [cc outsideCourse:track.locationManager.location.coordinate];
+    int outsideCourse = [cc outsideCourse:track.locationManager.location.coordinate];
     switch (trackingState) {
         case kTrackingStateStopped:
             if (mapViewController.courseMode && cc.isValid && outsideCourse) {
                 trackingState = kTrackingStateWaiting;
+                cc.direction = outsideCourse>0;
                 break;
             } // else fall through
         case kTrackingStateWaiting:

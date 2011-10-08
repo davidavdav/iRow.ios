@@ -38,9 +38,10 @@ enum {
     IBOutlet UILabel * timeLabel;
     IBOutlet UILabel * distanceLabel;
     IBOutlet UILabel * distanceUnitLabel;
+    IBOutlet UILabel * totalOrLeft;
     MapViewController * mapViewController;
     // button colors/images
-    UIImage * buttonImage[4];
+    UIImage * buttonImage[6];
     // location
     int trackingState;
     float dTlocation;
@@ -71,6 +72,7 @@ enum {
 @property (strong, nonatomic) IBOutlet UILabel * timeLabel;
 @property (strong, nonatomic) IBOutlet UILabel * distanceLabel;
 @property (strong, nonatomic) IBOutlet UILabel * distanceUnitLabel;
+@property (strong, nonatomic) IBOutlet UILabel * totalOrLeft;
 
 
 @property (strong, nonatomic) Track * track;
