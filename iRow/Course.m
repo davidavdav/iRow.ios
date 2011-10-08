@@ -15,7 +15,7 @@
 
 @implementation Course
 
-@synthesize start, finish, length;
+@synthesize start, finish, length, direction;
 
 - (id)init
 {
@@ -24,7 +24,7 @@
         // Initialization code here.
         waypoints = [NSMutableArray arrayWithCapacity:10];
         waypointNr = 0;
-//        normals = [NSMutableArray arrayWithCapacity:11];
+        direction=kDirectionForward;
     }
     
     return self;
@@ -32,19 +32,19 @@
 
 -(void) update {
     if (waypoints.count < 2) return;
-    [[waypoints objectAtIndex:0] resetDistanceInDirection:0];
+    [[waypoints objectAtIndex:0] resetDistanceInDirection:kDirectionForward];
     for (int i=1; i<waypoints.count; i++) {
-        [[waypoints objectAtIndex:i] connectingFrom:[waypoints objectAtIndex:i-1] direction:0];
+        [[waypoints objectAtIndex:i] connectingFrom:[waypoints objectAtIndex:i-1] direction:kDirectionForward];
 //        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i] dist][0]);
     }
     [[waypoints lastObject] resetDistanceInDirection:1];
     for (int i=waypoints.count-1; i>0; i--) {
-        [[waypoints objectAtIndex:i-1] connectingFrom:[waypoints objectAtIndex:i] direction:1];
+        [[waypoints objectAtIndex:i-1] connectingFrom:[waypoints objectAtIndex:i] direction:kDirectionBackward];
 //        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i-1] dist][1]);
     }        
-    [[waypoints objectAtIndex:0] copyNormalToDirection:0];
+    [[waypoints objectAtIndex:0] copyNormalToDirection:kDirectionForward];
     [[waypoints lastObject] copyNormalToDirection:1];
-    length = [(CourseAnnotation*)[waypoints lastObject] dist][1];
+    length = [(CourseAnnotation*)[waypoints lastObject] dist][kDirectionBackward];
     return;
 }
 
@@ -84,19 +84,26 @@
 
 -(double)distanceToStart:(CLLocationCoordinate2D)here  {
     if (waypoints.count<2) return 0;
-    double d = [[waypoints objectAtIndex:0] distanceFrom:here direction:0];
+    int extremeIndex = direction*(waypoints.count-1);
+    double d = [[waypoints objectAtIndex:extremeIndex] distanceFrom:here direction:direction];
 //    NSLog(@"%f", d);
     return d;
 }
 
 -(double)distanceToFinish:(CLLocationCoordinate2D)here  {
     if (waypoints.count<2) return 0;
-    for (int i=0; i<waypoints.count; i++) {
-        CourseAnnotation * a = [waypoints objectAtIndex:i];
-        CLLocationDistance d = [a distanceFrom:here direction:0];
-//        NSLog(@"%f", d);
-        if (d>0) return a.dist[0] + d;
-    }
+    if (direction==kDirectionForward) 
+        for (int i=0; i<waypoints.count; i++) {
+            CourseAnnotation * a = [waypoints objectAtIndex:i];
+            CLLocationDistance d = [a distanceFrom:here direction:direction];
+            if (d>0) return a.dist[direction] + d;
+        }
+    else 
+        for (int i=waypoints.count-1; i>=0; i--) {
+            CourseAnnotation * a = [waypoints objectAtIndex:i];
+            CLLocationDistance d = [a distanceFrom:here direction:direction];
+            if (d>0) return a.dist[direction] + d;            
+        }
     return 0;
 }
 

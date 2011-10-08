@@ -10,17 +10,23 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
+enum {
+    kDirectionForward=0,
+    kDirectionBackward
+} direction;
+
 @class CourseAnnotation;
 
 @interface Course : NSObject <NSCoding> {
     int waypointNr;
-    NSMutableArray * waypoints, *normals;
+    NSMutableArray * waypoints;
     CourseAnnotation * start, * finish;
-//    Normal * startNormal, * finishNormal;
+    int direction;
     CLLocationDistance length;
 }
 
 @property (strong, nonatomic) CourseAnnotation * start, * finish;
+@property int direction;
 @property (readonly) CLLocationDistance length;
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc;
