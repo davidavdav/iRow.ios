@@ -7,7 +7,6 @@
 //
 
 #import "ErgometerViewController.h"
-#import "GlassView.h"
 
 #define kStrokeAveragingDuration (10.0)
 
