@@ -18,7 +18,6 @@ enum {
 @class CourseAnnotation;
 
 @interface Course : NSObject <NSCoding> {
-    int waypointNr;
     NSMutableArray * waypoints;
     CourseAnnotation * start, * finish;
     int direction;
@@ -40,6 +39,7 @@ enum {
 -(double)distanceToFinish:(CLLocationCoordinate2D)here;
 -(BOOL)outsideCourse:(CLLocationCoordinate2D)here;
 -(MKCoordinateRegion)region;
+-(void)updateTitles:(int)side;
 
 @end
 
@@ -56,5 +56,6 @@ enum {
 -(void)resetDistanceInDirection:(int)dir;
 -(void)copyNormalToDirection:(int)dir;
 -(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here direction:(int)dir;
+-(void)setSubtitleFromDist:(int)dir;
 
 @end

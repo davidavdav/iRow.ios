@@ -23,36 +23,43 @@
     if (self) {
         // Initialization code here.
         waypoints = [NSMutableArray arrayWithCapacity:10];
-        waypointNr = 0;
         direction=kDirectionForward;
     }
     
     return self;
 }
 
+-(CourseAnnotation*) first {
+    return [waypoints objectAtIndex:0];
+}
+
+-(CourseAnnotation*)last {
+    return [waypoints lastObject];
+}
+
 -(void) update {
     if (waypoints.count < 2) return;
-    [[waypoints objectAtIndex:0] resetDistanceInDirection:kDirectionForward];
+    [[self first] resetDistanceInDirection:kDirectionForward];
+    [[self first] setTitle:@"1"];
     for (int i=1; i<waypoints.count; i++) {
         [[waypoints objectAtIndex:i] connectingFrom:[waypoints objectAtIndex:i-1] direction:kDirectionForward];
+        [[waypoints objectAtIndex:i] setTitle:[NSString stringWithFormat:@"%d",i+1]];
 //        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i] dist][0]);
     }
-    [[waypoints lastObject] resetDistanceInDirection:1];
+    [[self last] resetDistanceInDirection:1];
     for (int i=waypoints.count-1; i>0; i--) {
         [[waypoints objectAtIndex:i-1] connectingFrom:[waypoints objectAtIndex:i] direction:kDirectionBackward];
 //        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i-1] dist][1]);
     }        
-    [[waypoints objectAtIndex:0] copyNormalToDirection:kDirectionForward];
-    [[waypoints lastObject] copyNormalToDirection:1];
-    length = [(CourseAnnotation*)[waypoints lastObject] dist][kDirectionBackward];
+    [[self first] copyNormalToDirection:kDirectionForward];
+    [[self last] copyNormalToDirection:1];
+    length = [(CourseAnnotation*)[self last] dist][kDirectionBackward];
     return;
 }
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc {
     CourseAnnotation * new = [[CourseAnnotation alloc] init];
     new.coordinate = loc;
-    waypointNr++;
-    new.title = [NSString stringWithFormat:@"%d",waypointNr];
     [waypoints addObject:new];
     [self update];
     return new;
@@ -60,6 +67,7 @@
 
 -(void)removeWaypoint:(MKPointAnnotation*)point {
     [waypoints removeObject:point];
+    [self update];
 }
 
 -(int)count {
@@ -110,10 +118,15 @@
 // This tells us where we are w.r.t. the start- and finishline. 
 // <0: before start >0: after finish. 
 -(BOOL)outsideCourse:(CLLocationCoordinate2D)here {
-    double ds = [[waypoints objectAtIndex:0] distanceFrom:here direction:0];
-    double df = [[waypoints lastObject] distanceFrom:here direction:1];
+    double ds = [[self first] distanceFrom:here direction:0];
+    double df = [[self last] distanceFrom:here direction:1];
 //    NSLog(@"%f %f", ds, df);
-    return df>0 ? 1 : ds>0 ? -1 : 0;
+    if (df>0) {
+        return 1;
+    } else if (ds>0) {
+        return -1;
+    } else 
+        return 0;
 }
 
 -(MKCoordinateRegion)region {
@@ -131,14 +144,25 @@
     CLLocationDistance width = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(leftC))*2*kMargin,
     height = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(topC)) * 2 * kMargin;
     return MKCoordinateRegionMakeWithDistance(center, MAX(height, kMinMapSize), MAX(width, kMinMapSize));
+}
 
+-(void)updateTitles:(int)side {
+    if (side==0) return;
+    int dir = side>0;
+    for (CourseAnnotation * a in waypoints) [a setSubtitleFromDist:dir];
+    if (side>0) {
+        self.first.title = @"finish";
+        self.last.title = @"start";        
+    } else {
+        self.first.title = @"start";
+        self.last.title = @"finish";        
+    }
 }
 
 -(id)initWithCoder:(NSCoder*)dec {
     self = [super init];
     if (self) {
         waypoints = (NSMutableArray*) [dec decodeObjectForKey:@"waypoints"];
-        waypointNr = [dec decodeIntForKey:@"waypointNr"];
         start = (CourseAnnotation*) [dec decodeObjectForKey:@"start"];
         finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
 //        startNormal = [[Normal alloc] init];
@@ -150,7 +174,6 @@
 
 -(void)encodeWithCoder:(NSCoder*)enc {
     [enc encodeObject:waypoints forKey:@"waypoints"];
-    [enc encodeInt:waypointNr forKey:@"waypointNr"];
     [enc encodeObject:start forKey:@"start"];
     [enc encodeObject:finish forKey:@"finish"];
 }
@@ -197,6 +220,12 @@
     return d;
     
 }
+                                             
+-(void)setSubtitleFromDist:(int)dir {
+    dir = MAX(0, MIN(dir, 1));
+    self.subtitle = [NSString stringWithFormat:@"%4.1f m",dist[1-dir]];    
+}
+
 
 -(void)encodeWithCoder:(NSCoder *) enc {
     [enc encodeDouble:self.coordinate.longitude forKey:@"longitude"];
