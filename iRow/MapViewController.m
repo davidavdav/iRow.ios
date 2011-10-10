@@ -146,6 +146,7 @@ enum {
     [courseButton setTitle:@"course" forState:UIControlStateNormal];
 //    courseButton.center = CGPointMake(w/2, pinHeight/2+10);
     courseButton.frame = CGRectMake((w-84)/2, 10, 84, pinHeight);
+    [courseButton addTarget:self action:@selector(courseButtonDown:) forControlEvents:UIControlEventTouchDown];
 //    [courseButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [mapView addSubview:courseButton];
     clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -156,17 +157,6 @@ enum {
     [mapView addSubview:clearButton];
      //    NSLog(@"load");
     [mapView addAnnotations:currentCourse.annotations];
-    // calloutbuttons on the track
-    leftButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage * image = [UIImage imageNamed:@"rightarrow"];
-    leftButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    [leftButton setImage:image forState:UIControlStateNormal];
-    [leftButton addTarget:self action:@selector(leftPressed:) forControlEvents:UIControlEventTouchUpInside];
-    rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    image = [UIImage imageNamed:@"leftarrow"];
-    rightButton.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    [rightButton setImage:image forState:UIControlStateNormal];
-    [rightButton addTarget:self action:@selector(rightPressed:) forControlEvents:UIControlEventTouchUpInside];
     // distance label
     distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(mapView.bounds.size.width - 100, mapView.bounds.size.height - 20, 100, 20)];
     distanceLabel.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
@@ -228,6 +218,10 @@ enum {
 //    [[Settings sharedInstance] setObject:currentCourse forKey:@"currentCourse"];
     courseMode = !courseMode;
     [self updateButtons];
+}
+
+-(void)courseButtonDown:(id)sender {
+    NSLog(@"down");
 }
 
 -(BOOL)validCourse {
@@ -328,11 +322,6 @@ enum {
         pin.draggable = NO;
     }
     return pin;
-}
-
--(void)leftPressed:(id)sender {
-//    NSLog(@"%@", sender);
-    currentCourse.start = mapView.selectedAnnotations.lastObject;
 }
 
 // not even a delegate

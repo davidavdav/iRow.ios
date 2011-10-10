@@ -23,7 +23,6 @@
     MKPolyline * currentTrackPolyLine;
     Course * currentCourse;
     MKPolyline * currentCoursePolyline; 
-    UIButton * leftButton, * rightButton;
     UILabel * distanceLabel;
     UISegmentedControl * zoomModeControl;
     int zoomMode;
