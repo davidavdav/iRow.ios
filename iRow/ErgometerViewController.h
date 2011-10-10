@@ -30,8 +30,8 @@ enum {
 @interface ErgometerViewController : UIViewController <TrackDelegate, StrokeDelegate> {
     // interface
     IBOutlet UIButton * startButton;
-    IBOutlet UILabel * curSpeedLabel;
-    IBOutlet UILabel * aveSpeedLabel;
+    IBOutlet UILabel * curSpeedLabel, * curSpeedUnitLabel;
+    IBOutlet UILabel * aveSpeedLabel, * aveSpeedUnitLabel;
     IBOutlet UILabel * strokeFreqLabel;
     IBOutlet UILabel * aveStrokeFreqLabel;
     IBOutlet UILabel * totalStrokesLabel;
@@ -62,8 +62,8 @@ enum {
 
 @property (strong, nonatomic) IBOutlet UIButton * startButton;
 
-@property (strong, nonatomic) IBOutlet UILabel * curSpeedLabel;
-@property (strong, nonatomic) IBOutlet UILabel * aveSpeedLabel;
+@property (strong, nonatomic) IBOutlet UILabel * curSpeedLabel, * curSpeedUnitLabel;
+@property (strong, nonatomic) IBOutlet UILabel * aveSpeedLabel, * aveSpeedUnitLabel;
 
 @property (strong, nonatomic) IBOutlet UILabel * strokeFreqLabel;
 @property (strong, nonatomic) IBOutlet UILabel * aveStrokeFreqLabel;

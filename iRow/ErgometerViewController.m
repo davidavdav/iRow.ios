@@ -7,6 +7,7 @@
 //
 
 #import "ErgometerViewController.h"
+#import "GlassView.h"
 
 #define kStrokeAveragingDuration (10.0)
 
@@ -19,10 +20,12 @@ enum {
 #define kSpeedFactorKmph (3.6)
 #define kSpeedFactorMph (2.237415)
 
+#define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"M/h"
+
 @implementation ErgometerViewController
 
 @synthesize startButton;
-@synthesize curSpeedLabel, aveSpeedLabel;
+@synthesize curSpeedLabel, aveSpeedLabel, curSpeedUnitLabel, aveSpeedUnitLabel;
 @synthesize strokeFreqLabel, aveStrokeFreqLabel, totalStrokesLabel;
 @synthesize timeLabel, distanceLabel, distanceUnitLabel, totalOrLeft;
 
@@ -79,11 +82,14 @@ enum {
 }
 
 -(void)displaySpeed:(CLLocationSpeed)speed atLabel:(UILabel*)label {
-    switch (speedUnit) {
+    if (speed<0 || isnan(speed)) 
+        label.text = @"–"; // en-dash
+    else 
+        switch (speedUnit) {
         case kSpeedTimePer500m:
             ;
             NSTimeInterval timePer500 = 500.0/speed;
-            label.text = speed>0 ? [self hms:timePer500] : @"––:––"; // en-dash
+                label.text = speed==0 ? @"––:––" : [self hms:timePer500];
             break;
         case kSpeedMeterPerSecond:
              label.text = [NSString stringWithFormat:@"%3.1f",speed];
@@ -154,7 +160,9 @@ enum {
     switch (trackingState) {
         case kTrackingStateStopped:
             started=0;
-            title = mapViewController.outsideCourse ? @"Prepare for start" : @"Start";
+            int side = mapViewController.outsideCourse;
+            title = side ? @"Prepare for start" : @"Start";
+            [mapViewController.currentCourse updateTitles:side];
             break;
         case kTrackingStateWaiting:
             started=1;
@@ -179,6 +187,19 @@ enum {
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+//    GlassView * speedGlass = [[GlassView alloc] initWithFrame:curSpeedLabel.bounds];
+    UIButton * speedGlass = [UIButton buttonWithType:UIButtonTypeCustom];
+    speedGlass.frame = curSpeedLabel.bounds;
+    speedGlass.backgroundColor = [UIColor clearColor];
+    [speedGlass addTarget:self action:@selector(changeSpeedUp:) forControlEvents:UIControlEventTouchUpInside];
+    curSpeedLabel.userInteractionEnabled = YES;
+    [curSpeedLabel addSubview:speedGlass];
+    speedGlass = [UIButton buttonWithType:UIButtonTypeCustom];
+    speedGlass.frame = aveSpeedLabel.bounds;
+    speedGlass.backgroundColor = [UIColor clearColor];
+    [speedGlass addTarget:self action:@selector(changeSpeedDown:) forControlEvents:UIControlEventTouchUpInside];
+    aveSpeedLabel.userInteractionEnabled = YES;
+    [aveSpeedLabel addSubview:speedGlass];
     [self updateValues:kCurrentLocation | kCurrentStroke | kCumulatives];
     [self setButtonAppearance];
 }
@@ -209,6 +230,23 @@ enum {
 - (void)viewDidDisappear:(BOOL)animated
 {
 	[super viewDidDisappear:animated];
+}
+
+-(void)changeSpeed{
+    static NSArray * labels = nil;
+    if (labels==nil) labels = [NSArray arrayWithObjects:kSpeedLabels, nil];
+    [self updateValues:kCurrentLocation];
+    aveSpeedUnitLabel.text = curSpeedUnitLabel.text = [labels objectAtIndex:speedUnit];
+}
+
+-(void)changeSpeedUp:(id)sender {
+    speedUnit = (speedUnit+1) % 4;
+    [self changeSpeed];
+}
+
+-(void)changeSpeedDown:(id)sender {
+    speedUnit = (speedUnit+3) % 4;
+    [self changeSpeed];
 }
 
 -(void)locationUpdate:(id)sender {
@@ -255,6 +293,7 @@ enum {
             if (mapViewController.courseMode && cc.isValid && outsideCourse) {
                 trackingState = kTrackingStateWaiting;
                 cc.direction = outsideCourse>0;
+                [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                 break;
             } // else fall through
         case kTrackingStateWaiting:
