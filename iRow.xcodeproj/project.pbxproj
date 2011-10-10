@@ -47,6 +47,8 @@
 		63AE9736143CF9D300C63178 /* gray-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9733143CF9D200C63178 /* gray-normal.png */; };
 		63AE9737143CF9D300C63178 /* gray-highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9734143CF9D200C63178 /* gray-highlighted.png */; };
 		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
+		63AE973F14405EF400C63178 /* wait-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973D14405EF100C63178 /* wait-button.png */; };
+		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
 		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
 /* End PBXBuildFile section */
@@ -106,6 +108,8 @@
 		63AE9733143CF9D200C63178 /* gray-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-normal.png"; sourceTree = "<group>"; };
 		63AE9734143CF9D200C63178 /* gray-highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-highlighted.png"; sourceTree = "<group>"; };
 		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
+		63AE973D14405EF100C63178 /* wait-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button.png"; sourceTree = "<group>"; };
+		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
 		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
 		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,6 +189,8 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63AE973D14405EF100C63178 /* wait-button.png */,
+				63AE973E14405EF300C63178 /* wait-button-highlight.png */,
 				63AE9733143CF9D200C63178 /* gray-normal.png */,
 				63AE9734143CF9D200C63178 /* gray-highlighted.png */,
 				63AE9735143CF9D300C63178 /* gray-disabled.png */,
@@ -304,6 +310,8 @@
 				63AE9736143CF9D300C63178 /* gray-normal.png in Resources */,
 				63AE9737143CF9D300C63178 /* gray-highlighted.png in Resources */,
 				63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */,
+				63AE973F14405EF400C63178 /* wait-button.png in Resources */,
+				63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
