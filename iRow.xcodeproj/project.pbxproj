@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63192D741443509A001FB831 /* ShiftButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 63192D731443509A001FB831 /* ShiftButton.m */; };
 		6319A67114263D590035EB18 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6319A67014263D590035EB18 /* UIKit.framework */; };
 		6319A67314263D590035EB18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6319A67214263D590035EB18 /* Foundation.framework */; };
 		6319A67514263D590035EB18 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6319A67414263D590035EB18 /* CoreGraphics.framework */; };
@@ -51,9 +52,13 @@
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
 		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
+		63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014114447ED700C826B1 /* PLBlueMinus.png */; };
+		63E8014C14449A9500C826B1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014B14449A9500C826B1 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63192D721443509A001FB831 /* ShiftButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShiftButton.h; sourceTree = "<group>"; };
+		63192D731443509A001FB831 /* ShiftButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShiftButton.m; sourceTree = "<group>"; };
 		6319A66C14263D590035EB18 /* iRow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iRow.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6319A67014263D590035EB18 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6319A67214263D590035EB18 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -112,6 +117,8 @@
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
 		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
 		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
+		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
+		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +188,8 @@
 				63AE97091430E48E00C63178 /* Settings.m */,
 				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
 				6319A69314263D590035EB18 /* MapViewController.xib */,
+				63192D721443509A001FB831 /* ShiftButton.h */,
+				63192D731443509A001FB831 /* ShiftButton.m */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
 			path = iRow;
@@ -189,6 +198,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63E8014B14449A9500C826B1 /* Settings.bundle */,
 				63AE973D14405EF100C63178 /* wait-button.png */,
 				63AE973E14405EF300C63178 /* wait-button-highlight.png */,
 				63AE9733143CF9D200C63178 /* gray-normal.png */,
@@ -198,6 +208,7 @@
 				63AE9726143CD66D00C63178 /* green-highlighted.png */,
 				63AE9727143CD66D00C63178 /* green-disabled.png */,
 				63AE971F143BA50600C63178 /* UIButtonBarLocate.png */,
+				63E8014114447ED700C826B1 /* PLBlueMinus.png */,
 				63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */,
 				63AE97151439817A00C63178 /* leftarrow.png */,
 				63AE97161439817A00C63178 /* rightarrow.png */,
@@ -312,6 +323,8 @@
 				63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */,
 				63AE973F14405EF400C63178 /* wait-button.png in Resources */,
 				63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */,
+				63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */,
+				63E8014C14449A9500C826B1 /* Settings.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +347,7 @@
 				634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */,
 				63AE97071430492100C63178 /* Course.m in Sources */,
 				63AE970A1430E48E00C63178 /* Settings.m in Sources */,
+				63192D741443509A001FB831 /* ShiftButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
