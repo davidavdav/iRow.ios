@@ -9,7 +9,7 @@
 #import "iRowAppDelegate.h"
 
 
-#import "MapViewController.h"
+#import "Settings.h"
 
 @implementation iRowAppDelegate
 
@@ -21,15 +21,23 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     ergometerViewController = [[ErgometerViewController alloc] initWithNibName:@"ErgometerViewController" bundle:nil];
-    MapViewController *mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
+    mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
     ergometerViewController.mapViewController = mapViewController;
     mapViewController.ergometerViewController = ergometerViewController;
     self.tabBarController = [[UITabBarController alloc] init];
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     return YES;
+}
+
+// this will fire for _any_ change in settings, including the ones we write ourselves...
+-(void)settingsChanged:(id)sender {
+    // change of unit system?
+    int us = Settings.sharedInstance.unitSystem;
+    if (us != ergometerViewController.unitSystem)
+        ergometerViewController.unitSystem = mapViewController.unitSystem = us;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

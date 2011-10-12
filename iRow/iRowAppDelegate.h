@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 #import "ErgometerViewController.h"
+#import "MapViewController.h"
 
 
 @interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
     ErgometerViewController * ergometerViewController;
+    MapViewController * mapViewController;
 }
 
 @property (strong, nonatomic) UIWindow *window;
