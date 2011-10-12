@@ -93,6 +93,8 @@
     else return 0;
 }
 
+// this function mallocs data, this should be freed by the caller
+/*
 -(int)newTrackData:(CLLocationCoordinate2D **)trackdataPtr {
     CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
     int n=0;
@@ -104,8 +106,9 @@
     *trackdataPtr = trackdata;
     return n;
 }
+*/
 
--(MKPolyline*)trackData {
+-(MKPolyline*)polyLine {
     CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
     int n=0;
     for (CLLocation * l in locations) {
@@ -118,9 +121,9 @@
     return polyline;
 }
 
--(NSArray*)pinData {
-    return pins;
-}
+//-(NSArray*)pinData {
+//    return pins;
+//}
 
 -(CLLocation*)startLocation {
     if (locations.count) return [locations objectAtIndex:0];
@@ -158,7 +161,7 @@
 -(void)encodeWithCoder:(NSCoder *)enc {
     [enc encodeDouble:period forKey:@"period"];
     [enc encodeObject:locations forKey:@"locations"];
-    [enc encodeObject:pins forKey:@"pins"];
+//    [enc encodeObject:pins forKey:@"pins"];
 }
 
 -(id)initWithCoder:(NSCoder *)dec {
@@ -166,7 +169,8 @@
 	if (self != nil) {
 		period = [[dec valueForKey:@"period"] doubleValue];
         locations = [dec valueForKey:@"locations"];
-        pins = [dec valueForKey:@"pins"];
+        [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
+        [self addPin:@"finish" atLocation:[locations lastObject]];
     }
     return self;
 }

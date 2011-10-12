@@ -41,7 +41,7 @@
 -(void)reset;
 -(CLLocationDistance)totalDistance;
 -(CLLocationSpeed)averageSpeed;
--(MKPolyline*)trackData;
+-(MKPolyline*)polyLine;
 -(CLLocation*)startLocation;
 -(CLLocation*)stopLocation;
 -(MKCoordinateRegion)region;
