@@ -167,8 +167,8 @@
 -(id)initWithCoder:(NSCoder *)dec {
 	self = [super init];
 	if (self != nil) {
-		period = [[dec valueForKey:@"period"] doubleValue];
-        locations = [dec valueForKey:@"locations"];
+		period = [dec decodeDoubleForKey:@"period"];
+        locations = [dec decodeObjectForKey:@"locations"];
         [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
         [self addPin:@"finish" atLocation:[locations lastObject]];
     }
