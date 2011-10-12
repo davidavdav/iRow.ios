@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import "Track.h"
 
 @protocol TrackerDelegate <NSObject>
 
@@ -16,33 +17,22 @@
 
 @end
 
-@interface Tracker : NSObject <NSCoding> {
+@interface Tracker : NSObject {
     CLLocationManager * locationManager;
     NSTimer * locationTimer;
     float period;
     id<TrackerDelegate> delegate;
-    NSMutableArray * locations;
-    NSMutableArray * pins;
-}
+    Track * track;
+ }
 
 @property (strong, nonatomic) CLLocationManager * locationManager;
 @property (strong, nonatomic) id<TrackerDelegate> delegate;
-@property (strong, readonly) NSMutableArray *  locations;
-@property (strong, readonly) NSMutableArray *  pins;
+@property (strong, nonatomic) Track * track;
 
 -(id)initWithPeriod:(double)period;
--(void)add:(CLLocation*)loc;
--(void)addPin:(NSString*)name atLocation:(CLLocation*)loc;
 
 -(void)startTimer;
 -(void)stopTimer;
--(void)reset;
--(CLLocationDistance)totalDistance;
--(CLLocationSpeed)averageSpeed;
--(MKPolyline*)polyLine;
--(CLLocation*)startLocation;
--(CLLocation*)stopLocation;
--(MKCoordinateRegion)region;
--(int)count;
+
 
 @end

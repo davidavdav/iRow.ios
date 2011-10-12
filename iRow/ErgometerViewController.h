@@ -44,7 +44,7 @@ enum {
     // location
     int trackingState;
     float dTlocation;
-    Tracker * track;
+    Tracker * tracker;
     Stroke * stroke;
     float dTmotion;
     CFAbsoluteTime lastStrokeTime;
@@ -76,7 +76,7 @@ enum {
 @property (strong, nonatomic) IBOutlet UILabel * totalOrLeft;
 
 
-@property (strong, nonatomic) Tracker * track;
+@property (strong, nonatomic) Tracker * tracker;
 @property (readonly) int trackingState;
 
 @property (strong, nonatomic) MapViewController * mapViewController;

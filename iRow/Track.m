@@ -2,7 +2,7 @@
 //  Track.m
 //  iRow
 //
-//  Created by David van Leeuwen on 19-09-11.
+//  Created by David van Leeuwen on 13-10-11.
 //  Copyright 2011 strApps. All rights reserved.
 //
 
@@ -14,28 +14,18 @@
 
 @implementation Track
 
-@synthesize locationManager;
-@synthesize delegate;
 @synthesize locations, pins;
 
-- (id)initWithPeriod:(double)p
+- (id)init
 {
     self = [super init];
     if (self) {
         // Initialization code here.
-        locationManager = [[CLLocationManager alloc] init];
-        [locationManager startUpdatingLocation];
-        period = p;
         locations = [NSMutableArray arrayWithCapacity:1000];
         pins = [NSMutableArray arrayWithCapacity:10];
-        [self startTimer];
     }
     
     return self;
-}
-
--(void)inspectLocation:(id)sender {
-    if (delegate) [delegate locationUpdate:self];
 }
 
 -(void)add:(CLLocation*)loc {
@@ -48,14 +38,6 @@
     p.coordinate = loc.coordinate;
     p.title = name;
     if (loc!= nil) [pins addObject:p];
-}
-
--(void)startTimer {
-    locationTimer = [NSTimer scheduledTimerWithTimeInterval:period target:self selector:@selector(inspectLocation:) userInfo:nil repeats:YES];    
-}
-
--(void)stopTimer {
-    [locationTimer invalidate];
 }
 
 -(void)reset {
@@ -95,18 +77,18 @@
 
 // this function mallocs data, this should be freed by the caller
 /*
--(int)newTrackData:(CLLocationCoordinate2D **)trackdataPtr {
-    CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
-    int n=0;
-    for (CLLocation * l in locations) {
-        if (l.horizontalAccuracy>0) {
-            trackdata[n++] = l.coordinate;
-        }
-    }
-    *trackdataPtr = trackdata;
-    return n;
-}
-*/
+ -(int)newTrackData:(CLLocationCoordinate2D **)trackdataPtr {
+ CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
+ int n=0;
+ for (CLLocation * l in locations) {
+ if (l.horizontalAccuracy>0) {
+ trackdata[n++] = l.coordinate;
+ }
+ }
+ *trackdataPtr = trackdata;
+ return n;
+ }
+ */
 
 -(MKPolyline*)polyLine {
     CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
@@ -147,10 +129,10 @@
         }
     }
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake((top+bottom)/2, (left+right)/2), 
-        leftC = CLLocationCoordinate2DMake((top+bottom)/2, left), 
-        topC = CLLocationCoordinate2DMake(top, (left+right)/2);
+    leftC = CLLocationCoordinate2DMake((top+bottom)/2, left), 
+    topC = CLLocationCoordinate2DMake(top, (left+right)/2);
     CLLocationDistance width = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(leftC))*2*kMargin,
-        height = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(topC)) * 2 * kMargin;
+    height = MKMetersBetweenMapPoints(MKMapPointForCoordinate(center), MKMapPointForCoordinate(topC)) * 2 * kMargin;
     return MKCoordinateRegionMakeWithDistance(center, MAX(height, kMinMapSize), MAX(width, kMinMapSize));
 }
 
@@ -159,26 +141,19 @@
 }
 
 -(void)encodeWithCoder:(NSCoder *)enc {
-    [enc encodeDouble:period forKey:@"period"];
     [enc encodeObject:locations forKey:@"locations"];
-//    [enc encodeObject:pins forKey:@"pins"];
 }
 
 -(id)initWithCoder:(NSCoder *)dec {
 	self = [super init];
 	if (self != nil) {
-		period = [dec decodeDoubleForKey:@"period"];
         locations = [dec decodeObjectForKey:@"locations"];
+        pins = [NSMutableArray arrayWithCapacity:10];
         [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
         [self addPin:@"finish" atLocation:[locations lastObject]];
     }
     return self;
 }
 
-
-@end
-
-
-@implementation TrackPolyline
 
 @end

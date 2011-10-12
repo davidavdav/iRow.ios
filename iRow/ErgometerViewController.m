@@ -29,7 +29,7 @@ enum {
 @synthesize strokeFreqLabel, aveStrokeFreqLabel, totalStrokesLabel;
 @synthesize timeLabel, distanceLabel, distanceUnitLabel, totalOrLeft;
 
-@synthesize track, trackingState;
+@synthesize tracker, trackingState;
 
 @synthesize unitSystem;
 
@@ -44,12 +44,10 @@ enum {
         // location tracking
         dTlocation = 1.0;
         lastStrokeTime = 0;
-//        Track * data = (Track*)[[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
-//        if (0 && data!=nil)
-//            track = (Track*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
-//        else
-            track = [[Tracker alloc] initWithPeriod:dTlocation];
-        track.delegate = self;
+        tracker = [[Tracker alloc] initWithPeriod:dTlocation];
+        tracker.delegate = self;
+        Track * track = (Track*)[[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
+        if (track != nil) tracker.track = track;
         // stroke counting
         dTmotion = 0.1;
         stroke = [[Stroke alloc] initWithPeriod:dTmotion duration:kStrokeAveragingDuration];
@@ -252,7 +250,7 @@ enum {
 }
 
 -(void)locationUpdate:(id)sender {
-    CLLocation * here = track.locationManager.location;
+    CLLocation * here = tracker.locationManager.location;
     if (here==nil) return;
     // current speed
     curSpeed = here.speed;
@@ -260,10 +258,10 @@ enum {
     Course * cc = mapViewController.currentCourse;
     switch (trackingState) {
         case kTrackingStateTracking:
-            [track add:here];
+            [tracker.track add:here];
             CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
             totalTime = now - startTime;
-            totalDistance = track.totalDistance;
+            totalDistance = tracker.track.totalDistance;
             if (mapViewController.validCourse) {
                 finishDistance = [cc distanceToFinish:here.coordinate];
                 if (finishDistance==0) [self startPressed:self];
@@ -289,7 +287,7 @@ enum {
 
 -(IBAction)startPressed:(id)sender {
     Course * cc = mapViewController.currentCourse;
-    int outsideCourse = [cc outsideCourse:track.locationManager.location.coordinate];
+    int outsideCourse = [cc outsideCourse:tracker.locationManager.location.coordinate];
     switch (trackingState) {
         case kTrackingStateStopped:
             if (mapViewController.courseMode && cc.isValid && outsideCourse) {
@@ -303,9 +301,9 @@ enum {
             trackingState = kTrackingStateTracking;
             startTime = CFAbsoluteTimeGetCurrent();
             startStroke = stroke.strokes;
-            [track reset];
+            [tracker.track reset];
             [self locationUpdate:self];
-            [track addPin:@"start" atLocation:track.startLocation];
+            [tracker.track addPin:@"start" atLocation:tracker.track.startLocation];
             [mapViewController copyTrackPins];
             [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
             break;
@@ -313,10 +311,10 @@ enum {
             trackingState = kTrackingStateStopped;
             totalTime = CFAbsoluteTimeGetCurrent() - startTime;
             totalStrokes = stroke.strokes - startStroke;
-            totalDistance = track.totalDistance;
-            [track addPin:@"finish" atLocation:track.stopLocation];
+            totalDistance = tracker.track.totalDistance;
+            [tracker.track addPin:@"finish" atLocation:tracker.track.stopLocation];
             [mapViewController copyTrackPins];
-            [[Settings sharedInstance] setObject:track forKey:@"lastTrack"];
+            [[Settings sharedInstance] setObject:tracker.track forKey:@"lastTrack"];
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
             break;
         default:

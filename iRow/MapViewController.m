@@ -50,7 +50,7 @@ enum {
 // copies the track from currentTrack into an overlay
 -(int)copyTrackData {
     MKPolyline * old = currentTrackPolyLine;
-    currentTrackPolyLine = [ergometerViewController.track polyLine];
+    currentTrackPolyLine = [ergometerViewController.tracker.track polyLine];
     [mapView addOverlay:currentTrackPolyLine];
     if (old!=nil) [mapView removeOverlay:old];
     return currentTrackPolyLine.pointCount;
@@ -58,7 +58,7 @@ enum {
 
 // copies the start/stop pins from the currentTrack into annotations
 -(void)copyTrackPins {
-    NSArray * new = ergometerViewController.track.pins;
+    NSArray * new = ergometerViewController.tracker.track.pins;
     // first remove old pins
     for (MKPointAnnotation * p in trackPins) if (![new containsObject:p]) [mapView removeAnnotation:p];
     // then add new ones
@@ -249,8 +249,8 @@ enum {
                 [mapView setCenterCoordinate:here.coordinate animated:YES];
             break;
         case kZoomModeTrack:
-            if (ergometerViewController.track.count > 0) 
-                [mapView setRegion:[ergometerViewController.track region] animated:YES];
+            if (ergometerViewController.tracker.track.count > 0) 
+                [mapView setRegion:[ergometerViewController.tracker.track region] animated:YES];
             break;
         case kZoomModeCourse:
             if (currentCourse.count>0) 
