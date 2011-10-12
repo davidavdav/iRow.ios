@@ -19,12 +19,11 @@ enum {
 
 @interface Course : NSObject <NSCoding> {
     NSMutableArray * waypoints;
-    CourseAnnotation * start, * finish;
     int direction;
     CLLocationDistance length;
 }
 
-@property (strong, nonatomic) CourseAnnotation * start, * finish;
+// @property (strong, nonatomic) CourseAnnotation * start, * finish;
 @property int direction;
 @property (readonly) CLLocationDistance length;
 
@@ -40,6 +39,7 @@ enum {
 -(BOOL)outsideCourse:(CLLocationCoordinate2D)here;
 -(MKCoordinateRegion)region;
 -(void)updateTitles:(int)side;
+-(void)clear;
 
 @end
 

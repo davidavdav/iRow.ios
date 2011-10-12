@@ -8,6 +8,7 @@
 
 #import "Course.h"
 #import <MapKit/MapKit.h>
+#import "Settings.h"
 
 // minimum span of the map region, in meters.
 #define kMinMapSize (250)
@@ -15,7 +16,8 @@
 
 @implementation Course
 
-@synthesize start, finish, length, direction;
+//@synthesize start, finish, 
+@synthesize length, direction;
 
 - (id)init
 {
@@ -30,20 +32,24 @@
 }
 
 -(CourseAnnotation*) first {
-    return [waypoints objectAtIndex:0];
+    return waypoints.count ? [waypoints objectAtIndex:0] : nil;
 }
 
 -(CourseAnnotation*)last {
-    return [waypoints lastObject];
+    return waypoints.count ? [waypoints lastObject] : nil;
 }
 
 -(void) update {
-    if (waypoints.count < 2) return;
+    if (! waypoints.count) return;
     [[self first] resetDistanceInDirection:kDirectionForward];
     [[self first] setTitle:@"1"];
+    [[self first] setSubtitleFromDist:kDirectionForward];
+    if (waypoints.count < 2) return;
     for (int i=1; i<waypoints.count; i++) {
-        [[waypoints objectAtIndex:i] connectingFrom:[waypoints objectAtIndex:i-1] direction:kDirectionForward];
-        [[waypoints objectAtIndex:i] setTitle:[NSString stringWithFormat:@"%d",i+1]];
+        CourseAnnotation * w = [waypoints objectAtIndex:i];
+        [w connectingFrom:[waypoints objectAtIndex:i-1] direction:kDirectionForward];
+        [w setTitle:[NSString stringWithFormat:@"%d",i+1]];
+        [w setSubtitleFromDist:kDirectionForward];
 //        NSLog(@"%f", [(CourseAnnotation*) [waypoints objectAtIndex:i] dist][0]);
     }
     [[self last] resetDistanceInDirection:1];
@@ -159,14 +165,17 @@
     }
 }
 
+-(void)clear {
+    [waypoints removeAllObjects];
+//    self.start = self.finish = nil;
+}
+
 -(id)initWithCoder:(NSCoder*)dec {
     self = [super init];
     if (self) {
         waypoints = (NSMutableArray*) [dec decodeObjectForKey:@"waypoints"];
-        start = (CourseAnnotation*) [dec decodeObjectForKey:@"start"];
-        finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
-//        startNormal = [[Normal alloc] init];
-//        normals = [NSMutableArray arrayWithCapacity:11];
+//        start = (CourseAnnotation*) [dec decodeObjectForKey:@"start"];
+//        finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
         [self update];
     }
     return self;
@@ -174,8 +183,8 @@
 
 -(void)encodeWithCoder:(NSCoder*)enc {
     [enc encodeObject:waypoints forKey:@"waypoints"];
-    [enc encodeObject:start forKey:@"start"];
-    [enc encodeObject:finish forKey:@"finish"];
+//    [enc encodeObject:start forKey:@"start"];
+//    [enc encodeObject:finish forKey:@"finish"];
 }
 
 @end
@@ -223,7 +232,7 @@
                                              
 -(void)setSubtitleFromDist:(int)dir {
     dir = MAX(0, MIN(dir, 1));
-    self.subtitle = [NSString stringWithFormat:@"%4.1f m",dist[1-dir]];    
+    self.subtitle = [Settings dispLength:dist[1-dir]];    
 }
 
 
