@@ -33,11 +33,8 @@ enum {
         self.title = NSLocalizedString(@"Map", @"Map");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
         mapRegion.center = CLLocationCoordinate2DMake(100, 100); // anything not valid
-        NSData * data = [[NSUserDefaults standardUserDefaults] objectForKey:@"currentCourse"];
-        if (data) 
-            currentCourse = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        else 
-            currentCourse = [[Course alloc] init];
+        currentCourse = (Course*)[[Settings sharedInstance] loadObjectForKey:@"currentCourse"];
+        if (currentCourse==nil) currentCourse = [[Course alloc] init];
         NSArray * images = [NSArray arrayWithObjects:@"gray-normal", @"gray-highlighted", @"green-normal", @"green-highlighted", nil];
         for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[images objectAtIndex:i]];
     }
