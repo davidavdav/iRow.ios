@@ -44,9 +44,9 @@ enum {
         // location tracking
         dTlocation = 1.0;
         lastStrokeTime = 0;
-//        NSData * data = [[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
+//        Track * data = (Track*)[[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
 //        if (0 && data!=nil)
-//            track = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//            track = (Track*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 //        else
             track = [[Track alloc] initWithPeriod:dTlocation];
         track.delegate = self;
