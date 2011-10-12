@@ -7,6 +7,7 @@
 //
 
 #import "ErgometerViewController.h"
+#import "Settings.h"
 
 #define kStrokeAveragingDuration (10.0)
 
@@ -19,7 +20,7 @@ enum {
 #define kSpeedFactorKmph (3.6)
 #define kSpeedFactorMph (2.237415)
 
-#define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"M/h"
+#define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"mph"
 
 @implementation ErgometerViewController
 
@@ -29,6 +30,8 @@ enum {
 @synthesize timeLabel, distanceLabel, distanceUnitLabel, totalOrLeft;
 
 @synthesize track, trackingState;
+
+@synthesize unitSystem;
 
 @synthesize mapViewController;
 
@@ -41,7 +44,11 @@ enum {
         // location tracking
         dTlocation = 1.0;
         lastStrokeTime = 0;
-        track = [[Track alloc] initWithPeriod:dTlocation];
+//        NSData * data = [[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
+//        if (0 && data!=nil)
+//            track = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//        else
+            track = [[Track alloc] initWithPeriod:dTlocation];
         track.delegate = self;
         // stroke counting
         dTmotion = 0.1;
@@ -58,7 +65,7 @@ enum {
         totalTime = 0;
         NSArray * imageNames = [NSArray arrayWithObjects:@"start-button", @"start-button-highlighted", @"wait-button", @"wait-button-highlighted", @"stop-button", @"stop-button-highlighted", nil];
         for (int i=0; i<6; i++) buttonImage[i] = [UIImage imageNamed:[imageNames objectAtIndex:i]];
-        NSLog(@"%f %f", buttonImage[0].size.width, buttonImage[0].size.height);
+//        NSLog(@"%f %f", buttonImage[0].size.width, buttonImage[0].size.height);
         // mapviewcontroller must be set from appdelegate
     }
     return self;
@@ -90,14 +97,10 @@ enum {
             NSTimeInterval timePer500 = 500.0/speed;
                 label.text = speed==0 ? @"––:––" : [self hms:timePer500];
             break;
+        case kSpeedDistanceUnitPerHour:
+            speed *= unitSystem ? kSpeedFactorMph : kSpeedFactorKmph;
         case kSpeedMeterPerSecond:
-             label.text = [NSString stringWithFormat:@"%3.1f",speed];
-            break;
-        case kSpeedKMPerHour:
-             label.text = [NSString stringWithFormat:@"%3.1f",speed*kSpeedFactorKmph];
-            break;
-        case kSpeedMilesPerHour:
-            label.text = [NSString stringWithFormat:@"%3.1f",speed*kSpeedFactorMph];
+            label.text = [NSString stringWithFormat:@"%3.1f",speed];
             break;
         default:
             break;
@@ -129,14 +132,14 @@ enum {
                 if (mapViewController.validCourse) {
                     distance =  finishDistance;
                     distanceLabel.textColor = [UIColor blueColor];
-                    dur = distance / aveSpeed;
+                    dur = totalTime>1.0 ? distance / aveSpeed : 0; 
                 } else {
                     distance = totalDistance;
                     distanceLabel.textColor = [UIColor blackColor];
                  }
         }
-        distanceLabel.text = [[NSString stringWithFormat:@"%4.0f", distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
-//        distanceLabel.textColor = totalDistance < 0 ? [UIColor redColor] : mapViewController.validCourse && trackingState==kTrackingStateTracking ? [UIColor blueColor] : [UIColor blackColor];
+        distanceLabel.text = [[Settings dispLengthOnly:distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
+        distanceUnitLabel.text = [NSString stringWithFormat:@"(%@)    %@",[Settings dispLengthOnly:positionAccuracy],[Settings dispLengthUnit:distance]];
     }
     if (mask & kCurrentStroke) {
         strokeFreqLabel.text = [NSString stringWithFormat:@"%2.0f ", strokeFreq];
@@ -159,9 +162,7 @@ enum {
     switch (trackingState) {
         case kTrackingStateStopped:
             started=0;
-            int side = mapViewController.outsideCourse;
-            title = side ? @"Prepare for start" : @"Start";
-            [mapViewController.currentCourse updateTitles:side];
+            title = mapViewController.outsideCourse ? @"Prepare for start" : @"Start";
             break;
         case kTrackingStateWaiting:
             started=1;
@@ -201,6 +202,7 @@ enum {
     [aveSpeedLabel addSubview:speedGlass];
     [self updateValues:kCurrentLocation | kCurrentStroke | kCumulatives];
     [self setButtonAppearance];
+    [self setUnitSystem:Settings.sharedInstance.unitSystem];
 }
 
 - (void)viewDidUnload
@@ -231,28 +233,28 @@ enum {
 	[super viewDidDisappear:animated];
 }
 
--(void)changeSpeed{
+-(void)changeSpeedUnit {
     static NSArray * labels = nil;
     if (labels==nil) labels = [NSArray arrayWithObjects:kSpeedLabels, nil];
     [self updateValues:kCurrentLocation];
-    aveSpeedUnitLabel.text = curSpeedUnitLabel.text = [labels objectAtIndex:speedUnit];
+    int index=speedUnit + (speedUnit==kSpeedDistanceUnitPerHour) * unitSystem;
+    aveSpeedUnitLabel.text = curSpeedUnitLabel.text = [labels objectAtIndex:index];
 }
 
 -(void)changeSpeedUp:(id)sender {
-    speedUnit = (speedUnit+1) % 4;
-    [self changeSpeed];
+    speedUnit = (speedUnit+1) % 3;
+    [self changeSpeedUnit];
 }
 
 -(void)changeSpeedDown:(id)sender {
-    speedUnit = (speedUnit+3) % 4;
-    [self changeSpeed];
+    speedUnit = (speedUnit+2) % 3;
+    [self changeSpeedUnit];
 }
 
 -(void)locationUpdate:(id)sender {
     CLLocation * here = track.locationManager.location;
     if (here==nil) return;
     // current speed
-    distanceUnitLabel.text = [NSString stringWithFormat:@"(%1.0f)    m",here.horizontalAccuracy];
     curSpeed = here.speed;
     unsigned int mask = kCurrentLocation;
     Course * cc = mapViewController.currentCourse;
@@ -281,6 +283,7 @@ enum {
         default:
             break;
     }
+    positionAccuracy = here.horizontalAccuracy;
     [self updateValues:mask];
 }
 
@@ -292,6 +295,7 @@ enum {
             if (mapViewController.courseMode && cc.isValid && outsideCourse) {
                 trackingState = kTrackingStateWaiting;
                 cc.direction = outsideCourse>0;
+                [mapViewController.currentCourse updateTitles:outsideCourse];
                 [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                 break;
             } // else fall through
@@ -302,6 +306,7 @@ enum {
             [track reset];
             [self locationUpdate:self];
             [track addPin:@"start" atLocation:track.startLocation];
+            [mapViewController copyTrackPins];
             [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
             break;
         case kTrackingStateTracking:
@@ -310,6 +315,8 @@ enum {
             totalStrokes = stroke.strokes - startStroke;
             totalDistance = track.totalDistance;
             [track addPin:@"finish" atLocation:track.stopLocation];
+            [mapViewController copyTrackPins];
+            [[Settings sharedInstance] setObject:track forKey:@"lastTrack"];
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
             break;
         default:
@@ -319,6 +326,11 @@ enum {
     [self setButtonAppearance];
 }
 
+-(void)setUnitSystem:(int)us {
+    unitSystem = us;
+    [self changeSpeedUnit];
+    [self updateValues:kCurrentStroke|kCurrentLocation|kCumulatives];
+}
 
 
 #pragma mark StrokeDelegate

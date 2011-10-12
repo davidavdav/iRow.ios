@@ -17,8 +17,7 @@
 enum {
     kSpeedTimePer500m,
     kSpeedMeterPerSecond,
-    kSpeedKMPerHour,
-    kSpeedMilesPerHour,
+    kSpeedDistanceUnitPerHour,
 } speedUnit;
 
 enum {
@@ -58,6 +57,8 @@ enum {
     int totalStrokes;
     CFTimeInterval totalTime;
     double totalDistance, finishDistance;
+    int unitSystem;
+    double positionAccuracy;
 }
 
 @property (strong, nonatomic) IBOutlet UIButton * startButton;
@@ -80,6 +81,7 @@ enum {
 
 @property (strong, nonatomic) MapViewController * mapViewController;
 
+@property (nonatomic, setter=setUnitSystem:) int unitSystem;
 
 -(IBAction)startPressed:(id)sender;
 
