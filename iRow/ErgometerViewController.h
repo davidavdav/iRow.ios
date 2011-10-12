@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreMotion/CoreMotion.h>
 
-#import "Track.h"
+#import "Tracker.h"
 #import "Stroke.h"
 #import "MapViewController.h"
 
@@ -26,7 +26,7 @@ enum {
     kTrackingStateTracking
 };
 
-@interface ErgometerViewController : UIViewController <TrackDelegate, StrokeDelegate> {
+@interface ErgometerViewController : UIViewController <TrackerDelegate, StrokeDelegate> {
     // interface
     IBOutlet UIButton * startButton;
     IBOutlet UILabel * curSpeedLabel, * curSpeedUnitLabel;
@@ -44,7 +44,7 @@ enum {
     // location
     int trackingState;
     float dTlocation;
-    Track * track;
+    Tracker * track;
     Stroke * stroke;
     float dTmotion;
     CFAbsoluteTime lastStrokeTime;
@@ -76,7 +76,7 @@ enum {
 @property (strong, nonatomic) IBOutlet UILabel * totalOrLeft;
 
 
-@property (strong, nonatomic) Track * track;
+@property (strong, nonatomic) Tracker * track;
 @property (readonly) int trackingState;
 
 @property (strong, nonatomic) MapViewController * mapViewController;

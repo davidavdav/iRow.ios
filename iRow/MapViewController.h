@@ -10,7 +10,7 @@
 #import <MapKit/MapKit.h>
 @class ErgometerViewController;
 
-#import "Track.h"
+#import "Tracker.h"
 #import "Course.h"
 #import "ShiftButton.h"
 

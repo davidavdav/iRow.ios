@@ -48,7 +48,7 @@ enum {
 //        if (0 && data!=nil)
 //            track = (Track*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 //        else
-            track = [[Track alloc] initWithPeriod:dTlocation];
+            track = [[Tracker alloc] initWithPeriod:dTlocation];
         track.delegate = self;
         // stroke counting
         dTmotion = 0.1;
