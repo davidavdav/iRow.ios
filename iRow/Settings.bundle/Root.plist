@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Title</key>
+	<string>iRow Settings</string>
+	<key>StringsTable</key>
+	<string>Root</string>
+	<key>PreferenceSpecifiers</key>
+	<array>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Stroke sensitivity</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSSliderSpecifier</string>
+			<key>Key</key>
+			<string>stroke_sensitivity</string>
+			<key>DefaultValue</key>
+			<integer>1</integer>
+			<key>MinimumValue</key>
+			<integer>0</integer>
+			<key>MaximumValue</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+			<key>Title</key>
+			<string>Distances and speed</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Key</key>
+			<string>unit_system</string>
+			<key>Title</key>
+			<string>Unit system</string>
+			<key>Titles</key>
+			<array>
+				<string>metric (m, s, km/h)</string>
+				<string>imperial (Miles, Mph)</string>
+			</array>
+			<key>DefaultValue</key>
+			<real>0</real>
+			<key>Values</key>
+			<array>
+				<integer>0</integer>
+				<string>1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
