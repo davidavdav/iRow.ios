@@ -24,6 +24,7 @@ enum {
 @synthesize trackPins, coursePins;
 @synthesize currentTrackPolyLine, currentCoursePolyline;
 @synthesize currentCourse, courseMode;
+@synthesize unitSystem;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -52,7 +53,7 @@ enum {
 // copies the track from currentTrack into an overlay
 -(int)copyTrackData {
     MKPolyline * old = currentTrackPolyLine;
-    currentTrackPolyLine = [ergometerViewController.track trackData];
+    currentTrackPolyLine = [ergometerViewController.track polyLine];
     [mapView addOverlay:currentTrackPolyLine];
     if (old!=nil) [mapView removeOverlay:old];
     return currentTrackPolyLine.pointCount;
@@ -61,24 +62,14 @@ enum {
 // copies the start/stop pins from the currentTrack into annotations
 -(void)copyTrackPins {
     NSArray * new = ergometerViewController.track.pins;
-    if ([new isEqualToArray:trackPins]) {
-        return;
-    }
-    [mapView removeAnnotations:trackPins];
-    [mapView addAnnotations:new];
+    // first remove old pins
+    for (MKPointAnnotation * p in trackPins) if (![new containsObject:p]) [mapView removeAnnotation:p];
+    // then add new ones
+    for (MKPointAnnotation * p in new) if (![trackPins containsObject:p]) [mapView addAnnotation:p];
+    // and register which annotations we have in the view...
     self.trackPins = [new copy];
 }
 
-// this is all very metric
--(NSString*)dispLength:(CLLocationDistance)l {
-    // metric
-    NSString * s;
-    if (l>1e4) 
-        s = [NSString stringWithFormat:@"4.1 km",l/1000];
-    else 
-        s = [NSString stringWithFormat:@"%4.0f m",l];
-    return s;
-}
 
 // this method updates the course polyline and distance label
 -(void)updateCourse {
@@ -90,7 +81,7 @@ enum {
         if (currentCourse.isValid) {
             currentCoursePolyline = [currentCourse polyline];
             [mapView addOverlay:currentCoursePolyline];
-            distanceLabel.text = [self dispLength:currentCourse.length];
+            distanceLabel.text = [Settings dispLength:currentCourse.length];
 //            distanceLabel.hidden = NO;
         } else {
 //            distanceLabel.hidden = YES;
@@ -104,9 +95,14 @@ enum {
     if (showCoursePins) {
         NSMutableArray * shown = [NSMutableArray arrayWithArray:[mapView annotations]];
         for (MKPointAnnotation * a in mapView.annotations) if (![a isKindOfClass:[CourseAnnotation class]]) [shown removeObject:a];
+        // shown now is the collection of annotations in mapView of type CourseAnnotation
+        // remove pins that are no longer in the currentCourse
+        for (MKPointAnnotation * a in shown) if (![currentCourse.annotations containsObject:a]) [mapView removeAnnotation:a];
+        // then add the missing pins
         for (MKPointAnnotation * a in currentCourse.annotations) if (![shown containsObject:a]) 
             [mapView addAnnotation:a];
     } else {
+        // simply remove all pins of type CourseAnnotation
         for (MKPointAnnotation * a in mapView.annotations) if ([a isKindOfClass:[CourseAnnotation class]]) [mapView removeAnnotation:a];
     }
 }
@@ -114,6 +110,7 @@ enum {
 -(void)updateButtons {
     [courseButton setBackgroundImage:buttonImage[2*courseMode] forState:UIControlStateNormal];
     [courseButton setBackgroundImage:buttonImage[2*courseMode+1] forState:UIControlStateHighlighted];
+    courseButton.enableShift = courseMode;
     distanceLabel.hidden = !courseMode;
     showCoursePins = courseMode;
     [self updateCoursePins];
@@ -141,14 +138,14 @@ enum {
     pinButton.center = CGPointMake(10+pinHeight/2, 10+pinHeight/2);
     [mapView addSubview:pinButton];
     // course button
-    courseButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    courseButton = [ShiftButton buttonWithType:UIButtonTypeCustom];
     [courseButton addTarget:self action:@selector(courseButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [courseButton setTitle:@"course" forState:UIControlStateNormal];
 //    courseButton.center = CGPointMake(w/2, pinHeight/2+10);
     courseButton.frame = CGRectMake((w-84)/2, 10, 84, pinHeight);
-    [courseButton addTarget:self action:@selector(courseButtonDown:) forControlEvents:UIControlEventTouchDown];
-//    [courseButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [courseButton onShiftTarget:self action:@selector(deleteCourse:)];
     [mapView addSubview:courseButton];
+    // clear
     clearButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [clearButton setImage:[UIImage imageNamed:@"PLBlueMinus"] forState:UIControlStateNormal];
     clearButton.frame = CGRectMake(w - pinHeight - 10, 10, pinHeight, pinHeight);
@@ -164,7 +161,7 @@ enum {
     [mapView addSubview:distanceLabel];
     // navigator arrow
     zoomModeControl= [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:[UIImage imageNamed:@"UIButtonBarLocate"], @"track", @"course", @"none",nil]];
-    zoomModeControl.frame = CGRectMake((w-200)/2, h-60, 200, 30);
+    zoomModeControl.frame = CGRectMake((w-250)/2, h-70, 250, 40);
     zoomModeControl.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     zoomModeControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [zoomModeControl addTarget:self action:@selector(zoomChanged:) forControlEvents:UIControlEventValueChanged];
@@ -197,7 +194,6 @@ enum {
     MKPointAnnotation * new = [currentCourse addWaypoint:mapView.centerCoordinate];
     [mapView addAnnotation:new];
     [self updateCourse];
-    courseButton.hidden = currentCourse.count<2;
 }
 
 -(void)clearButtonPressed:(id)sender {
@@ -210,7 +206,6 @@ enum {
         }
     }
     [self updateCourse];
-    courseButton.hidden = currentCourse.count<2;
 }
 
 -(void)courseButtonPressed:(id)sender {
@@ -220,8 +215,10 @@ enum {
     [self updateButtons];
 }
 
--(void)courseButtonDown:(id)sender {
-    NSLog(@"down");
+-(void)deleteCourse:(id)sender {
+    [currentCourse clear];
+    [self updateCourse];
+    [self updateCoursePins];
 }
 
 -(BOOL)validCourse {
@@ -229,7 +226,7 @@ enum {
 }
 
 -(BOOL)outsideCourse {
-    return [self validCourse] && [currentCourse outsideCourse:mapView.userLocation.coordinate];
+    return [self validCourse] * [currentCourse outsideCourse:mapView.userLocation.coordinate];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -265,6 +262,13 @@ enum {
         default:
             break;
     }
+}
+
+// called from appDelegate, triggered from setttings changed...
+-(void)setUnitSystem:(int)us {
+    unitSystem = us;
+    [currentCourse update]; // update annotation distances, in the labels
+    distanceLabel.text = [Settings dispLength:currentCourse.length];
 }
 
 #pragma mark mkmapviewdelegate
@@ -309,10 +313,13 @@ enum {
         pin.annotation = annotation;
     }
     if ([annotation isKindOfClass:[CourseAnnotation class]]) {
-        pin.pinColor = annotation == currentCourse.start || annotation == currentCourse.finish ? MKPinAnnotationColorPurple : MKPinAnnotationColorGreen;
+        pin.pinColor = MKPinAnnotationColorGreen;
         pin.animatesDrop = YES;
         pin.canShowCallout = YES;
         pin.draggable = YES;
+// this does not work like this...
+//        if ([pin.annotation.title isEqualToString:@"1"]) 
+//            pin.image = [UIImage imageNamed:@"leftarrow"];
 //        pin.leftCalloutAccessoryView = leftButton;
 //        pin.rightCalloutAccessoryView = rightButton;
     } else {
@@ -337,13 +344,14 @@ enum {
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view {
     if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = NO;
+        mySelectionCount++;
 //        NSLog(@"%@", mapView.selectedAnnotations);
     }
 }
 
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
-        clearButton.hidden = YES;        
+        clearButton.hidden = (--mySelectionCount == 0);
     }
 }
 

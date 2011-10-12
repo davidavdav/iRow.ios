@@ -12,10 +12,12 @@
 
 #import "Track.h"
 #import "Course.h"
+#import "ShiftButton.h"
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
     MKMapView * mapView;
-    UIButton * courseButton, *pinButton, *clearButton;
+    ShiftButton * courseButton;
+    UIButton *pinButton, *clearButton;
     UIImage * buttonImage[4];
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
@@ -28,6 +30,8 @@
     int zoomMode;
     BOOL courseMode;
     BOOL showCoursePins;
+    int unitSystem;
+    int mySelectionCount;
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;
@@ -37,7 +41,10 @@
 @property (strong, nonatomic) Course * currentCourse;
 @property (readonly) BOOL courseMode;
 
+@property (nonatomic, setter=setUnitSystem:) int unitSystem;
+
 -(BOOL)validCourse;
 -(BOOL)outsideCourse;
+-(void)copyTrackPins;
 
 @end
