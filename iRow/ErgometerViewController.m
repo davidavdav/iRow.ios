@@ -31,7 +31,7 @@ enum {
 
 @synthesize tracker, trackingState;
 
-@synthesize unitSystem;
+@synthesize unitSystem, stroke;
 
 @synthesize mapViewController;
 
@@ -52,6 +52,7 @@ enum {
         dTmotion = 0.1;
         stroke = [[Stroke alloc] initWithPeriod:dTmotion duration:kStrokeAveragingDuration];
         stroke.delegate=self;
+        stroke.sensitivity = Settings.sharedInstance.logSensitivity;
         // init of vars
         trackingState = kTrackingStateStopped;
         speedUnit = kSpeedTimePer500m;

@@ -75,6 +75,8 @@ enum {
 @property (strong, nonatomic) IBOutlet UILabel * distanceUnitLabel;
 @property (strong, nonatomic) IBOutlet UILabel * totalOrLeft;
 
+@property (readonly, strong, nonatomic) Stroke * stroke;
+
 
 @property (strong, nonatomic) Tracker * tracker;
 @property (readonly) int trackingState;
