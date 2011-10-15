@@ -166,6 +166,7 @@ enum {
     zoomMode = 0;
     [self updateButtons];
     [self updateCourse];
+    [self setUnitSystem:Settings.sharedInstance.unitSystem];
 }
 
 - (void)viewDidUnload
