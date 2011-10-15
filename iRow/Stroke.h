@@ -28,6 +28,7 @@
     Filter * bpx, * bpy;
     int strokes;
     id<StrokeDelegate> delegate;
+    float threshold;
 }
 
 @property (strong, nonatomic) CMMotionManager * motionManager;
@@ -38,6 +39,7 @@
 -(id)initWithPeriod:(CFTimeInterval)period duration:(CFTimeInterval)duration;
 -(void)add:(CMAcceleration)acc;
 -(void)reset;
+-(void)setSensitivity:(float)logSens;
 
 -(CMAcceleration)gravity;
 

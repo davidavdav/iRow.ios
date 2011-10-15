@@ -55,7 +55,7 @@
     if (ptr>=size) ptr = 0;
     N = MIN(size, N+1);
 //    NSLog(@"%f", yacc);
-    if (yacc * sign < 0 && fabs(yacc)>0.05) {
+    if (yacc * sign < 0 && fabs(yacc)>threshold) {
         sign = (yacc>0) ? 1 : -1;
         if (sign>0) { // count positive accelerations...
             strokes++;
@@ -76,6 +76,9 @@
 
 -(void)reset {
     strokes = 0;
+}
+-(void)setSensitivity:(float)logSens {
+    threshold = pow(10,-logSens);
 }
 
 
