@@ -23,7 +23,9 @@ enum {
 -(void)setObject:(id)object forKey:(NSString*)key;
 -(id)loadObjectForKey:(NSString*)key;
 
+// from the general settings:
 -(int)unitSystem;
+-(double)logSensitivity;
 
 // a utility function
 +(NSString*)dispLength:(CLLocationDistance)l;

@@ -44,6 +44,10 @@
     return [[ud valueForKey:@"unit_system"] intValue];
 }
 
+-(double)logSensitivity {
+    return [[ud valueForKey:@"stroke_sensitivity"] doubleValue];
+}
+
 // these are probably relatively slow methods...
 +(NSString*)dispLength:(CLLocationDistance)l {
     NSString * s;
