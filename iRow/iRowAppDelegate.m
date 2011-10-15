@@ -38,6 +38,7 @@
     int us = Settings.sharedInstance.unitSystem;
     if (us != ergometerViewController.unitSystem)
         ergometerViewController.unitSystem = mapViewController.unitSystem = us;
+    ergometerViewController.stroke.sensitivity = Settings.sharedInstance.logSensitivity;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
