@@ -25,7 +25,7 @@
         delete.textAlignment = UITextAlignmentCenter;
         // shift label
         shiftLabel = [[UILabel alloc] initWithFrame:self.frame]; // is adapted later...
-        shiftLabel.text = @"shift button to delete course";
+        shiftLabel.text = @"shift button to delete entire course";
         shiftLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
         shiftLabel.textAlignment = UITextAlignmentCenter;
         shiftLabel.textColor = [UIColor whiteColor];
@@ -78,13 +78,13 @@
         self.center = CGPointMake(x, self.center.y);
     }
     if (!shifted) {
-        [shiftLabel removeFromSuperview];
+//        [shiftLabel removeFromSuperview];
         [self.superview insertSubview:delete belowSubview:self];
 //        self.backgroundColor = [UIColor redColor];
     }
     shifted = YES;
-//    [shiftLabel removeFromSuperview];
     CGFloat shift = fabs(self.center.x - origCenter.x) / self.bounds.size.width;
+    if (shift>0.05) [shiftLabel removeFromSuperview];
     deleteSelected = shift>0.97;
     delete.text = deleteSelected ? @"Yes!" : @"Delete?";
     delete.backgroundColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:shift];
@@ -92,7 +92,6 @@
 }
 
 -(void)unhide {
-    NSLog(@"unhide");
     shiftLabel.frame = self.superview.bounds;
     [self.superview addSubview:shiftLabel];
 }
