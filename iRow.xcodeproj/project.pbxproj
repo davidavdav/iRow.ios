@@ -23,7 +23,7 @@
 		6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* ErgometerViewController.xib */; };
 		6319A69514263D590035EB18 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69314263D590035EB18 /* MapViewController.xib */; };
 		634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F68142647270001BF57 /* CoreLocation.framework */; };
-		634A7F711427311F0001BF57 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F701427311F0001BF57 /* Track.m */; };
+		634A7F711427311F0001BF57 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F701427311F0001BF57 /* Tracker.m */; };
 		634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F771427564C0001BF57 /* MapKit.framework */; };
 		634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F821427DC8B0001BF57 /* CoreMotion.framework */; };
 		634A7F861427DFE90001BF57 /* Stroke.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F851427DFE90001BF57 /* Stroke.m */; };
@@ -36,6 +36,7 @@
 		6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A903142C7CCA00562991 /* start-button-highlight.png */; };
 		6354A909142C7EC800562991 /* stop-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A907142C7EC800562991 /* stop-button.png */; };
 		6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A908142C7EC800562991 /* stop-button-highlight.png */; };
+		63696BB0144A28480069FC9C /* CrossHair.m in Sources */ = {isa = PBXBuildFile; fileRef = 63696BAF144A28480069FC9C /* CrossHair.m */; };
 		63AE97071430492100C63178 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97061430492100C63178 /* Course.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE97171439817A00C63178 /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97151439817A00C63178 /* leftarrow.png */; };
@@ -52,6 +53,7 @@
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
 		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
+		63BED61C1446476C00A52775 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BED61B1446476C00A52775 /* Track.m */; };
 		63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014114447ED700C826B1 /* PLBlueMinus.png */; };
 		63E8014C14449A9500C826B1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014B14449A9500C826B1 /* Settings.bundle */; };
 /* End PBXBuildFile section */
@@ -80,8 +82,8 @@
 		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ErgometerViewController.xib; sourceTree = "<group>"; };
 		6319A69414263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController.xib; sourceTree = "<group>"; };
 		634A7F68142647270001BF57 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		634A7F6F1427311F0001BF57 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
-		634A7F701427311F0001BF57 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		634A7F6F1427311F0001BF57 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
+		634A7F701427311F0001BF57 /* Tracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
 		634A7F771427564C0001BF57 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		634A7F821427DC8B0001BF57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		634A7F841427DFE90001BF57 /* Stroke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stroke.h; sourceTree = "<group>"; };
@@ -99,6 +101,8 @@
 		6354A903142C7CCA00562991 /* start-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start-button-highlight.png"; path = "lib/start-button-highlight.png"; sourceTree = SOURCE_ROOT; };
 		6354A907142C7EC800562991 /* stop-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button.png"; path = "lib/stop-button.png"; sourceTree = SOURCE_ROOT; };
 		6354A908142C7EC800562991 /* stop-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button-highlight.png"; path = "lib/stop-button-highlight.png"; sourceTree = SOURCE_ROOT; };
+		63696BAE144A28480069FC9C /* CrossHair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossHair.h; sourceTree = "<group>"; };
+		63696BAF144A28480069FC9C /* CrossHair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossHair.m; sourceTree = "<group>"; };
 		63AE97051430492100C63178 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63AE97061430492100C63178 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
@@ -117,6 +121,8 @@
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
 		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
 		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
+		63BED61A1446476C00A52775 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		63BED61B1446476C00A52775 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
 		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,8 +184,10 @@
 				6319A68314263D590035EB18 /* ErgometerViewController.m */,
 				634A7F841427DFE90001BF57 /* Stroke.h */,
 				634A7F851427DFE90001BF57 /* Stroke.m */,
-				634A7F6F1427311F0001BF57 /* Track.h */,
-				634A7F701427311F0001BF57 /* Track.m */,
+				634A7F6F1427311F0001BF57 /* Tracker.h */,
+				634A7F701427311F0001BF57 /* Tracker.m */,
+				63BED61A1446476C00A52775 /* Track.h */,
+				63BED61B1446476C00A52775 /* Track.m */,
 				63AE97051430492100C63178 /* Course.h */,
 				63AE97061430492100C63178 /* Course.m */,
 				6319A68914263D590035EB18 /* MapViewController.h */,
@@ -190,6 +198,8 @@
 				6319A69314263D590035EB18 /* MapViewController.xib */,
 				63192D721443509A001FB831 /* ShiftButton.h */,
 				63192D731443509A001FB831 /* ShiftButton.m */,
+				63696BAE144A28480069FC9C /* CrossHair.h */,
+				63696BAF144A28480069FC9C /* CrossHair.m */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
 			path = iRow;
@@ -339,7 +349,7 @@
 				6319A68114263D590035EB18 /* iRowAppDelegate.m in Sources */,
 				6319A68414263D590035EB18 /* ErgometerViewController.m in Sources */,
 				6319A68B14263D590035EB18 /* MapViewController.m in Sources */,
-				634A7F711427311F0001BF57 /* Track.m in Sources */,
+				634A7F711427311F0001BF57 /* Tracker.m in Sources */,
 				634A7F861427DFE90001BF57 /* Stroke.m in Sources */,
 				634A7F8F1428B2240001BF57 /* Filter.m in Sources */,
 				634A7F981428B3C10001BF57 /* Vector.m in Sources */,
@@ -348,6 +358,8 @@
 				63AE97071430492100C63178 /* Course.m in Sources */,
 				63AE970A1430E48E00C63178 /* Settings.m in Sources */,
 				63192D741443509A001FB831 /* ShiftButton.m in Sources */,
+				63BED61C1446476C00A52775 /* Track.m in Sources */,
+				63696BB0144A28480069FC9C /* CrossHair.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
