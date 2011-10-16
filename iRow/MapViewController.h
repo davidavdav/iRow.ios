@@ -13,6 +13,8 @@
 #import "Tracker.h"
 #import "Course.h"
 #import "ShiftButton.h"
+#import "CrossHair.h"
+
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
     MKMapView * mapView;
@@ -32,6 +34,7 @@
     BOOL showCoursePins;
     int unitSystem;
     int mySelectionCount;
+    CrossHair * crossHair;
 }
 
 @property (strong, nonatomic) ErgometerViewController * ergometerViewController;

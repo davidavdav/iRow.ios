@@ -9,6 +9,7 @@
 #import "MapViewController.h"
 #import "ErgometerViewController.h"
 #import "Settings.h"
+#import <QuartzCore/QuartzCore.h>
 
 enum {
     kZoomModeHere=0,
@@ -162,11 +163,16 @@ enum {
     zoomModeControl.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     zoomModeControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [zoomModeControl addTarget:self action:@selector(zoomChanged:) forControlEvents:UIControlEventValueChanged];
+    zoomModeControl.selectedSegmentIndex = 0;
     [mapView addSubview:zoomModeControl];
     zoomMode = 0;
     [self updateButtons];
     [self updateCourse];
     [self setUnitSystem:Settings.sharedInstance.unitSystem];
+    crossHair = [[CrossHair alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    crossHair.center = mapView.center;
+    crossHair.hidden = YES;
+    [mapView addSubview:crossHair];
 }
 
 - (void)viewDidUnload
@@ -269,7 +275,7 @@ enum {
     distanceLabel.text = [Settings dispLength:currentCourse.length];
 }
 
-#pragma mark mkmapviewdelegate
+#pragma mark MKMapViewDelegate
 // centers the map as soon as location is found
 -(void)mapView:(MKMapView *)mv didUpdateUserLocation:(MKUserLocation *)userLocation {
     static BOOL centered = NO;
@@ -329,7 +335,7 @@ enum {
     return pin;
 }
 
-// not even a delegate
+#pragma mark MKMapViewDelegate
 
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
@@ -351,6 +357,22 @@ enum {
     if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = (--mySelectionCount == 0);
     }
+}
+
+-(void)mapView:(MKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
+   [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+       crossHair.alpha = 1;
+       crossHair.hidden = !courseMode;
+   } completion:^(BOOL finished){}];
+}
+
+-(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
+    [UIView animateWithDuration:0.5 delay:0.5 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+        crossHair.alpha = 0;
+    } completion:^(BOOL finished){
+        if (finished) crossHair.hidden = YES;
+        crossHair.alpha = 1;
+    }];
 }
 
 -(void)zoomChanged:(id)sender {
