@@ -83,6 +83,7 @@ enum {
 
 @property (strong, nonatomic) MapViewController * mapViewController;
 
+@property (nonatomic) int speedUnit;
 @property (nonatomic, setter=setUnitSystem:) int unitSystem;
 
 -(IBAction)startPressed:(id)sender;

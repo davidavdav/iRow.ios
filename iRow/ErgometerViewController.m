@@ -31,7 +31,7 @@ enum {
 
 @synthesize tracker, trackingState;
 
-@synthesize unitSystem, stroke;
+@synthesize speedUnit, unitSystem, stroke;
 
 @synthesize mapViewController;
 
@@ -55,7 +55,7 @@ enum {
         stroke.sensitivity = Settings.sharedInstance.logSensitivity;
         // init of vars
         trackingState = kTrackingStateStopped;
-        speedUnit = kSpeedTimePer500m;
+        speedUnit = [[[Settings sharedInstance] loadObjectForKey:@"speedUnit"] intValue];
         curSpeed = -1; // invalid
         aveSpeed = -1;
         strokeFreq = 0;
@@ -118,24 +118,19 @@ enum {
         switch (trackingState) {
             case kTrackingStateStopped:
                 distance = totalDistance;
-                distanceLabel.textColor = [UIColor blackColor];
-                totalOrLeft.text = @"Total";
                  break;
             case kTrackingStateWaiting:
                 distance = -finishDistance;
-                distanceLabel.textColor = [UIColor redColor];
-                totalOrLeft.text = @"Still to go…";
-                dur = 0;
+                dur = (mapViewController.validCourse && curSpeed>0) ? finishDistance / curSpeed : 0;
                 break;
             case kTrackingStateTracking:
                 if (mapViewController.validCourse) {
-                    distance =  finishDistance;
-                    distanceLabel.textColor = [UIColor blueColor];
+                    distance = finishDistance;
                     dur = totalTime>1.0 ? distance / aveSpeed : 0; 
                 } else {
                     distance = totalDistance;
-                    distanceLabel.textColor = [UIColor blackColor];
-                 }
+                }
+                break;
         }
         distanceLabel.text = [[Settings dispLengthOnly:distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
         distanceUnitLabel.text = [NSString stringWithFormat:@"(%@)    %@",[Settings dispLengthOnly:positionAccuracy],[Settings dispLengthUnit:distance]];
@@ -145,8 +140,17 @@ enum {
         aveStrokeFreqLabel.text = totalTime>0 ? [NSString stringWithFormat:@"%4.1f", 60 * totalStrokes / totalTime] :
         @"–"; // en-dash
         int strokes=totalStrokes;
-        if (trackingState == kTrackingStateTracking && mapViewController.validCourse) 
-            strokes = totalStrokes * finishDistance/totalDistance;
+        switch (trackingState) {
+            case kTrackingStateTracking:
+                if (mapViewController.validCourse) 
+                    strokes = totalStrokes * finishDistance/totalDistance;
+                break;
+            case kTrackingStateWaiting:
+                if (mapViewController.validCourse)
+                    strokes = 0;
+            default:
+                break;
+        }
         totalStrokesLabel.text = [NSString stringWithFormat:@"%d",strokes];
     }
     if (mask & kCumulatives) {
@@ -260,7 +264,7 @@ enum {
     switch (trackingState) {
         case kTrackingStateTracking:
             [tracker.track add:here];
-            CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
+            CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();                
             totalTime = now - startTime;
             totalDistance = tracker.track.totalDistance;
             if (mapViewController.validCourse) {
@@ -268,13 +272,16 @@ enum {
                 if (finishDistance==0) [self startPressed:self];
             }
             mask |= kCumulatives;
+            if (self.tabBarController.selectedIndex==1) [mapViewController refreshTrack];
             break;
         case kTrackingStateWaiting:
             if (mapViewController.validCourse) {
                 finishDistance = [cc distanceToStart:here.coordinate];
                 if (finishDistance<=0) {
                     [self startPressed:self];
+                    finishDistance = [cc distanceToFinish:here.coordinate];
                 }
+                mask |= kCumulatives;
             }
             break;
         case kTrackingStateStopped:
@@ -295,7 +302,12 @@ enum {
                 trackingState = kTrackingStateWaiting;
                 cc.direction = outsideCourse>0;
                 [mapViewController.currentCourse updateTitles:outsideCourse];
+                // user interface changes
+                totalStrokesLabel.textColor = timeLabel.textColor = distanceLabel.textColor = [UIColor redColor];
+                totalOrLeft.text = @"Still to go…";
                 [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+                startTime = CFAbsoluteTimeGetCurrent();
+                startStroke = stroke.strokes;
                 break;
             } // else fall through
         case kTrackingStateWaiting:
@@ -304,6 +316,8 @@ enum {
             startStroke = stroke.strokes;
             [tracker.track reset];
             [self locationUpdate:self];
+            // userinterface changes
+            totalStrokesLabel.textColor = timeLabel.textColor = distanceLabel.textColor = (mapViewController.validCourse) ? [UIColor blueColor] : [UIColor blackColor];
             [tracker.track addPin:@"start" atLocation:tracker.track.startLocation];
             [mapViewController copyTrackPins];
             [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
@@ -313,7 +327,10 @@ enum {
             totalTime = CFAbsoluteTimeGetCurrent() - startTime;
             totalStrokes = stroke.strokes - startStroke;
             totalDistance = tracker.track.totalDistance;
+            // user interface changes
             [tracker.track addPin:@"finish" atLocation:tracker.track.stopLocation];
+            totalStrokesLabel.textColor = timeLabel.textColor = distanceLabel.textColor = [UIColor blackColor];
+            totalOrLeft.text = @"Total";
             [mapViewController copyTrackPins];
             [[Settings sharedInstance] setObject:tracker.track forKey:@"lastTrack"];
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
