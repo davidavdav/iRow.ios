@@ -14,6 +14,7 @@
 #import "Course.h"
 #import "ShiftButton.h"
 #import "CrossHair.h"
+#import "MySegmentedControl.h"
 
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
@@ -28,12 +29,13 @@
     Course * currentCourse;
     MKPolyline * currentCoursePolyline; 
     UILabel * distanceLabel;
-    UISegmentedControl * zoomModeControl;
+    MySegmentedControl * zoomModeControl;
     int zoomMode;
     BOOL courseMode;
     BOOL showCoursePins;
     int unitSystem;
     int mySelectionCount;
+    MKPointAnnotation * selectedPin;
     CrossHair * crossHair;
 }
 
@@ -49,5 +51,6 @@
 -(BOOL)validCourse;
 -(BOOL)outsideCourse;
 -(void)copyTrackPins;
+-(void)refreshTrack;
 
 @end

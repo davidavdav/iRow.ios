@@ -69,7 +69,7 @@ enum {
 }
 
 
-// this method updates the course polyline and distance label
+// this method updates the course polyline and total distance label
 -(void)updateCourse {
     // first save the current course...
     [[Settings sharedInstance] setObject:currentCourse forKey:@"currentCourse"];
@@ -158,12 +158,13 @@ enum {
     distanceLabel.textAlignment = UITextAlignmentRight;
     [mapView addSubview:distanceLabel];
     // navigator arrow
-    zoomModeControl= [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:[UIImage imageNamed:@"UIButtonBarLocate"], @"track", @"course", @"none",nil]];
+    zoomModeControl= [[MySegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:[UIImage imageNamed:@"UIButtonBarLocate"], @"track", @"course", @"none",nil]];
     zoomModeControl.frame = CGRectMake((w-250)/2, h-70, 250, 40);
     zoomModeControl.tintColor = [UIColor colorWithWhite:0.5 alpha:0.5];
     zoomModeControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [zoomModeControl addTarget:self action:@selector(zoomChanged:) forControlEvents:UIControlEventValueChanged];
-    zoomModeControl.selectedSegmentIndex = 0;
+    zoomModeControl.selectedSegmentIndex = kZoomModeHere;
+//    zoomModeControl.alpha = 0.9;
     [mapView addSubview:zoomModeControl];
     zoomMode = 0;
     [self updateButtons];
@@ -201,6 +202,7 @@ enum {
 }
 
 -(void)clearButtonPressed:(id)sender {
+/*
     NSArray * selected = mapView.selectedAnnotations;
     NSLog(@"%@", mapView.selectedAnnotations);
     if (selected.count) {
@@ -209,7 +211,12 @@ enum {
             [mapView removeAnnotation:a];
         }
     }
-    [self updateCourse];
+  */
+    if (selectedPin) {
+        [currentCourse removeWaypoint:selectedPin];
+        [mapView removeAnnotation:selectedPin];
+        [self updateCourse];
+    }
 }
 
 -(void)courseButtonPressed:(id)sender {
@@ -268,6 +275,11 @@ enum {
     }
 }
 
+-(void)refreshTrack {
+    [self copyTrackData];
+    if (zoomMode == kZoomModeTrack) [self zoom];
+}
+
 // called from appDelegate, triggered from setttings changed...
 -(void)setUnitSystem:(int)us {
     unitSystem = us;
@@ -283,7 +295,7 @@ enum {
         [mv setRegion:MKCoordinateRegionMakeWithDistance(userLocation.location.coordinate, 1000, 1000)];
     centered = YES;
     [self copyTrackData];
-    [self zoom];
+    if (zoomMode==kZoomModeHere) [self zoom];
 }
 
 // this draws the track
@@ -335,11 +347,9 @@ enum {
     return pin;
 }
 
-#pragma mark MKMapViewDelegate
-
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
-        NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
+//        NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
         [currentCourse update];
         [self updateCourse];
     }
@@ -349,6 +359,7 @@ enum {
     if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = NO;
         mySelectionCount++;
+        selectedPin = view.annotation;
 //        NSLog(@"%@", mapView.selectedAnnotations);
     }
 }
@@ -356,6 +367,7 @@ enum {
 -(void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view {
     if ([view.annotation isKindOfClass:[CourseAnnotation class]]) {
         clearButton.hidden = (--mySelectionCount == 0);
+//        selectedPin = nil;
     }
 }
 
@@ -363,7 +375,9 @@ enum {
    [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
        crossHair.alpha = 1;
        crossHair.hidden = !courseMode;
+//       zoomModeControl.alpha=1;
    } completion:^(BOOL finished){}];
+
 }
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated {
@@ -373,11 +387,15 @@ enum {
         if (finished) crossHair.hidden = YES;
         crossHair.alpha = 1;
     }];
+//    [UIView animateWithDuration:0.5 delay:1.0 options:0 animations:^{zoomModeControl.alpha=0.5;} completion:^(BOOL finished){}];
 }
 
 -(void)zoomChanged:(id)sender {
     zoomMode = [sender selectedSegmentIndex];
     [self zoom];
+// this makes the bezel unsharp...
+    //    zoomModeControl.alpha=1;
+//    [UIView animateWithDuration:0.5 delay:1.0 options:0 animations:^{zoomModeControl.alpha=0.9;} completion:^(BOOL finished){}];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
