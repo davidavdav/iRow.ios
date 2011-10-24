@@ -39,6 +39,7 @@
     return waypoints.count ? [waypoints lastObject] : nil;
 }
 
+// this methods updates the metadata about the course
 -(void) update {
     if (! waypoints.count) return;
     [[self first] resetDistanceInDirection:kDirectionForward];
@@ -104,8 +105,40 @@
     return d;
 }
 
+// segments are indexed 0..N-2
+// this computes the distance to a line segment, meaning to the segment itself when you are
+// parallel to the segments, and the plain distance to the closest endpoint otherwise. 
+-(double)distanceFrom:(CLLocationCoordinate2D)here toSegment:(NSInteger)i {
+    CourseAnnotation * a1 = [waypoints objectAtIndex:i];
+    CourseAnnotation * a2 = [waypoints objectAtIndex:i+1];
+    CLLocationDistance D1 = [a1 distanceFrom:here direction:kDirectionBackward];
+    if (D1<0) return [[waypoints objectAtIndex:i] distanceFrom:here];
+    CLLocationDistance D2 = [a2 distanceFrom:here direction:kDirectionForward];
+    if (D2<0) return [a2 distanceFrom:here];
+    double rx = -a2.ny[kDirectionForward], ry = a2.nx[kDirectionForward]; // rotated normalized normal
+    MKMapPoint h = MKMapPointForCoordinate(here);
+    MKMapPoint p = MKMapPointForCoordinate(a2.coordinate);
+    double dx = p.x-h.x, dy=p.y-h.y;
+    CLLocationDistance d = (dx*rx + dy*ry) * MKMetersPerMapPointAtLatitude(a2.coordinate.latitude);    
+    return fabs(d);
+}
+
 -(double)distanceToFinish:(CLLocationCoordinate2D)here  {
     if (waypoints.count<2) return 0;
+    double min=1e9;
+    int mini = -1;
+    for (int i=0; i<waypoints.count-1; i++) {
+        double d = [self distanceFrom:here toSegment:i];
+        if (d<min) {
+            min=d;
+            mini=i;
+        }
+    }
+    CourseAnnotation * a = [waypoints objectAtIndex:mini+1-direction];
+    CLLocationDistance d = [a distanceFrom:here direction:direction];
+    if (((direction==kDirectionForward && mini+2==waypoints.count) || (direction == kDirectionBackward && mini==0)) && d<0) return 0;
+    return d + a.dist[direction];
+    return 0;
     if (direction==kDirectionForward) 
         for (int i=0; i<waypoints.count; i++) {
             CourseAnnotation * a = [waypoints objectAtIndex:i];
@@ -220,6 +253,7 @@
     ny[dir] = -ny[other];
 }
 
+// this is distance to line perpendicular to line segment
 -(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here direction:(int)dir {
     dir = MAX(0, MIN(dir, 1));
     MKMapPoint h = MKMapPointForCoordinate(here);
@@ -227,9 +261,14 @@
     double dx = p.x-h.x, dy=p.y-h.y;
     CLLocationDistance d = (dx*nx[dir] + dy*ny[dir]) * MKMetersPerMapPointAtLatitude(self.coordinate.latitude);
     return d;
-    
 }
-                                             
+             
+-(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here {
+    MKMapPoint h = MKMapPointForCoordinate(here);
+    MKMapPoint p = MKMapPointForCoordinate(self.coordinate);
+    return MKMetersBetweenMapPoints(h, p);
+}
+
 -(void)setSubtitleFromDist:(int)dir {
     dir = MAX(0, MIN(dir, 1));
     self.subtitle = [Settings dispLength:dist[1-dir]];    

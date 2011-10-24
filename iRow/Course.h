@@ -56,6 +56,7 @@ enum {
 -(void)resetDistanceInDirection:(int)dir;
 -(void)copyNormalToDirection:(int)dir;
 -(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here direction:(int)dir;
+-(CLLocationDistance)distanceFrom:(CLLocationCoordinate2D)here;
 -(void)setSubtitleFromDist:(int)dir;
 
 @end
