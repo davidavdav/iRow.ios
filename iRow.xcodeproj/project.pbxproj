@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63157C06144B50250057E1D7 /* MySegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C05144B50250057E1D7 /* MySegmentedControl.m */; };
+		63157C15144B6C2B0057E1D7 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C14144B6C2A0057E1D7 /* InfoViewController.m */; };
+		63157C17144B6DDD0057E1D7 /* info.html in Resources */ = {isa = PBXBuildFile; fileRef = 63157C16144B6DDD0057E1D7 /* info.html */; };
+		63157C19144B910E0057E1D7 /* UIButtonBarInfoDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */; };
 		63192D741443509A001FB831 /* ShiftButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 63192D731443509A001FB831 /* ShiftButton.m */; };
 		6319A67114263D590035EB18 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6319A67014263D590035EB18 /* UIKit.framework */; };
 		6319A67314263D590035EB18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6319A67214263D590035EB18 /* Foundation.framework */; };
@@ -36,7 +40,14 @@
 		6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A903142C7CCA00562991 /* start-button-highlight.png */; };
 		6354A909142C7EC800562991 /* stop-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A907142C7EC800562991 /* stop-button.png */; };
 		6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A908142C7EC800562991 /* stop-button-highlight.png */; };
+		63561162144CC67D005A90E2 /* help-start-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561161144CC67D005A90E2 /* help-start-button.png */; };
+		63561166144CCD36005A90E2 /* help-map.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561165144CCD36005A90E2 /* help-map.png */; };
 		63696BB0144A28480069FC9C /* CrossHair.m in Sources */ = {isa = PBXBuildFile; fileRef = 63696BAF144A28480069FC9C /* CrossHair.m */; };
+		637052ED144CD643004B25A0 /* help-ergometer1.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052EC144CD643004B25A0 /* help-ergometer1.png */; };
+		637052F0144CD851004B25A0 /* help-course-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052EF144CD851004B25A0 /* help-course-unselected.png */; };
+		637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */; };
+		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
+		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
 		63AE97071430492100C63178 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97061430492100C63178 /* Course.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE97171439817A00C63178 /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97151439817A00C63178 /* leftarrow.png */; };
@@ -54,11 +65,18 @@
 		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
 		63BED61C1446476C00A52775 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BED61B1446476C00A52775 /* Track.m */; };
+		63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */; };
 		63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014114447ED700C826B1 /* PLBlueMinus.png */; };
 		63E8014C14449A9500C826B1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014B14449A9500C826B1 /* Settings.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63157C04144B50250057E1D7 /* MySegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySegmentedControl.h; sourceTree = "<group>"; };
+		63157C05144B50250057E1D7 /* MySegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySegmentedControl.m; sourceTree = "<group>"; };
+		63157C13144B6C2A0057E1D7 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
+		63157C14144B6C2A0057E1D7 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
+		63157C16144B6DDD0057E1D7 /* info.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = info.html; sourceTree = "<group>"; };
+		63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonBarInfoDark.png; sourceTree = "<group>"; };
 		63192D721443509A001FB831 /* ShiftButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShiftButton.h; sourceTree = "<group>"; };
 		63192D731443509A001FB831 /* ShiftButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShiftButton.m; sourceTree = "<group>"; };
 		6319A66C14263D590035EB18 /* iRow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iRow.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,8 +119,15 @@
 		6354A903142C7CCA00562991 /* start-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "start-button-highlight.png"; path = "lib/start-button-highlight.png"; sourceTree = SOURCE_ROOT; };
 		6354A907142C7EC800562991 /* stop-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button.png"; path = "lib/stop-button.png"; sourceTree = SOURCE_ROOT; };
 		6354A908142C7EC800562991 /* stop-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button-highlight.png"; path = "lib/stop-button-highlight.png"; sourceTree = SOURCE_ROOT; };
+		63561161144CC67D005A90E2 /* help-start-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-start-button.png"; sourceTree = "<group>"; };
+		63561165144CCD36005A90E2 /* help-map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-map.png"; sourceTree = "<group>"; };
 		63696BAE144A28480069FC9C /* CrossHair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossHair.h; sourceTree = "<group>"; };
 		63696BAF144A28480069FC9C /* CrossHair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossHair.m; sourceTree = "<group>"; };
+		637052EC144CD643004B25A0 /* help-ergometer1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-ergometer1.png"; sourceTree = "<group>"; };
+		637052EF144CD851004B25A0 /* help-course-unselected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-unselected.png"; sourceTree = "<group>"; };
+		637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-UIButtonBarContactAdd.png"; sourceTree = "<group>"; };
+		637052F3144CDD58004B25A0 /* help-course-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-selected.png"; sourceTree = "<group>"; };
+		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
 		63AE97051430492100C63178 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63AE97061430492100C63178 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
@@ -123,6 +148,7 @@
 		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
 		63BED61A1446476C00A52775 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		63BED61B1446476C00A52775 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarInfoDark@2x.png"; sourceTree = "<group>"; };
 		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
 		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -200,6 +226,10 @@
 				63192D731443509A001FB831 /* ShiftButton.m */,
 				63696BAE144A28480069FC9C /* CrossHair.h */,
 				63696BAF144A28480069FC9C /* CrossHair.m */,
+				63157C04144B50250057E1D7 /* MySegmentedControl.h */,
+				63157C05144B50250057E1D7 /* MySegmentedControl.m */,
+				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
+				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
 			path = iRow;
@@ -208,6 +238,9 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6356115F144CC642005A90E2 /* help */,
+				63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */,
+				63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */,
 				63E8014B14449A9500C826B1 /* Settings.bundle */,
 				63AE973D14405EF100C63178 /* wait-button.png */,
 				63AE973E14405EF300C63178 /* wait-button-highlight.png */,
@@ -257,6 +290,21 @@
 			path = iRow;
 			sourceTree = "<group>";
 		};
+		6356115F144CC642005A90E2 /* help */ = {
+			isa = PBXGroup;
+			children = (
+				637052F5144CE137004B25A0 /* help-finish.png */,
+				637052F3144CDD58004B25A0 /* help-course-selected.png */,
+				637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */,
+				637052EF144CD851004B25A0 /* help-course-unselected.png */,
+				637052EC144CD643004B25A0 /* help-ergometer1.png */,
+				63561165144CCD36005A90E2 /* help-map.png */,
+				63561161144CC67D005A90E2 /* help-start-button.png */,
+				63157C16144B6DDD0057E1D7 /* info.html */,
+			);
+			name = help;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -283,6 +331,7 @@
 		6319A66314263D590035EB18 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = strApps;
 			};
 			buildConfigurationList = 6319A66614263D590035EB18 /* Build configuration list for PBXProject "iRow" */;
@@ -335,6 +384,16 @@
 				63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */,
 				63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */,
 				63E8014C14449A9500C826B1 /* Settings.bundle in Resources */,
+				63157C17144B6DDD0057E1D7 /* info.html in Resources */,
+				63157C19144B910E0057E1D7 /* UIButtonBarInfoDark.png in Resources */,
+				63561162144CC67D005A90E2 /* help-start-button.png in Resources */,
+				63561166144CCD36005A90E2 /* help-map.png in Resources */,
+				637052ED144CD643004B25A0 /* help-ergometer1.png in Resources */,
+				637052F0144CD851004B25A0 /* help-course-unselected.png in Resources */,
+				637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */,
+				637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */,
+				637052F6144CE137004B25A0 /* help-finish.png in Resources */,
+				63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +419,8 @@
 				63192D741443509A001FB831 /* ShiftButton.m in Sources */,
 				63BED61C1446476C00A52775 /* Track.m in Sources */,
 				63696BB0144A28480069FC9C /* CrossHair.m in Sources */,
+				63157C06144B50250057E1D7 /* MySegmentedControl.m in Sources */,
+				63157C15144B6C2B0057E1D7 /* InfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
