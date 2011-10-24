@@ -7,7 +7,7 @@
 //
 
 #import "iRowAppDelegate.h"
-
+#import "InfoViewController.h"
 
 #import "Settings.h"
 
@@ -24,8 +24,9 @@
     mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
     ergometerViewController.mapViewController = mapViewController;
     mapViewController.ergometerViewController = ergometerViewController;
+    InfoViewController * infoViewController = [[InfoViewController alloc] init];
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, infoViewController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
@@ -59,6 +60,7 @@
      */
     [ergometerViewController.tracker.locationManager stopUpdatingLocation];
     [ergometerViewController.tracker stopTimer];
+    [[Settings sharedInstance] setObject:[NSNumber numberWithInt:ergometerViewController.speedUnit] forKey:@"speedUnit"];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -69,6 +71,7 @@
     if (ergometerViewController.trackingState != kTrackingStateStopped) 
         [ergometerViewController.tracker.locationManager startUpdatingLocation];
     [ergometerViewController.tracker startTimer];
+    ergometerViewController.speedUnit = [[[Settings sharedInstance] loadObjectForKey:@"speedUnit"] intValue];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
