@@ -76,7 +76,8 @@ enum {
     // Release any cached data, images, etc that aren't in use.
 }
 
--(NSString*)hms:(NSTimeInterval) t{
+-(NSString*)hms:(NSTimeInterval) t {
+    if (t<0) return @"–:––";
     int h = t / 3600;
     t -= h*3600;
     int m = t / 60;
@@ -126,7 +127,7 @@ enum {
             case kTrackingStateTracking:
                 if (mapViewController.validCourse) {
                     distance = finishDistance;
-                    dur = totalTime>1.0 ? distance / aveSpeed : 0; 
+                    dur = totalTime>2.0 && aveSpeed > 0 ? distance / aveSpeed : -1; 
                 } else {
                     distance = totalDistance;
                 }
@@ -143,7 +144,7 @@ enum {
         switch (trackingState) {
             case kTrackingStateTracking:
                 if (mapViewController.validCourse) 
-                    strokes = totalStrokes * finishDistance/totalDistance;
+                    strokes = totalDistance>0 ? totalStrokes * finishDistance/totalDistance : -1;
                 break;
             case kTrackingStateWaiting:
                 if (mapViewController.validCourse)
@@ -151,7 +152,7 @@ enum {
             default:
                 break;
         }
-        totalStrokesLabel.text = [NSString stringWithFormat:@"%d",strokes];
+        totalStrokesLabel.text = strokes<0 ? @"–" : [NSString stringWithFormat:@"%d",strokes];
     }
     if (mask & kCumulatives) {
         timeLabel.text = [self hms:dur];
@@ -203,6 +204,10 @@ enum {
     [speedGlass addTarget:self action:@selector(changeSpeedDown:) forControlEvents:UIControlEventTouchUpInside];
     aveSpeedLabel.userInteractionEnabled = YES;
     [aveSpeedLabel addSubview:speedGlass];
+    strokeBeat = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"glow-black"]];
+    strokeBeat.frame = strokeFreqLabel.bounds;
+    [strokeFreqLabel addSubview:strokeBeat];
+    strokeBeat.alpha = 0;
     [self updateValues:kCurrentLocation | kCurrentStroke | kCumulatives];
     [self setButtonAppearance];
     [self setUnitSystem:Settings.sharedInstance.unitSystem];
@@ -359,6 +364,11 @@ enum {
         [self updateValues:kCurrentStroke];
     }
     lastStrokeTime = now;
+    strokeBeat.alpha = 1;
+    [UIView animateWithDuration:1.0 animations:^{
+        strokeBeat.alpha = 0;
+    } completion:^(BOOL finished) {
+    }];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

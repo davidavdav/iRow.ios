@@ -38,6 +38,7 @@ enum {
     IBOutlet UILabel * distanceLabel;
     IBOutlet UILabel * distanceUnitLabel;
     IBOutlet UILabel * totalOrLeft;
+    UIView * strokeBeat;
     MapViewController * mapViewController;
     // button colors/images
     UIImage * buttonImage[6];
