@@ -83,7 +83,6 @@
 }
 -(void)setSensitivity:(float)logSens {
     threshold = kMaxStrokeSens * pow(kMinStrokeSens/kMaxStrokeSens,logSens/kLogSensRange);
-    NSLog(@"t %f", threshold);
 }
 
 
