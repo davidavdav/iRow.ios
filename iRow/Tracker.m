@@ -21,7 +21,7 @@
         // Initialization code here.
         locationManager = [[CLLocationManager alloc] init];
         [locationManager startUpdatingLocation];
-        track = [[Track alloc] init];
+        track = [[TrackData alloc] init];
         period = p;
         [self startTimer];
     }

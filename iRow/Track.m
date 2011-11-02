@@ -6,13 +6,13 @@
 //  Copyright 2011 strApps. All rights reserved.
 //
 
-#import "Track.h"
+#import "TrackData.h"
 
 // minimum span of the map region, in meters.
 #define kMinMapSize (250)
 #define kMargin (1.1)
 
-@implementation Track
+@implementation TrackData
 
 @synthesize locations, pins;
 
@@ -22,7 +22,7 @@
     if (self) {
         // Initialization code here.
         locations = [NSMutableArray arrayWithCapacity:1000];
-        pins = [NSMutableArray arrayWithCapacity:10];
+        pins = [NSMutableArray arrayWithCapacity:2];
     }
     
     return self;
@@ -148,7 +148,7 @@
 	self = [super init];
 	if (self != nil) {
         locations = [dec decodeObjectForKey:@"locations"];
-        pins = [NSMutableArray arrayWithCapacity:10];
+        pins = [NSMutableArray arrayWithCapacity:2];
         [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
         [self addPin:@"finish" atLocation:[locations lastObject]];
     }

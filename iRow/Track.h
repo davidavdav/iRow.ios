@@ -10,7 +10,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 
-@interface Track : NSObject <NSCoding> {
+@interface TrackData : NSObject <NSCoding> {
     NSMutableArray * locations;
     NSMutableArray * pins;
 }

@@ -46,8 +46,9 @@ enum {
         lastStrokeTime = 0;
         tracker = [[Tracker alloc] initWithPeriod:dTlocation];
         tracker.delegate = self;
-        Track * track = (Track*)[[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
-        if (track != nil) tracker.track = track;
+        // warning: this potentially leads to a bug because we changed Track to Trackdata...
+        id lastTrack = [[Settings sharedInstance] loadObjectForKey:@"lastTrack"];
+        if ([lastTrack isKindOfClass:[TrackData class]]) tracker.track = lastTrack;
         // stroke counting
         dTmotion = 0.1;
         stroke = [[Stroke alloc] initWithPeriod:dTmotion duration:kStrokeAveragingDuration];

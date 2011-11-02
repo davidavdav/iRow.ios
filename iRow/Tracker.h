@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
-#import "Track.h"
+#import "TrackData.h"
 
 @protocol TrackerDelegate <NSObject>
 
@@ -22,12 +22,12 @@
     NSTimer * locationTimer;
     float period;
     id<TrackerDelegate> delegate;
-    Track * track;
+    TrackData * track;
  }
 
 @property (strong, nonatomic) CLLocationManager * locationManager;
 @property (strong, nonatomic) id<TrackerDelegate> delegate;
-@property (strong, nonatomic) Track * track;
+@property (strong, nonatomic) TrackData * track;
 
 -(id)initWithPeriod:(double)period;
 

@@ -37,7 +37,14 @@
 -(id)loadObjectForKey:(NSString *)key {
     NSData * data = [ud objectForKey:key];
     if (data==nil) return nil;
-    return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    id res=nil;
+    @try {
+        res = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    @catch (NSException * exception) {
+        res = nil;
+    }
+    return res;
 }
 
 -(int)unitSystem {
