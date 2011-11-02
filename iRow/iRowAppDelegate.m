@@ -7,7 +7,7 @@
 //
 
 #import "iRowAppDelegate.h"
-#import "InfoViewController.h"
+#import "OptionsViewController.h"
 
 #import "Settings.h"
 
@@ -15,6 +15,8 @@
 
 @synthesize window = _window;
 @synthesize tabBarController = _tabBarController;
+
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -24,9 +26,10 @@
     mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
     ergometerViewController.mapViewController = mapViewController;
     mapViewController.ergometerViewController = ergometerViewController;
-    InfoViewController * infoViewController = [[InfoViewController alloc] init];
+    OptionsViewController * settingsViewController = [[OptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, infoViewController, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nav, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
@@ -104,5 +107,131 @@
 {
 }
 */
+
+- (void)saveContext {
+    
+    NSError *error = nil;
+	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
+    if (managedObjectContext != nil) {
+        if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
+            /*
+             Replace this implementation with code to handle the error appropriately.
+             
+             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+             */
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+			UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"I am very sorry.  An error occurred in saving data.  We suggest you close the application, removing it from running in the background as well, and re-starting it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        } 
+    }
+}    
+
+
+#pragma mark -
+#pragma mark Core Data stack
+
+/**
+ Returns the managed object context for the application.
+ If the context doesn't already exist, it is created and bound to the persistent store coordinator for the application.
+ */
+- (NSManagedObjectContext *)managedObjectContext {
+    
+    if (managedObjectContext_ != nil) {
+        return managedObjectContext_;
+    }
+    
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        managedObjectContext_ = [[NSManagedObjectContext alloc] init];
+        [managedObjectContext_ setPersistentStoreCoordinator:coordinator];
+    }
+    return managedObjectContext_;
+}
+
+
+/**
+ Returns the managed object model for the application.
+ If the model doesn't already exist, it is created from the application's model.
+ */
+- (NSManagedObjectModel *)managedObjectModel {
+    
+    if (managedObjectModel_ != nil) {
+        return managedObjectModel_;
+    }
+	// this is for versioned systems
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"iSTI" withExtension:@"momd"];
+    //	NSLog(@"%@", modelURL);
+    managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];  
+	// this no longer works with verisioning...
+    //	managedObjectModel_ = [[NSManagedObjectModel mergedModelFromBundles:nil] retain];
+    return managedObjectModel_;
+}
+
+
+/**
+ Returns the persistent store coordinator for the application.
+ If the coordinator doesn't already exist, it is created and the application's store added to it.
+ */
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator {
+    
+    if (persistentStoreCoordinator_ != nil) {
+        return persistentStoreCoordinator_;
+    }
+    // this is ios 2.0 compatible...
+    //    NSURL *storeURL = [NSURL URLWithString:@"isti.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
+	NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"isti.sqlite"];
+    
+    NSError *error = nil;
+	
+    persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+	if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+        /*
+         Replace this implementation with code to handle the error appropriately.
+         
+         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
+         
+         Typical reasons for an error here include:
+         * The persistent store is not accessible;
+         * The schema for the persistent store is incompatible with current managed object model.
+         Check the error message to determine what the actual problem was.
+         
+         
+         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
+         
+         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
+         * Simply deleting the existing store:
+         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
+         
+         * Performing automatic lightweight migration by passing the following dictionary as the options parameter: 
+         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+         
+         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
+         
+         */
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"I am very sorry.  I cannot initialize the measurements database, it is likely due to an upgrade of the iSTI app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }    
+    
+    return persistentStoreCoordinator_;
+}
+
+
+#pragma mark -
+#pragma mark Application's Documents directory
+
+/**
+ Returns the URL to the application's Documents directory.
+ */
+- (NSURL *)applicationDocumentsDirectory {
+	NSURL * dir;
+    // ios 4.0
+    dir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+	return dir;
+}
+
 
 @end
