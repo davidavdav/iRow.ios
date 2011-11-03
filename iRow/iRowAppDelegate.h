@@ -13,7 +13,7 @@
 #import "MapViewController.h"
 
 
-@interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate> {
+@interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIAlertViewDelegate> {
     ErgometerViewController * ergometerViewController;
     MapViewController * mapViewController;
     NSManagedObjectContext * managedObjectContext_;

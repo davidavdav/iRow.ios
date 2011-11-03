@@ -159,7 +159,7 @@
         return managedObjectModel_;
     }
 	// this is for versioned systems
-    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"iSTI" withExtension:@"momd"];
+    NSURL *modelURL = [[NSBundle mainBundle] URLForResource:@"DataModel" withExtension:@"momd"];
     //	NSLog(@"%@", modelURL);
     managedObjectModel_ = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];  
 	// this no longer works with verisioning...
@@ -178,8 +178,8 @@
         return persistentStoreCoordinator_;
     }
     // this is ios 2.0 compatible...
-    //    NSURL *storeURL = [NSURL URLWithString:@"isti.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
-	NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"isti.sqlite"];
+    NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
+	// NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"iRow.sqlite"];
     
     NSError *error = nil;
 	
@@ -212,11 +212,26 @@
          
          */
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"I am very sorry.  I cannot initialize the measurements database, it is likely due to an upgrade of the iSTI app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  I cannot initialize the courses/tracks database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  One way out is to re-initialize the database." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Initialize",nil];
         [alert show];
     }    
     
     return persistentStoreCoordinator_;
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex==0) return;
+    NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
+    NSError *error = nil;
+    NSURL * destURL = [storeURL URLByAppendingPathExtension:@".old"];
+    [[NSFileManager defaultManager] moveItemAtURL:storeURL toURL:destURL error:nil];
+	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+	if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+ 		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  This didn't help.  The only way out now seems to be to delete the App entirely from your iOS device, and re-install from iTunes." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 
