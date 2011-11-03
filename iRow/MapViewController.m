@@ -10,6 +10,7 @@
 #import "ErgometerViewController.h"
 #import "Settings.h"
 #import <QuartzCore/QuartzCore.h>
+#import "utilities.h"
 
 enum {
     kZoomModeHere=0,
@@ -79,7 +80,7 @@ enum {
         if (currentCourse.isValid) {
             currentCoursePolyline = [currentCourse polyline];
             [mapView addOverlay:currentCoursePolyline];
-            distanceLabel.text = [Settings dispLength:currentCourse.length];
+            distanceLabel.text = dispLength(currentCourse.length);
 //            distanceLabel.hidden = NO;
         } else {
 //            distanceLabel.hidden = YES;
@@ -284,7 +285,7 @@ enum {
 -(void)setUnitSystem:(int)us {
     unitSystem = us;
     [currentCourse update]; // update annotation distances, in the labels
-    distanceLabel.text = [Settings dispLength:currentCourse.length];
+    distanceLabel.text = dispLength(currentCourse.length);
 }
 
 #pragma mark MKMapViewDelegate
