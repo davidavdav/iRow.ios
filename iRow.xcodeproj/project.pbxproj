@@ -42,6 +42,9 @@
 		6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A908142C7EC800562991 /* stop-button-highlight.png */; };
 		63561162144CC67D005A90E2 /* help-start-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561161144CC67D005A90E2 /* help-start-button.png */; };
 		63561166144CCD36005A90E2 /* help-map.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561165144CCD36005A90E2 /* help-map.png */; };
+		635C332B1461CCAC007C273F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635C332A1461CCAC007C273F /* CoreData.framework */; };
+		635C332F1461CCF0007C273F /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 635C332D1461CCF0007C273F /* OptionsViewController.m */; };
+		635C33321461CDB1007C273F /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 635C33301461CDB1007C273F /* DataModel.xcdatamodeld */; };
 		63696BB0144A28480069FC9C /* CrossHair.m in Sources */ = {isa = PBXBuildFile; fileRef = 63696BAF144A28480069FC9C /* CrossHair.m */; };
 		637052ED144CD643004B25A0 /* help-ergometer1.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052EC144CD643004B25A0 /* help-ergometer1.png */; };
 		637052F0144CD851004B25A0 /* help-course-unselected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052EF144CD851004B25A0 /* help-course-unselected.png */; };
@@ -64,8 +67,11 @@
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
 		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
-		63BED61C1446476C00A52775 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BED61B1446476C00A52775 /* Track.m */; };
 		63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */; };
+		63E3ADBB146201D8009FAECE /* TrackData.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADB9146201D8009FAECE /* TrackData.m */; };
+		63E3ADC8146207E3009FAECE /* SaveCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */; };
+		63E3ADCD146290BC009FAECE /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCC146290BC009FAECE /* utilities.m */; };
+		63E3ADD01462D9BA009FAECE /* MyGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCF1462D9BA009FAECE /* MyGeocoder.m */; };
 		63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014114447ED700C826B1 /* PLBlueMinus.png */; };
 		63E8014C14449A9500C826B1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014B14449A9500C826B1 /* Settings.bundle */; };
 		63F4B3CE1456C3EA00C68809 /* glow-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F4B3CD1456C3EA00C68809 /* glow-black.png */; };
@@ -129,6 +135,10 @@
 		6354A908142C7EC800562991 /* stop-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button-highlight.png"; path = "lib/stop-button-highlight.png"; sourceTree = SOURCE_ROOT; };
 		63561161144CC67D005A90E2 /* help-start-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-start-button.png"; sourceTree = "<group>"; };
 		63561165144CCD36005A90E2 /* help-map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-map.png"; sourceTree = "<group>"; };
+		635C332A1461CCAC007C273F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		635C332D1461CCF0007C273F /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		635C332E1461CCF0007C273F /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
+		635C33311461CDB1007C273F /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		63696BAE144A28480069FC9C /* CrossHair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossHair.h; sourceTree = "<group>"; };
 		63696BAF144A28480069FC9C /* CrossHair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossHair.m; sourceTree = "<group>"; };
 		637052EC144CD643004B25A0 /* help-ergometer1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-ergometer1.png"; sourceTree = "<group>"; };
@@ -154,9 +164,15 @@
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
 		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
 		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
-		63BED61A1446476C00A52775 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
-		63BED61B1446476C00A52775 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarInfoDark@2x.png"; sourceTree = "<group>"; };
+		63E3ADB9146201D8009FAECE /* TrackData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackData.m; sourceTree = "<group>"; };
+		63E3ADBA146201D8009FAECE /* TrackData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackData.h; sourceTree = "<group>"; };
+		63E3ADC6146207E3009FAECE /* SaveCourseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveCourseViewController.h; sourceTree = "<group>"; };
+		63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveCourseViewController.m; sourceTree = "<group>"; };
+		63E3ADCB146290BC009FAECE /* utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utilities.h; sourceTree = "<group>"; };
+		63E3ADCC146290BC009FAECE /* utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utilities.m; sourceTree = "<group>"; };
+		63E3ADCE1462D9BA009FAECE /* MyGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGeocoder.h; sourceTree = "<group>"; };
+		63E3ADCF1462D9BA009FAECE /* MyGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGeocoder.m; sourceTree = "<group>"; };
 		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
 		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		63F4B3CD1456C3EA00C68809 /* glow-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glow-black.png"; sourceTree = "<group>"; };
@@ -174,6 +190,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				635C332B1461CCAC007C273F /* CoreData.framework in Frameworks */,
 				634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */,
 				634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */,
 				634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */,
@@ -207,6 +224,7 @@
 		6319A66F14263D590035EB18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				635C332A1461CCAC007C273F /* CoreData.framework */,
 				634A7F821427DC8B0001BF57 /* CoreMotion.framework */,
 				634A7F771427564C0001BF57 /* MapKit.framework */,
 				634A7F68142647270001BF57 /* CoreLocation.framework */,
@@ -220,32 +238,15 @@
 		6319A67614263D590035EB18 /* iRow */ = {
 			isa = PBXGroup;
 			children = (
+				63E3ADCB146290BC009FAECE /* utilities.h */,
+				63E3ADCC146290BC009FAECE /* utilities.m */,
 				6319A67F14263D590035EB18 /* iRowAppDelegate.h */,
 				6319A68014263D590035EB18 /* iRowAppDelegate.m */,
-				6319A68214263D590035EB18 /* ErgometerViewController.h */,
-				6319A68314263D590035EB18 /* ErgometerViewController.m */,
-				634A7F841427DFE90001BF57 /* Stroke.h */,
-				634A7F851427DFE90001BF57 /* Stroke.m */,
-				634A7F6F1427311F0001BF57 /* Tracker.h */,
-				634A7F701427311F0001BF57 /* Tracker.m */,
-				63BED61A1446476C00A52775 /* Track.h */,
-				63BED61B1446476C00A52775 /* Track.m */,
-				63AE97051430492100C63178 /* Course.h */,
-				63AE97061430492100C63178 /* Course.m */,
-				6319A68914263D590035EB18 /* MapViewController.h */,
-				6319A68A14263D590035EB18 /* MapViewController.m */,
 				63AE97081430E48E00C63178 /* Settings.h */,
 				63AE97091430E48E00C63178 /* Settings.m */,
-				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
-				6319A69314263D590035EB18 /* MapViewController.xib */,
-				63192D721443509A001FB831 /* ShiftButton.h */,
-				63192D731443509A001FB831 /* ShiftButton.m */,
-				63696BAE144A28480069FC9C /* CrossHair.h */,
-				63696BAF144A28480069FC9C /* CrossHair.m */,
-				63157C04144B50250057E1D7 /* MySegmentedControl.h */,
-				63157C05144B50250057E1D7 /* MySegmentedControl.m */,
-				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
-				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
+				63E3ADC414620709009FAECE /* Ergometer */,
+				63E3ADC51462072B009FAECE /* Map */,
+				63E3ADC3146206D1009FAECE /* Options */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
 			path = iRow;
@@ -254,6 +255,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
 				63F4B3CF1456CA8A00C68809 /* iRow */,
 				63F4B3CD1456C3EA00C68809 /* glow-black.png */,
 				6356115F144CC642005A90E2 /* help */,
@@ -321,6 +323,55 @@
 				63157C16144B6DDD0057E1D7 /* info.html */,
 			);
 			name = help;
+			sourceTree = "<group>";
+		};
+		63E3ADC3146206D1009FAECE /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				635C332D1461CCF0007C273F /* OptionsViewController.m */,
+				635C332E1461CCF0007C273F /* OptionsViewController.h */,
+				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
+				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
+				63E3ADC6146207E3009FAECE /* SaveCourseViewController.h */,
+				63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */,
+			);
+			name = Options;
+			sourceTree = "<group>";
+		};
+		63E3ADC414620709009FAECE /* Ergometer */ = {
+			isa = PBXGroup;
+			children = (
+				6319A68214263D590035EB18 /* ErgometerViewController.h */,
+				6319A68314263D590035EB18 /* ErgometerViewController.m */,
+				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
+				63E3ADB9146201D8009FAECE /* TrackData.m */,
+				63E3ADBA146201D8009FAECE /* TrackData.h */,
+				634A7F841427DFE90001BF57 /* Stroke.h */,
+				634A7F851427DFE90001BF57 /* Stroke.m */,
+				634A7F6F1427311F0001BF57 /* Tracker.h */,
+				634A7F701427311F0001BF57 /* Tracker.m */,
+			);
+			name = Ergometer;
+			sourceTree = "<group>";
+		};
+		63E3ADC51462072B009FAECE /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				6319A68914263D590035EB18 /* MapViewController.h */,
+				6319A68A14263D590035EB18 /* MapViewController.m */,
+				6319A69314263D590035EB18 /* MapViewController.xib */,
+				63AE97051430492100C63178 /* Course.h */,
+				63AE97061430492100C63178 /* Course.m */,
+				63192D721443509A001FB831 /* ShiftButton.h */,
+				63192D731443509A001FB831 /* ShiftButton.m */,
+				63696BAE144A28480069FC9C /* CrossHair.h */,
+				63696BAF144A28480069FC9C /* CrossHair.m */,
+				63157C04144B50250057E1D7 /* MySegmentedControl.h */,
+				63157C05144B50250057E1D7 /* MySegmentedControl.m */,
+				63E3ADCE1462D9BA009FAECE /* MyGeocoder.h */,
+				63E3ADCF1462D9BA009FAECE /* MyGeocoder.m */,
+			);
+			name = Map;
 			sourceTree = "<group>";
 		};
 		63F4B3CF1456CA8A00C68809 /* iRow */ = {
@@ -457,10 +508,15 @@
 				63AE97071430492100C63178 /* Course.m in Sources */,
 				63AE970A1430E48E00C63178 /* Settings.m in Sources */,
 				63192D741443509A001FB831 /* ShiftButton.m in Sources */,
-				63BED61C1446476C00A52775 /* Track.m in Sources */,
 				63696BB0144A28480069FC9C /* CrossHair.m in Sources */,
 				63157C06144B50250057E1D7 /* MySegmentedControl.m in Sources */,
 				63157C15144B6C2B0057E1D7 /* InfoViewController.m in Sources */,
+				635C332F1461CCF0007C273F /* OptionsViewController.m in Sources */,
+				635C33321461CDB1007C273F /* DataModel.xcdatamodeld in Sources */,
+				63E3ADBB146201D8009FAECE /* TrackData.m in Sources */,
+				63E3ADC8146207E3009FAECE /* SaveCourseViewController.m in Sources */,
+				63E3ADCD146290BC009FAECE /* utilities.m in Sources */,
+				63E3ADD01462D9BA009FAECE /* MyGeocoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +650,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		635C33301461CDB1007C273F /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				635C33311461CDB1007C273F /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 635C33311461CDB1007C273F /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 6319A66314263D590035EB18 /* Project object */;
 }
