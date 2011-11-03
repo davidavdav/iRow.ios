@@ -27,10 +27,5 @@ enum {
 -(int)unitSystem;
 -(double)logSensitivity;
 
-// a utility function
-+(NSString*)dispLength:(CLLocationDistance)l;
-+(NSString*)dispLengthOnly:(CLLocationDistance)l;
-+(NSString*)dispLengthUnit:(CLLocationDistance)l;
-
 
 @end
