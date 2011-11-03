@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 @interface OptionsViewController : UITableViewController {
     NSArray * sectionTitles;
+    NSManagedObjectContext * moc;
 }
 
 @end

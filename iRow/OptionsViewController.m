@@ -8,8 +8,9 @@
 
 #import "OptionsViewController.h"
 #import "InfoViewController.h"
+#import "SaveCourseViewController.h"
 
-#define kSectionTitles @"Track", @"Route", @"Help"
+#define kSectionTitles @"Track", @"Course", @"Help"
 enum {
     kSectionTrack=0,
     kSectionRoute,
@@ -26,6 +27,8 @@ enum {
         self.title = @"Options";
         self.tabBarItem.image = [UIImage imageNamed:@"UIButtonBarInfoDark"];
         sectionTitles = [NSArray arrayWithObjects:kSectionTitles,nil];
+        id delegate = UIApplication.sharedApplication.delegate;
+        moc = [delegate managedObjectContext];
     }
     return self;
 }
@@ -189,6 +192,17 @@ enum {
 {
     // Navigation logic may go here. Create and push another view controller.
     switch (indexPath.section) {
+        case kSectionRoute:
+            switch (indexPath.row) {
+                case 0: {
+                    SaveCourseViewController * scvc = [[SaveCourseViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:scvc animated:YES];
+                    break;
+                }    
+                default:
+                    break;
+            }
+            break;
         case kSectionHelp:
             switch (indexPath.row) {
                 case 0:
