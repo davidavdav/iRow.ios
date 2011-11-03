@@ -8,7 +8,7 @@
 
 #import "Course.h"
 #import <MapKit/MapKit.h>
-#import "Settings.h"
+#import "utilities.h"
 
 // minimum span of the map region, in meters.
 #define kMinMapSize (250)
@@ -18,6 +18,22 @@
 
 //@synthesize start, finish, 
 @synthesize length, direction;
+@synthesize waterway;
+
+-(void)encodeWithCoder:(NSCoder*)enc {
+    [enc encodeObject:waypoints forKey:@"waypoints"];
+}
+
+-(id)initWithCoder:(NSCoder*)dec {
+    self = [super init];
+    if (self) {
+        waypoints = (NSMutableArray*) [dec decodeObjectForKey:@"waypoints"];
+        direction=kDirectionForward;
+        geoCoder = [[MyGeocoder alloc] init];
+        [self update];
+    }
+    return self;
+}
 
 - (id)init
 {
@@ -26,6 +42,7 @@
         // Initialization code here.
         waypoints = [NSMutableArray arrayWithCapacity:10];
         direction=kDirectionForward;
+        geoCoder = [[MyGeocoder alloc] init];
     }
     
     return self;
@@ -61,6 +78,15 @@
     [[self first] copyNormalToDirection:kDirectionForward];
     [[self last] copyNormalToDirection:1];
     length = [(CourseAnnotation*)[self last] dist][kDirectionBackward];
+    if (waterway==nil) {
+        CLLocationCoordinate2D loc = [self.first coordinate];
+        [geoCoder reverseGeocodeLocation:[[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude]completionHandler:^(NSArray* placemarks, NSError* error){
+            NSLog(@"MyGeocoder finished");
+            if (placemarks.count>0) 
+            placemark = [placemarks objectAtIndex:0];
+            waterway = [placemark respondsToSelector:@selector(inlandWater)] ? placemark.inlandWater : placemark.locality;
+        }];
+    }
     return;
 }
 
@@ -203,23 +229,6 @@
 //    self.start = self.finish = nil;
 }
 
--(id)initWithCoder:(NSCoder*)dec {
-    self = [super init];
-    if (self) {
-        waypoints = (NSMutableArray*) [dec decodeObjectForKey:@"waypoints"];
-//        start = (CourseAnnotation*) [dec decodeObjectForKey:@"start"];
-//        finish = (CourseAnnotation*) [dec decodeObjectForKey:@"finish"];
-        [self update];
-    }
-    return self;
-}
-
--(void)encodeWithCoder:(NSCoder*)enc {
-    [enc encodeObject:waypoints forKey:@"waypoints"];
-//    [enc encodeObject:start forKey:@"start"];
-//    [enc encodeObject:finish forKey:@"finish"];
-}
-
 @end
 
 @implementation CourseAnnotation
@@ -271,7 +280,7 @@
 
 -(void)setSubtitleFromDist:(int)dir {
     dir = MAX(0, MIN(dir, 1));
-    self.subtitle = [Settings dispLength:dist[1-dir]];    
+    self.subtitle = dispLength(dist[1-dir]);    
 }
 
 

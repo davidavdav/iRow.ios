@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
+#import "MyGeocoder.h"
 
 enum {
     kDirectionForward=0,
@@ -21,11 +22,15 @@ enum {
     NSMutableArray * waypoints;
     int direction;
     CLLocationDistance length;
+    NSString * waterway;
+    MyGeocoder * geoCoder;
+    MKPlacemark * placemark;
 }
 
 // @property (strong, nonatomic) CourseAnnotation * start, * finish;
 @property int direction;
 @property (readonly) CLLocationDistance length;
+@property (readonly) NSString * waterway;
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc;
 -(void)removeWaypoint:(MKPointAnnotation*)point;
