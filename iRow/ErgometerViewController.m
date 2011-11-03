@@ -8,6 +8,7 @@
 
 #import "ErgometerViewController.h"
 #import "Settings.h"
+#import "utilities.h"
 
 #define kStrokeAveragingDuration (10.0)
 
@@ -134,8 +135,8 @@ enum {
                 }
                 break;
         }
-        distanceLabel.text = [[Settings dispLengthOnly:distance] stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
-        distanceUnitLabel.text = [NSString stringWithFormat:@"(%@)    %@",[Settings dispLengthOnly:positionAccuracy],[Settings dispLengthUnit:distance]];
+        distanceLabel.text = [dispLengthOnly(distance) stringByReplacingOccurrencesOfString:@"-" withString:@"–"];
+        distanceUnitLabel.text = [NSString stringWithFormat:@"(%@)    %@",dispLengthOnly(positionAccuracy), dispLengthUnit(distance)];
     }
     if (mask & kCurrentStroke) {
         strokeFreqLabel.text = [NSString stringWithFormat:@"%2.0f ", strokeFreq];
