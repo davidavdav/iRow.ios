@@ -26,6 +26,8 @@
 		6319A68F14263D590035EB18 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68E14263D590035EB18 /* second@2x.png */; };
 		6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* ErgometerViewController.xib */; };
 		6319A69514263D590035EB18 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69314263D590035EB18 /* MapViewController.xib */; };
+		63351FCB14682547000E759A /* RowerBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FCA14682547000E759A /* RowerBrowserController.m */; };
+		63351FD8146878E6000E759A /* MyDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FD7146878E5000E759A /* MyDatePicker.m */; };
 		634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F68142647270001BF57 /* CoreLocation.framework */; };
 		634A7F711427311F0001BF57 /* Tracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F701427311F0001BF57 /* Tracker.m */; };
 		634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F771427564C0001BF57 /* MapKit.framework */; };
@@ -72,6 +74,13 @@
 		63E3ADC8146207E3009FAECE /* SaveCourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */; };
 		63E3ADCD146290BC009FAECE /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCC146290BC009FAECE /* utilities.m */; };
 		63E3ADD01462D9BA009FAECE /* MyGeocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCF1462D9BA009FAECE /* MyGeocoder.m */; };
+		63E3ADD914634B6B009FAECE /* BoatBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADD814634B6A009FAECE /* BoatBrowserController.m */; };
+		63E3ADDC14634F08009FAECE /* BoatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADDB14634F08009FAECE /* BoatViewController.m */; };
+		63E3ADDF1463C2E9009FAECE /* Boat.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADDE1463C2E9009FAECE /* Boat.m */; };
+		63E3ADE51466DA9F009FAECE /* RowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADE41466DA9E009FAECE /* RowerViewController.m */; };
+		63E3ADE81466DC5E009FAECE /* Rower.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADE71466DC5E009FAECE /* Rower.m */; };
+		63E3ADEB1466E267009FAECE /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E3ADE91466E265009FAECE /* AddressBook.framework */; };
+		63E3ADEC1466E267009FAECE /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63E3ADEA1466E266009FAECE /* AddressBookUI.framework */; };
 		63E8014214447ED700C826B1 /* PLBlueMinus.png in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014114447ED700C826B1 /* PLBlueMinus.png */; };
 		63E8014C14449A9500C826B1 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 63E8014B14449A9500C826B1 /* Settings.bundle */; };
 		63F4B3CE1456C3EA00C68809 /* glow-black.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F4B3CD1456C3EA00C68809 /* glow-black.png */; };
@@ -113,6 +122,10 @@
 		6319A68E14263D590035EB18 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
 		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ErgometerViewController.xib; sourceTree = "<group>"; };
 		6319A69414263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController.xib; sourceTree = "<group>"; };
+		63351FC914682547000E759A /* RowerBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowerBrowserController.h; sourceTree = "<group>"; };
+		63351FCA14682547000E759A /* RowerBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowerBrowserController.m; sourceTree = "<group>"; };
+		63351FD6146878E5000E759A /* MyDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDatePicker.h; sourceTree = "<group>"; };
+		63351FD7146878E5000E759A /* MyDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDatePicker.m; sourceTree = "<group>"; };
 		634A7F68142647270001BF57 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		634A7F6F1427311F0001BF57 /* Tracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tracker.h; sourceTree = "<group>"; };
 		634A7F701427311F0001BF57 /* Tracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tracker.m; sourceTree = "<group>"; };
@@ -173,6 +186,18 @@
 		63E3ADCC146290BC009FAECE /* utilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = utilities.m; sourceTree = "<group>"; };
 		63E3ADCE1462D9BA009FAECE /* MyGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyGeocoder.h; sourceTree = "<group>"; };
 		63E3ADCF1462D9BA009FAECE /* MyGeocoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyGeocoder.m; sourceTree = "<group>"; };
+		63E3ADD714634B6A009FAECE /* BoatBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoatBrowserController.h; sourceTree = "<group>"; };
+		63E3ADD814634B6A009FAECE /* BoatBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoatBrowserController.m; sourceTree = "<group>"; };
+		63E3ADDA14634F07009FAECE /* BoatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BoatViewController.h; sourceTree = "<group>"; };
+		63E3ADDB14634F08009FAECE /* BoatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BoatViewController.m; sourceTree = "<group>"; };
+		63E3ADDD1463C2E8009FAECE /* Boat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Boat.h; path = datamodel/Boat.h; sourceTree = "<group>"; };
+		63E3ADDE1463C2E9009FAECE /* Boat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Boat.m; path = datamodel/Boat.m; sourceTree = "<group>"; };
+		63E3ADE31466DA9D009FAECE /* RowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowerViewController.h; sourceTree = "<group>"; };
+		63E3ADE41466DA9E009FAECE /* RowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowerViewController.m; sourceTree = "<group>"; };
+		63E3ADE61466DC5E009FAECE /* Rower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rower.h; sourceTree = "<group>"; };
+		63E3ADE71466DC5E009FAECE /* Rower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rower.m; sourceTree = "<group>"; };
+		63E3ADE91466E265009FAECE /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		63E3ADEA1466E266009FAECE /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
 		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		63F4B3CD1456C3EA00C68809 /* glow-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glow-black.png"; sourceTree = "<group>"; };
@@ -190,6 +215,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63E3ADEB1466E267009FAECE /* AddressBook.framework in Frameworks */,
+				63E3ADEC1466E267009FAECE /* AddressBookUI.framework in Frameworks */,
 				635C332B1461CCAC007C273F /* CoreData.framework in Frameworks */,
 				634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */,
 				634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */,
@@ -224,6 +251,8 @@
 		6319A66F14263D590035EB18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				63E3ADE91466E265009FAECE /* AddressBook.framework */,
+				63E3ADEA1466E266009FAECE /* AddressBookUI.framework */,
 				635C332A1461CCAC007C273F /* CoreData.framework */,
 				634A7F821427DC8B0001BF57 /* CoreMotion.framework */,
 				634A7F771427564C0001BF57 /* MapKit.framework */,
@@ -256,6 +285,10 @@
 			isa = PBXGroup;
 			children = (
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
+				63E3ADE61466DC5E009FAECE /* Rower.h */,
+				63E3ADE71466DC5E009FAECE /* Rower.m */,
+				63E3ADDD1463C2E8009FAECE /* Boat.h */,
+				63E3ADDE1463C2E9009FAECE /* Boat.m */,
 				63F4B3CF1456CA8A00C68809 /* iRow */,
 				63F4B3CD1456C3EA00C68809 /* glow-black.png */,
 				6356115F144CC642005A90E2 /* help */,
@@ -294,6 +327,38 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		63351FD314685076000E759A /* Rower */ = {
+			isa = PBXGroup;
+			children = (
+				63351FC914682547000E759A /* RowerBrowserController.h */,
+				63351FCA14682547000E759A /* RowerBrowserController.m */,
+				63E3ADE31466DA9D009FAECE /* RowerViewController.h */,
+				63E3ADE41466DA9E009FAECE /* RowerViewController.m */,
+				63351FD4146850A7000E759A /* Info */,
+			);
+			name = Rower;
+			sourceTree = "<group>";
+		};
+		63351FD4146850A7000E759A /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
+				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
+			);
+			name = Info;
+			sourceTree = "<group>";
+		};
+		63351FD514686C5A000E759A /* Boat */ = {
+			isa = PBXGroup;
+			children = (
+				63E3ADD714634B6A009FAECE /* BoatBrowserController.h */,
+				63E3ADD814634B6A009FAECE /* BoatBrowserController.m */,
+				63E3ADDA14634F07009FAECE /* BoatViewController.h */,
+				63E3ADDB14634F08009FAECE /* BoatViewController.m */,
+			);
+			name = Boat;
+			sourceTree = "<group>";
+		};
 		634A7F871428AF840001BF57 /* signal processing */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,12 +393,14 @@
 		63E3ADC3146206D1009FAECE /* Options */ = {
 			isa = PBXGroup;
 			children = (
-				635C332D1461CCF0007C273F /* OptionsViewController.m */,
 				635C332E1461CCF0007C273F /* OptionsViewController.h */,
-				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
-				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
+				635C332D1461CCF0007C273F /* OptionsViewController.m */,
+				63351FD314685076000E759A /* Rower */,
 				63E3ADC6146207E3009FAECE /* SaveCourseViewController.h */,
 				63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */,
+				63351FD514686C5A000E759A /* Boat */,
+				63351FD6146878E5000E759A /* MyDatePicker.h */,
+				63351FD7146878E5000E759A /* MyDatePicker.m */,
 			);
 			name = Options;
 			sourceTree = "<group>";
@@ -517,6 +584,13 @@
 				63E3ADC8146207E3009FAECE /* SaveCourseViewController.m in Sources */,
 				63E3ADCD146290BC009FAECE /* utilities.m in Sources */,
 				63E3ADD01462D9BA009FAECE /* MyGeocoder.m in Sources */,
+				63E3ADD914634B6B009FAECE /* BoatBrowserController.m in Sources */,
+				63E3ADDC14634F08009FAECE /* BoatViewController.m in Sources */,
+				63E3ADDF1463C2E9009FAECE /* Boat.m in Sources */,
+				63E3ADE51466DA9F009FAECE /* RowerViewController.m in Sources */,
+				63E3ADE81466DC5E009FAECE /* Rower.m in Sources */,
+				63351FCB14682547000E759A /* RowerBrowserController.m in Sources */,
+				63351FD8146878E6000E759A /* MyDatePicker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
