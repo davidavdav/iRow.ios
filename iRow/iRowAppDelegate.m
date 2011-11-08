@@ -223,7 +223,7 @@
     if (buttonIndex==0) return;
     NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
     NSError *error = nil;
-    NSURL * destURL = [storeURL URLByAppendingPathExtension:@".old"];
+    NSURL * destURL = [storeURL URLByAppendingPathExtension:@"old"];
     [[NSFileManager defaultManager] moveItemAtURL:storeURL toURL:destURL error:nil];
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
