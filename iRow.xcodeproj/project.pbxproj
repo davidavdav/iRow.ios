@@ -395,9 +395,9 @@
 			children = (
 				635C332E1461CCF0007C273F /* OptionsViewController.h */,
 				635C332D1461CCF0007C273F /* OptionsViewController.m */,
-				63351FD314685076000E759A /* Rower */,
 				63E3ADC6146207E3009FAECE /* SaveCourseViewController.h */,
 				63E3ADC7146207E3009FAECE /* SaveCourseViewController.m */,
+				63351FD314685076000E759A /* Rower */,
 				63351FD514686C5A000E759A /* Boat */,
 				63351FD6146878E5000E759A /* MyDatePicker.h */,
 				63351FD7146878E5000E759A /* MyDatePicker.m */,
