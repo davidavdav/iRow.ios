@@ -20,7 +20,7 @@
     if (self) {
         // Custom initialization
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];
-        currentCourse = (MapViewController*)[[delegate.tabBarController.viewControllers objectAtIndex:1] currentCourse];
+        currentCourse = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] currentCourse];
         self.title = @"Current Course";
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveItem:)];
         name = [NSString stringWithFormat:@"%@ – %@",currentCourse.waterway,dispLength(currentCourse.length)];
@@ -115,19 +115,20 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     switch (indexPath.section) {
         case 0: {
-            UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 200, 22)];   
+            UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
             textField.delegate = self;
             textField.textAlignment = UITextAlignmentRight;
             switch (indexPath.row) {
                 case 0:
-                    cell.textLabel.text = @"name";
+                    cell.textLabel.text = @"Course name";
                     textField.placeholder = @"name";
                     textField.text = name;
                     break;
                 case 1:
-                    cell.textLabel.text = @"waterway";
+                    cell.textLabel.text = @"Waterway";
                     textField.placeholder = @"waterway";
                     textField.text = waterway;
                 default:
