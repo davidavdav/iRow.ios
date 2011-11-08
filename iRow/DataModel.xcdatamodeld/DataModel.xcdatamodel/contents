@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="872" systemVersion="10K549" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Boat" syncable="YES">
+    <entity name="Boat" representedClassName="Boat" syncable="YES">
         <attribute name="buildDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="dragFactor" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="mass" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Track" inverseName="boat" inverseEntity="Track" syncable="YES"/>
     </entity>
     <entity name="Course" syncable="YES">
@@ -16,13 +16,13 @@
         <attribute name="waterway" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="author" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Rower" inverseName="courses" inverseEntity="Rower" syncable="YES"/>
     </entity>
-    <entity name="Rower" syncable="YES">
+    <entity name="Rower" representedClassName="Rower" syncable="YES">
         <attribute name="birthDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="mass" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="power" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="weight" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="courses" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Course" inverseName="author" inverseEntity="Course" syncable="YES"/>
+        <relationship name="courses" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Course" inverseName="author" inverseEntity="Course" syncable="YES"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Track" inverseName="rowers" inverseEntity="Track" syncable="YES"/>
     </entity>
     <entity name="Track" syncable="YES">
@@ -39,7 +39,7 @@
     <elements>
         <element name="Boat" positionX="54" positionY="144" width="128" height="135"/>
         <element name="Course" positionX="160" positionY="192" width="128" height="135"/>
-        <element name="Rower" positionX="216" positionY="9" width="128" height="135"/>
+        <element name="Rower" positionX="216" positionY="9" width="128" height="150"/>
         <element name="Track" positionX="-63" positionY="-18" width="128" height="165"/>
     </elements>
 </model>
