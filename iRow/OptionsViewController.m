@@ -9,12 +9,18 @@
 #import "OptionsViewController.h"
 #import "InfoViewController.h"
 #import "SaveCourseViewController.h"
+#import "Settings.h"
+#import "BoatBrowserController.h"
+#import "RowerViewController.h"
+#import "RowerBrowserController.h"
 
-#define kSectionTitles @"Track", @"Course", @"Help"
+#define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
 enum {
     kSectionTrack=0,
-    kSectionRoute,
-    kSectionHelp
+    kSectionCourse,
+    kSectionHelp, 
+    kSectionRowers, 
+    kSectionBoats,
 } sectionNumbers;
 
 @implementation OptionsViewController
@@ -29,6 +35,19 @@ enum {
         sectionTitles = [NSArray arrayWithObjects:kSectionTitles,nil];
         id delegate = UIApplication.sharedApplication.delegate;
         moc = [delegate managedObjectContext];
+        // rower database
+        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
+        [frq setEntity:[NSEntityDescription entityForName:@"Rower" inManagedObjectContext:moc]];
+        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+        NSArray * sds = [NSArray arrayWithObject:sd];
+        [frq setSortDescriptors:sds];
+        NSError * error;
+        frcRower = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+        if (![frcRower performFetch:&error]) {
+            NSLog(@"Problem executing fetch request %@", [error localizedDescription]);
+        }
+        frcRower.delegate = (id)self;
+
     }
     return self;
 }
@@ -64,6 +83,9 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    NSError * error;
+    [frcRower performFetch:&error];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -104,10 +126,14 @@ enum {
     // Return the number of rows in the section.
     switch (section) {
         case kSectionTrack:
-        case kSectionRoute:
+        case kSectionCourse:
             return 2;
             break;
         case kSectionHelp:
+            return 1;
+        case kSectionRowers:
+            return 2;
+        case kSectionBoats:
             return 1;
         default:
             break;
@@ -121,11 +147,12 @@ enum {
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
+    cell.detailTextLabel.text = nil;
     switch (indexPath.section) {
         case kSectionTrack:
-        case kSectionRoute:
+        case kSectionCourse:
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"Save Current %@", [sectionTitles objectAtIndex:indexPath.section]];
@@ -139,6 +166,24 @@ enum {
         case kSectionHelp:
             cell.textLabel.text = @"Quick help";
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        case kSectionRowers:
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"You";
+                    cell.detailTextLabel.text = Settings.sharedInstance.user.name;
+                    break;
+                case 1:
+                    cell.textLabel.text = @"Others";
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",frcRower.fetchedObjects.count - (Settings.sharedInstance.user != nil)];
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case kSectionBoats:
+            cell.textLabel.text = @"Boat";
+            cell.detailTextLabel.text = Settings.sharedInstance.currentBoat.name;
             break;
         default:
             break;
@@ -192,7 +237,7 @@ enum {
 {
     // Navigation logic may go here. Create and push another view controller.
     switch (indexPath.section) {
-        case kSectionRoute:
+        case kSectionCourse:
             switch (indexPath.row) {
                 case 0: {
                     SaveCourseViewController * scvc = [[SaveCourseViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -212,6 +257,32 @@ enum {
                     break;
             }
             break;
+        case kSectionRowers:
+            switch (indexPath.row) {
+                case 0: {
+                    RowerViewController * rvc = [[RowerViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    rvc.title = @"You";
+                    [rvc setRower:Settings.sharedInstance.user completion:^(id new) {
+                        if (new != nil) Settings.sharedInstance.user = (Rower*)new;
+                    }];
+                    [self.navigationController pushViewController:rvc animated:YES];
+                    break;
+                }
+                case 1: {
+                    RowerBrowserController * rbc = [[RowerBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:rbc animated:YES];
+                    break;
+                }
+                    
+                default:
+                    break;
+            }
+            break;
+        case kSectionBoats: {
+            BoatBrowserController * bbc = [[BoatBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:bbc animated:YES];
+            break;
+        }
         default:
             break;
     }
