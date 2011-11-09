@@ -267,7 +267,7 @@ enum {
     // current speed
     curSpeed = here.speed;
     unsigned int mask = kCurrentLocation;
-    Course * cc = mapViewController.currentCourse;
+    CourseData * cc = mapViewController.currentCourse;
     switch (trackingState) {
         case kTrackingStateTracking:
             [tracker.track add:here];
@@ -301,7 +301,7 @@ enum {
 }
 
 -(IBAction)startPressed:(id)sender {
-    Course * cc = mapViewController.currentCourse;
+    CourseData * cc = mapViewController.currentCourse;
     int outsideCourse = [cc outsideCourse:tracker.locationManager.location.coordinate];
     switch (trackingState) {
         case kTrackingStateStopped:

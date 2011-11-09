@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6308E30A1469F721006CF5D8 /* CourseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6308E3091469F721006CF5D8 /* CourseData.m */; };
 		63157C06144B50250057E1D7 /* MySegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C05144B50250057E1D7 /* MySegmentedControl.m */; };
 		63157C15144B6C2B0057E1D7 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C14144B6C2A0057E1D7 /* InfoViewController.m */; };
 		63157C17144B6DDD0057E1D7 /* info.html in Resources */ = {isa = PBXBuildFile; fileRef = 63157C16144B6DDD0057E1D7 /* info.html */; };
@@ -53,7 +54,6 @@
 		637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */; };
 		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
-		63AE97071430492100C63178 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97061430492100C63178 /* Course.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE97171439817A00C63178 /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97151439817A00C63178 /* leftarrow.png */; };
 		63AE97181439817A00C63178 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97161439817A00C63178 /* rightarrow.png */; };
@@ -94,6 +94,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6308E3081469F721006CF5D8 /* CourseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourseData.h; sourceTree = "<group>"; };
+		6308E3091469F721006CF5D8 /* CourseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourseData.m; sourceTree = "<group>"; };
 		63157C04144B50250057E1D7 /* MySegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySegmentedControl.h; sourceTree = "<group>"; };
 		63157C05144B50250057E1D7 /* MySegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySegmentedControl.m; sourceTree = "<group>"; };
 		63157C13144B6C2A0057E1D7 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
@@ -159,8 +161,6 @@
 		637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-UIButtonBarContactAdd.png"; sourceTree = "<group>"; };
 		637052F3144CDD58004B25A0 /* help-course-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-selected.png"; sourceTree = "<group>"; };
 		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
-		63AE97051430492100C63178 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
-		63AE97061430492100C63178 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		63AE97151439817A00C63178 /* leftarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leftarrow.png; path = "../../../../Desktop/iPhone Simulator 5.0 artwork/EventKitUI framework/leftarrow.png"; sourceTree = "<group>"; };
@@ -408,6 +408,8 @@
 		63E3ADC414620709009FAECE /* Ergometer */ = {
 			isa = PBXGroup;
 			children = (
+				6308E3081469F721006CF5D8 /* CourseData.h */,
+				6308E3091469F721006CF5D8 /* CourseData.m */,
 				6319A68214263D590035EB18 /* ErgometerViewController.h */,
 				6319A68314263D590035EB18 /* ErgometerViewController.m */,
 				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
@@ -427,8 +429,6 @@
 				6319A68914263D590035EB18 /* MapViewController.h */,
 				6319A68A14263D590035EB18 /* MapViewController.m */,
 				6319A69314263D590035EB18 /* MapViewController.xib */,
-				63AE97051430492100C63178 /* Course.h */,
-				63AE97061430492100C63178 /* Course.m */,
 				63192D721443509A001FB831 /* ShiftButton.h */,
 				63192D731443509A001FB831 /* ShiftButton.m */,
 				63696BAE144A28480069FC9C /* CrossHair.h */,
@@ -572,7 +572,6 @@
 				634A7F981428B3C10001BF57 /* Vector.m in Sources */,
 				634A7F9E1429CA880001BF57 /* Matrix.m in Sources */,
 				634A7FA11429CF5B0001BF57 /* Matrix+operations.m in Sources */,
-				63AE97071430492100C63178 /* Course.m in Sources */,
 				63AE970A1430E48E00C63178 /* Settings.m in Sources */,
 				63192D741443509A001FB831 /* ShiftButton.m in Sources */,
 				63696BB0144A28480069FC9C /* CrossHair.m in Sources */,
@@ -591,6 +590,7 @@
 				63E3ADE81466DC5E009FAECE /* Rower.m in Sources */,
 				63351FCB14682547000E759A /* RowerBrowserController.m in Sources */,
 				63351FD8146878E6000E759A /* MyDatePicker.m in Sources */,
+				6308E30A1469F721006CF5D8 /* CourseData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

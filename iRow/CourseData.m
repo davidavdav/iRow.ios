@@ -6,7 +6,7 @@
 //  Copyright 2011 strApps. All rights reserved.
 //
 
-#import "Course.h"
+#import "CourseData.h"
 #import <MapKit/MapKit.h>
 #import "utilities.h"
 
@@ -14,7 +14,7 @@
 #define kMinMapSize (250)
 #define kMargin (1.1)
 
-@implementation Course
+@implementation CourseData
 
 //@synthesize start, finish, 
 @synthesize length, direction;

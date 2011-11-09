@@ -11,7 +11,7 @@
 @class ErgometerViewController;
 
 #import "Tracker.h"
-#import "Course.h"
+#import "CourseData.h"
 #import "ShiftButton.h"
 #import "CrossHair.h"
 #import "MySegmentedControl.h"
@@ -26,7 +26,7 @@
     MKCoordinateRegion mapRegion;
     NSArray * trackPins, * coursePins;
     MKPolyline * currentTrackPolyLine;
-    Course * currentCourse;
+    CourseData * currentCourse;
     MKPolyline * currentCoursePolyline; 
     UILabel * distanceLabel;
     MySegmentedControl * zoomModeControl;
@@ -43,7 +43,7 @@
 @property (strong, nonatomic) MKMapView * mapView;
 @property (strong, nonatomic) NSArray * trackPins, * coursePins;
 @property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentCoursePolyline;
-@property (strong, nonatomic) Course * currentCourse;
+@property (strong, nonatomic) CourseData * currentCourse;
 @property (readonly) BOOL courseMode;
 
 @property (nonatomic, setter=setUnitSystem:) int unitSystem;

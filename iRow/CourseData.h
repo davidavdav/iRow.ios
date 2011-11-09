@@ -18,7 +18,7 @@ enum {
 
 @class CourseAnnotation;
 
-@interface Course : NSObject <NSCoding> {
+@interface CourseData : NSObject <NSCoding> {
     NSMutableArray * waypoints;
     int direction;
     CLLocationDistance length;

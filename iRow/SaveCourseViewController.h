@@ -11,11 +11,11 @@
 
 
 @interface SaveCourseViewController : UITableViewController <UITextFieldDelegate> {
-    Course * currentCourse;
+    CourseData * currentCourse;
     NSString * name;
     NSString * waterway;
 }
 
-@property (strong, nonatomic) Course * currentCourse;
+@property (strong, nonatomic) CourseData * currentCourse;
 
 @end
