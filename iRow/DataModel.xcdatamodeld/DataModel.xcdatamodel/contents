@@ -8,7 +8,7 @@
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="tracks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Track" inverseName="boat" inverseEntity="Track" syncable="YES"/>
     </entity>
-    <entity name="Course" syncable="YES">
+    <entity name="Course" representedClassName="Course" syncable="YES">
         <attribute name="course" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="distance" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
