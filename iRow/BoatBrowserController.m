@@ -18,7 +18,6 @@
     if (self) {
         // Custom initialization
         self.title = @"Boats";
-        self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBoat:)], [[UIBarButtonItem alloc] initWithTitle:@"Load" style:UIBarButtonItemStylePlain target:self action:@selector(setCurrentBoat:)],nil];
         moc = Settings.sharedInstance.moc;
         NSFetchRequest * frq = [[NSFetchRequest alloc] init];
         [frq setEntity:[NSEntityDescription entityForName:@"Boat" inManagedObjectContext:moc]];
@@ -69,6 +68,8 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    loadButton = [[UIBarButtonItem alloc] initWithTitle:@"Load" style:UIBarButtonItemStyleDone target:self action:@selector(setCurrentBoat:)];
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBoat:)], loadButton, nil];
 }
 
 - (void)viewDidUnload
@@ -81,6 +82,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    loadButton.enabled = NO;
     NSError * error;
     if (![frc performFetch:&error]) {
         NSLog(@"Problem executing fetch request %@", [error localizedDescription]);
@@ -203,6 +205,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selected = indexPath;
+    loadButton.enabled = YES;
 }
 
 @end

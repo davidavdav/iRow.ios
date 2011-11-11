@@ -12,6 +12,7 @@
 @interface BoatBrowserController : UITableViewController {
     NSManagedObjectContext * moc;
     NSFetchedResultsController * frc;
+    UIBarButtonItem * loadButton;
     NSIndexPath * selected;
 }
 
