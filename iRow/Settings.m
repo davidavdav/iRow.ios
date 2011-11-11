@@ -10,18 +10,21 @@
 
 @implementation Settings
 
+@synthesize courseData;
 @synthesize moc;
-@synthesize user, currentBoat;
+@synthesize user, currentCourse, currentBoat;
 
+// we can't init the courseDaa objet, because it needs the sharedSettings instace. 
+// this would lead to a recursive loop. 
 - (id)init
 {
     self = [super init];
     if (self) {
         // Initialization code here.
         ud = [NSUserDefaults standardUserDefaults];
-        user = [self loadObjectForKey:@"user"];
         id delegate = UIApplication.sharedApplication.delegate;
         moc = [delegate managedObjectContext];
+        currentCourse = [self loadManagedObject:@"current_course"];
         currentBoat = [self loadManagedObject:@"currentBoat"];
         user = [self loadManagedObject:@"user"];
     }
@@ -70,6 +73,23 @@
 
 -(NSData*)objectAsData:(NSManagedObject*)mo {
 	return [NSKeyedArchiver archivedDataWithRootObject:[[mo objectID] URIRepresentation]];
+}
+
+// this will return an existing or a new instance of CourseData
+-(CourseData*)courseData {
+    if (courseData==nil) courseData = [self loadObjectForKey:@"courseData"]; // historical naming...
+    if (courseData==nil) courseData = [[CourseData alloc] init];
+    return courseData;
+}
+
+-(void)setCourseData:(CourseData *)cd {
+    courseData = cd;
+    [self setObject:courseData forKey:@"courseData"]; // historical name...
+}
+
+-(void)setCurrentCourse:(Course*)c {
+    currentCourse = c;
+    [self setManagedObject:c forKey:@"current_course"];
 }
 
 -(void)setUser:(Rower *)u {
