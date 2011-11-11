@@ -91,7 +91,6 @@
     [super viewDidLoad];
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    self.navigationItem.leftBarButtonItem.action = @selector(backPressed:);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -182,11 +181,11 @@
 			switch (indexPath.row) {
 				case 0:
 					textField.text = rower.name;
-                    textField.keyboardType = UIKeyboardTypeDefault;
+                    textField.keyboardType = UIKeyboardTypeASCIICapable;
 					break;
 				case 1:
 					textField.text = [self massAsString];
-					textField.keyboardType = UIKeyboardTypeNumberPad;
+					textField.keyboardType = UIKeyboardTypeDecimalPad;
                     break;
 				case 3:
 					textField.text = rower.email;
@@ -213,7 +212,7 @@
                 }
                 case 4:
                     textField.text = [self powerAsString];
-                    textField.keyboardType = UIKeyboardTypeNumberPad;
+                    textField.keyboardType = UIKeyboardTypeDecimalPad;
                     break;
 				default:
 					break;
