@@ -267,7 +267,7 @@ enum {
     // current speed
     curSpeed = here.speed;
     unsigned int mask = kCurrentLocation;
-    CourseData * cc = mapViewController.currentCourse;
+    CourseData * cc = mapViewController.courseData;
     switch (trackingState) {
         case kTrackingStateTracking:
             [tracker.track add:here];
@@ -301,14 +301,14 @@ enum {
 }
 
 -(IBAction)startPressed:(id)sender {
-    CourseData * cc = mapViewController.currentCourse;
+    CourseData * cc = mapViewController.courseData;
     int outsideCourse = [cc outsideCourse:tracker.locationManager.location.coordinate];
     switch (trackingState) {
         case kTrackingStateStopped:
             if (mapViewController.courseMode && cc.isValid && outsideCourse) {
                 trackingState = kTrackingStateWaiting;
                 cc.direction = outsideCourse>0;
-                [mapViewController.currentCourse updateTitles:outsideCourse];
+                [mapViewController.courseData updateTitles:outsideCourse];
                 // user interface changes
                 totalStrokesLabel.textColor = timeLabel.textColor = distanceLabel.textColor = [UIColor redColor];
                 totalOrLeft.text = @"Still to go…";
