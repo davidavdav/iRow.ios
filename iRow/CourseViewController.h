@@ -14,13 +14,13 @@
 @interface CourseViewController : UITableViewController <UITextFieldDelegate> {
     UIBarButtonItem * leftBarItem;
     Settings * settings;
-    Course * currentCourse;
+    Course * course;
     CourseData * courseData;
     BOOL editing;
-    NSString * name;
-    NSString * waterway;
+//    NSString * name;
+//    NSString * waterway;
 }
 
-@property (strong, nonatomic) Course * currentCourse;
+@property (strong, nonatomic) Course * course;
 
 @end

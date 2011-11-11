@@ -6,24 +6,13 @@
 //  Copyright (c) 2011 strApps. All rights reserved.
 //
 
-#import "SaveCourseViewController.h"
+#import "CourseViewController.h"
 #import "iRowAppDelegate.h"
 #import "utilities.h"
 
 @implementation CourseViewController
 
-@synthesize currentCourse;
-
--(void)editPressed:(id)sender {
-    leftBarItem = self.navigationController.navigationItem.leftBarButtonItem;
-    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
-    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
-    if (currentCourse == nil) {
-        currentCourse = (Course*)[NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:settings.moc];
-        currentCourse.course = courseData ? [NSKeyedArchiver archivedDataWithRootObject:courseData] : nil;
-    } 
-    self.editing = YES;
-}
+@synthesize course;
 
 // this assumes that there is a non-nil current courseData
 - (id)initWithStyle:(UITableViewStyle)style
@@ -34,13 +23,34 @@
         self.title = @"Current Course";
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];
-        courseData = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] currentCourseData];
-        currentCourse = settings.currentCourse;
-        [self editPressed:self];
-        name = [NSString stringWithFormat:@"%@ – %@",courseData.waterway,dispLength(courseData.length)];
-        waterway = courseData.waterway;
+        courseData = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] courseData];
+//        course = settings.currentCourse;
+//        [self editPressed:self];
     }
     return self;
+}
+
+// if the course is set, we should update our copy of the courseData
+-(void)setCourse:(Course *)c {
+    course=c;
+    if (c!=nil && c.course != nil) {
+        courseData = [NSKeyedUnarchiver unarchiveObjectWithData:c.course];
+    }
+}
+
+-(void)editPressed:(id)sender {
+    leftBarItem = self.navigationController.navigationItem.leftBarButtonItem;
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
+    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
+    if (course == nil) {
+        course = (Course*)[NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:settings.moc];
+        if (courseData) {
+            course.course = [NSKeyedArchiver archivedDataWithRootObject:courseData];
+            course.waterway = courseData.waterway;
+            course.distance = [NSNumber numberWithFloat:courseData.length];
+        }
+    } 
+    self.editing = YES;
 }
 
 -(void)restoreButtons {
@@ -97,6 +107,10 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if (course==nil) [self editPressed:self];
+    else self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
+//    name = [NSString stringWithFormat:@"%@ – %@",courseData.waterway,dispLength(courseData.length)];
+//    waterway = courseData.waterway;
 }
 
 - (void)viewDidUnload
@@ -171,16 +185,21 @@
             textField.delegate = self;
             textField.textAlignment = UITextAlignmentRight;
             textField.tag = indexPath.row;
+            textField.enabled = editing;
+            textField.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+            textField.autocapitalizationType = UITextAutocapitalizationTypeWords;
+            textField.autocorrectionType = UITextAutocorrectionTypeNo;
+            textField.clearButtonMode = editing ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = @"Course name";
                     textField.placeholder = @"name";
-                    textField.text = name;
+                    textField.text = course.name;
                     break;
                 case 1:
                     cell.textLabel.text = @"Waterway";
                     textField.placeholder = @"waterway";
-                    textField.text = waterway;
+                    textField.text = course.waterway;
                 default:
                     break;
             }
@@ -191,7 +210,7 @@
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = @"distance";
-                    cell.detailTextLabel.text = dispLength(courseData.length);
+                    cell.detailTextLabel.text = dispLength(course.distance.floatValue);
                     break;
                 case 1:
                     cell.textLabel.text = @"#pins";
@@ -266,9 +285,24 @@
 
 #pragma mark - UITextFieldDelegate
 
+// this make return remove the keyboard
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    NSLog(@"ended editing %d", textField.tag);
+    switch (textField.tag) {
+        case 0:
+            course.name = textField.text;
+            break;
+        case 1:
+            course.waterway = textField.text;
+            break;
+        default:
+            break;
+    }
 }
 
 @end
