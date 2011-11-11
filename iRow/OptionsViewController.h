@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import "Settings.h"
 
 @interface OptionsViewController : UITableViewController {
     NSArray * sectionTitles;
     NSManagedObjectContext * moc;
     NSFetchedResultsController * frcRower;
+    Settings * settings;
 }
 
 @end

@@ -8,7 +8,8 @@
 
 #import "OptionsViewController.h"
 #import "InfoViewController.h"
-#import "SaveCourseViewController.h"
+#import "CourseViewController.h"
+#import "CourseBrowserController.h"
 #import "Settings.h"
 #import "BoatBrowserController.h"
 #import "RowerViewController.h"
@@ -33,8 +34,8 @@ enum {
         self.title = @"Options";
         self.tabBarItem.image = [UIImage imageNamed:@"UIButtonBarInfoDark"];
         sectionTitles = [NSArray arrayWithObjects:kSectionTitles,nil];
-        id delegate = UIApplication.sharedApplication.delegate;
-        moc = [delegate managedObjectContext];
+        settings = Settings.sharedInstance;
+        moc = settings.moc;
         // rower database
         NSFetchRequest * frq = [[NSFetchRequest alloc] init];
         [frq setEntity:[NSEntityDescription entityForName:@"Rower" inManagedObjectContext:moc]];
@@ -240,10 +241,23 @@ enum {
         case kSectionCourse:
             switch (indexPath.row) {
                 case 0: {
-                    SaveCourseViewController * scvc = [[SaveCourseViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    [self.navigationController pushViewController:scvc animated:YES];
+                    if (!Settings.sharedInstance.courseData.isValid) {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"You must have a course defined in the Map view.  You can add course by tapping the 'course' button in the Map view and add streched by tapping the '+' button." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                        [a show]; 
+                        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+                        break;
+                    }
+                    CourseViewController * cvc = [[CourseViewController alloc] initWithStyle:UITableViewStyleGrouped];
+//                    if (settings.currentCourse);
+                    cvc.course = nil; // we want a new course
+                    [self.navigationController pushViewController:cvc animated:YES];
                     break;
                 }    
+                case 1: {
+                    CourseBrowserController * cbc = [[CourseBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:cbc animated:YES];
+                    break;
+                }
                 default:
                     break;
             }
