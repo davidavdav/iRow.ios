@@ -15,6 +15,7 @@
 #import "ShiftButton.h"
 #import "CrossHair.h"
 #import "MySegmentedControl.h"
+#import "Settings.h"
 
 
 @interface MapViewController : UIViewController <MKMapViewDelegate> {
@@ -22,11 +23,12 @@
     ShiftButton * courseButton;
     UIButton *pinButton, *clearButton;
     UIImage * buttonImage[4];
+    Settings * settings;
     ErgometerViewController * ergometerViewController;
     MKCoordinateRegion mapRegion;
     NSArray * trackPins, * coursePins;
     MKPolyline * currentTrackPolyLine;
-    CourseData * currentCourse;
+    CourseData * courseData;
     MKPolyline * currentCoursePolyline; 
     UILabel * distanceLabel;
     MySegmentedControl * zoomModeControl;
@@ -43,7 +45,7 @@
 @property (strong, nonatomic) MKMapView * mapView;
 @property (strong, nonatomic) NSArray * trackPins, * coursePins;
 @property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentCoursePolyline;
-@property (strong, nonatomic) CourseData * currentCourse;
+@property (strong, nonatomic) CourseData * courseData;
 @property (readonly) BOOL courseMode;
 
 @property (nonatomic, setter=setUnitSystem:) int unitSystem;

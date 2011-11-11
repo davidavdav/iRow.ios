@@ -25,7 +25,7 @@ enum {
 @synthesize mapView;
 @synthesize trackPins, coursePins;
 @synthesize currentTrackPolyLine, currentCoursePolyline;
-@synthesize currentCourse, courseMode;
+@synthesize courseData, courseMode;
 @synthesize unitSystem;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -35,8 +35,8 @@ enum {
         self.title = NSLocalizedString(@"Map", @"Map");
         self.tabBarItem.image = [UIImage imageNamed:@"second"];
         mapRegion.center = CLLocationCoordinate2DMake(100, 100); // anything not valid
-        currentCourse = (CourseData*)[[Settings sharedInstance] loadObjectForKey:@"currentCourse"];
-        if (currentCourse==nil) currentCourse = [[CourseData alloc] init];
+        settings = Settings.sharedInstance;
+//        if (courseData==nil) courseData = [[CourseData alloc] init];
         NSArray * images = [NSArray arrayWithObjects:@"gray-normal", @"gray-highlighted", @"green-normal", @"green-highlighted", nil];
         for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[images objectAtIndex:i]];
     }
@@ -73,14 +73,14 @@ enum {
 // this method updates the course polyline and total distance label
 -(void)updateCourse {
     // first save the current course...
-    [[Settings sharedInstance] setObject:currentCourse forKey:@"currentCourse"];
-    if (currentCoursePolyline != nil || currentCourse.isValid) {
+    settings.courseData = courseData;
+    if (currentCoursePolyline != nil || courseData.isValid) {
         MKPolyline * old = currentCoursePolyline;
         
-        if (currentCourse.isValid) {
-            currentCoursePolyline = [currentCourse polyline];
+        if (courseData.isValid) {
+            currentCoursePolyline = [courseData polyline];
             [mapView addOverlay:currentCoursePolyline];
-            distanceLabel.text = dispLength(currentCourse.length);
+            distanceLabel.text = dispLength(courseData.length);
 //            distanceLabel.hidden = NO;
         } else {
 //            distanceLabel.hidden = YES;
@@ -96,9 +96,9 @@ enum {
         for (MKPointAnnotation * a in mapView.annotations) if (![a isKindOfClass:[CourseAnnotation class]]) [shown removeObject:a];
         // shown now is the collection of annotations in mapView of type CourseAnnotation
         // remove pins that are no longer in the currentCourse
-        for (MKPointAnnotation * a in shown) if (![currentCourse.annotations containsObject:a]) [mapView removeAnnotation:a];
+        for (MKPointAnnotation * a in shown) if (![courseData.annotations containsObject:a]) [mapView removeAnnotation:a];
         // then add the missing pins
-        for (MKPointAnnotation * a in currentCourse.annotations) if (![shown containsObject:a]) 
+        for (MKPointAnnotation * a in courseData.annotations) if (![shown containsObject:a]) 
             [mapView addAnnotation:a];
     } else {
         // simply remove all pins of type CourseAnnotation
@@ -152,7 +152,7 @@ enum {
     [clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [mapView addSubview:clearButton];
      //    NSLog(@"load");
-    [mapView addAnnotations:currentCourse.annotations];
+    [mapView addAnnotations:courseData.annotations];
     // distance label
     distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(mapView.bounds.size.width - 100, mapView.bounds.size.height - 20, 100, 20)];
     distanceLabel.backgroundColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.5];
@@ -167,9 +167,7 @@ enum {
     zoomModeControl.selectedSegmentIndex = kZoomModeHere;
 //    zoomModeControl.alpha = 0.9;
     [mapView addSubview:zoomModeControl];
-    zoomMode = 0;
-    [self updateButtons];
-    [self updateCourse];
+    zoomMode = kZoomModeHere;
     [self setUnitSystem:Settings.sharedInstance.unitSystem];
     crossHair = [[CrossHair alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     crossHair.center = mapView.center;
@@ -190,14 +188,18 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    courseData = settings.courseData; NSLog(@"%@", courseData);
+    [self updateCourse];
+    [self updateCoursePins];
     [self copyTrackData];
     [self copyTrackPins];
+    [self updateButtons];
 //    NSLog(@"appear");
 }
 
 
 -(void)pinButtonPressed:(id)sender {
-    MKPointAnnotation * new = [currentCourse addWaypoint:mapView.centerCoordinate];
+    MKPointAnnotation * new = [courseData addWaypoint:mapView.centerCoordinate];
     [mapView addAnnotation:new];
     [self updateCourse];
 }
@@ -214,7 +216,7 @@ enum {
     }
   */
     if (selectedPin) {
-        [currentCourse removeWaypoint:selectedPin];
+        [courseData removeWaypoint:selectedPin];
         [mapView removeAnnotation:selectedPin];
         [self updateCourse];
     }
@@ -228,17 +230,17 @@ enum {
 }
 
 -(void)deleteCourse:(id)sender {
-    [currentCourse clear];
+    [courseData clear];
     [self updateCourse];
     [self updateCoursePins];
 }
 
 -(BOOL)validCourse {
-    return courseMode && currentCourse != nil && currentCourse.count>1;
+    return courseMode && courseData != nil && courseData.count>1;
 }
 
 -(BOOL)outsideCourse {
-    return [self validCourse] * [currentCourse outsideCourse:mapView.userLocation.coordinate];
+    return [self validCourse] * [courseData outsideCourse:mapView.userLocation.coordinate];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -268,8 +270,8 @@ enum {
                 [mapView setRegion:[ergometerViewController.tracker.track region] animated:YES];
             break;
         case kZoomModeCourse:
-            if (currentCourse.count>0) 
-                [mapView setRegion:[currentCourse region] animated:YES];
+            if (courseData.count>0) 
+                [mapView setRegion:[courseData region] animated:YES];
             break;
         default:
             break;
@@ -284,8 +286,8 @@ enum {
 // called from appDelegate, triggered from setttings changed...
 -(void)setUnitSystem:(int)us {
     unitSystem = us;
-    [currentCourse update]; // update annotation distances, in the labels
-    distanceLabel.text = dispLength(currentCourse.length);
+    [courseData update]; // update annotation distances, in the labels
+    distanceLabel.text = dispLength(courseData.length);
 }
 
 #pragma mark MKMapViewDelegate
@@ -351,7 +353,7 @@ enum {
 -(void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view didChangeDragState:(MKAnnotationViewDragState)newState fromOldState:(MKAnnotationViewDragState)oldState {
     if (newState == MKAnnotationViewDragStateEnding) {
 //        NSLog(@"Dragging ended: %f %f", view.annotation.coordinate.longitude, view.annotation.coordinate.latitude);
-        [currentCourse update];
+        [courseData update];
         [self updateCourse];
     }
 }
