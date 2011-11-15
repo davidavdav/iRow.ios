@@ -61,6 +61,11 @@
     return d;
 }
 
+-(NSTimeInterval)totalTime {
+    if (locations.count<2) return 0;
+    return [self.stopLocation.timestamp timeIntervalSinceDate:self.startLocation.timestamp];
+}
+
 // This computes average GPS speed.  We could also try to integrate the location, bu the path has to be smoothed first...
 -(CLLocationSpeed)averageSpeed {
     CLLocationSpeed s = 0;

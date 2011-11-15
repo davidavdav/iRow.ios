@@ -22,6 +22,7 @@
 -(void)reset;
 
 -(CLLocationDistance)totalDistance;
+-(NSTimeInterval)totalTime;
 -(CLLocationSpeed)averageSpeed;
 -(MKPolyline*)polyLine;
 -(CLLocation*)startLocation;
