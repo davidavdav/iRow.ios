@@ -57,7 +57,10 @@
             else self.center = origCenter;
         } completion:^(BOOL finished){
             [delete removeFromSuperview];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             if (deleteSelected && _target != nil) [_target performSelector:_action withObject:self];
+#pragma clang diagnostic pop
             if (deleteSelected) {
                 self.alpha = 1;
                 self.center = origCenter;
