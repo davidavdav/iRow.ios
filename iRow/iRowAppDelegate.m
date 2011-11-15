@@ -224,7 +224,8 @@
     NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
     NSError *error = nil;
     NSURL * destURL = [storeURL URLByAppendingPathExtension:@"old"];
-    [[NSFileManager defaultManager] moveItemAtURL:storeURL toURL:destURL error:nil];
+    [[NSFileManager defaultManager] removeItemAtURL:destURL error:nil]; //  first remove old old version
+    [[NSFileManager defaultManager] moveItemAtURL:storeURL toURL:destURL error:nil]; // then move current to old
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
 							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
