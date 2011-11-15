@@ -188,7 +188,7 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    courseData = settings.courseData; NSLog(@"%@", courseData);
+    courseData = settings.courseData; 
     [self updateCourse];
     [self updateCoursePins];
     [self copyTrackData];
