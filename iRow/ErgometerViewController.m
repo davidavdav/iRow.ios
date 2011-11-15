@@ -18,9 +18,6 @@ enum {
     kCumulatives=0x4
 };
 
-#define kSpeedFactorKmph (3.6)
-#define kSpeedFactorMph (2.237415)
-
 #define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"mph"
 
 @implementation ErgometerViewController
@@ -78,45 +75,14 @@ enum {
     // Release any cached data, images, etc that aren't in use.
 }
 
--(NSString*)hms:(NSTimeInterval) t {
-    if (t<0) return @"–:––";
-    int h = t / 3600;
-    t -= h*3600;
-    int m = t / 60;
-    t -= m*60;
-    int s = t;
-    if (h) return [NSString stringWithFormat:@"%d:%02d:%02d",h,m,s];
-    else return [NSString stringWithFormat:@"%d:%02d",m,s];
-}
-
--(void)displaySpeed:(CLLocationSpeed)speed atLabel:(UILabel*)label {
-    if (speed<0 || isnan(speed)) 
-        label.text = @"–"; // en-dash
-    else 
-        switch (speedUnit) {
-        case kSpeedTimePer500m:
-            ;
-            NSTimeInterval timePer500 = 500.0/speed;
-                label.text = speed==0 ? @"––:––" : [self hms:timePer500];
-            break;
-        case kSpeedDistanceUnitPerHour:
-            speed *= unitSystem ? kSpeedFactorMph : kSpeedFactorKmph;
-        case kSpeedMeterPerSecond:
-            label.text = [NSString stringWithFormat:@"%3.1f",speed];
-            break;
-        default:
-            break;
-    }
-    
-}
 
 // this updates the values of the ergometer display
 -(void)updateValues:(uint)mask {
     CFTimeInterval dur=totalTime;
     if (mask & kCurrentLocation) {
-        [self displaySpeed:curSpeed atLabel:curSpeedLabel];
+        curSpeedLabel.text = dispSpeed(curSpeed, speedUnit);
         aveSpeed = totalDistance / totalTime;
-        [self displaySpeed:aveSpeed atLabel:aveSpeedLabel];
+        aveSpeedLabel.text = dispSpeed(aveSpeed, speedUnit);
         double distance;
         switch (trackingState) {
             case kTrackingStateStopped:
@@ -157,7 +123,7 @@ enum {
         totalStrokesLabel.text = strokes<0 ? @"–" : [NSString stringWithFormat:@"%d",strokes];
     }
     if (mask & kCumulatives) {
-        timeLabel.text = [self hms:dur];
+        timeLabel.text = hms(dur);
     }
 }
 
