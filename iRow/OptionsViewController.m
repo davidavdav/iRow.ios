@@ -14,6 +14,8 @@
 #import "BoatBrowserController.h"
 #import "RowerViewController.h"
 #import "RowerBrowserController.h"
+#import "TrackViewController.h"
+#import "TrackBrowserController.h"
 
 #define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
 enum {
@@ -60,6 +62,8 @@ enum {
     
     // Release any cached data, images, etc that aren't in use.
 }
+
+
 
 #pragma mark - View lifecycle
 
@@ -238,6 +242,23 @@ enum {
 {
     // Navigation logic may go here. Create and push another view controller.
     switch (indexPath.section) {
+        case kSectionTrack:
+            switch (indexPath.row) {
+                case 0: {
+                    TrackViewController * tvc = [[TrackViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:tvc animated:YES];
+                    break;
+                }
+                case 1: {
+                    TrackBrowserController * tbc = [[TrackBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:tbc animated:YES];
+                    break;
+                }
+
+                default:
+                    break;
+            }
+            break;
         case kSectionCourse:
             switch (indexPath.row) {
                 case 0: {
