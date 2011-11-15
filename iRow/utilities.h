@@ -14,3 +14,6 @@ NSString * dispLength(CLLocationDistance l);
 NSString * dispLengthOnly(CLLocationDistance l);
 NSString * dispLengthUnit(CLLocationDistance l);
 
+NSString * hms(NSTimeInterval t);
+
+NSString * dispSpeed(CLLocationSpeed speed, int speedUnit);

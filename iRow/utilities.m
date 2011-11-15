@@ -9,6 +9,16 @@
 #import "utilities.h"
 #import "Settings.h"
 
+enum {
+    kSpeedTimePer500m,
+    kSpeedMeterPerSecond,
+    kSpeedDistanceUnitPerHour,
+} speedUnit;
+
+#define kSpeedFactorKmph (3.6)
+#define kSpeedFactorMph (2.237415)
+
+
 // these are probably relatively slow methods...
 NSString * dispLength(CLLocationDistance l) {
     NSString * s;
@@ -56,3 +66,38 @@ NSString * dispLengthUnit(CLLocationDistance l) {
             return @"yd";
     }
 }
+
+NSString * hms(NSTimeInterval t) {
+    if (t<0) return @"–:––";
+    int h = t / 3600;
+    t -= h*3600;
+    int m = t / 60;
+    t -= m*60;
+    int s = t;
+    if (h) return [NSString stringWithFormat:@"%d:%02d:%02d",h,m,s];
+    else return [NSString stringWithFormat:@"%d:%02d",m,s];
+}
+
+NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
+    if (speed<0 || isnan(speed)) 
+        return @"–"; // en-dash
+    else {
+        int us = Settings.sharedInstance.unitSystem;
+        switch (speedUnit) {
+            case kSpeedTimePer500m: {
+                NSTimeInterval timePer500 = 500.0/speed;
+                return speed==0 ? @"––:––" : hms(timePer500);
+                break;
+            }
+            case kSpeedDistanceUnitPerHour:
+                speed *= us ? kSpeedFactorMph : kSpeedFactorKmph;
+            case kSpeedMeterPerSecond:
+                return [NSString stringWithFormat:@"%3.1f",speed];
+                break;
+            default:
+                break;
+        }
+    }
+    return nil;
+}
+
