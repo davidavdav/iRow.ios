@@ -209,15 +209,15 @@
         case 1:
             switch (indexPath.row) {
                 case 0:
-                    cell.textLabel.text = @"distance";
+                    cell.textLabel.text = @"Distance";
                     cell.detailTextLabel.text = dispLength(course.distance.floatValue);
                     break;
                 case 1:
-                    cell.textLabel.text = @"#pins";
+                    cell.textLabel.text = @"Number of pins";
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",courseData.count];
                     break;
                 case 2:
-                    cell.textLabel.text = @"date";
+                    cell.textLabel.text = @"Date";
                     break;
                 default:
                     break;

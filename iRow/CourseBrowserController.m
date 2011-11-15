@@ -10,6 +10,7 @@
 #import "Settings.h"
 #import "utilities.h"
 #import "CourseViewController.h"
+#import "TrackViewController.h"
 #import "MapViewController.h"
 
 @implementation CourseBrowserController
@@ -21,16 +22,6 @@
         // Custom initialization
         self.title = @"Courses";
         moc = Settings.sharedInstance.moc;
-        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
-        [frq setEntity:[NSEntityDescription entityForName:@"Course" inManagedObjectContext:moc]];
-        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        NSArray * sds = [NSArray arrayWithObject:sd];
-        [frq setSortDescriptors:sds];
-        frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-        NSError * error;
-        if (![frc performFetch:&error]) {
-            NSLog(@"Error fetching courses");
-        };
     }
     return self;
 }
@@ -48,6 +39,17 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSFetchRequest * frq = [[NSFetchRequest alloc] init];
+    [frq setEntity:[NSEntityDescription entityForName:@"Course" inManagedObjectContext:moc]];
+    NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    NSArray * sds = [NSArray arrayWithObject:sd];
+    [frq setSortDescriptors:sds];
+    frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+    NSError * error;
+    if (![frc performFetch:&error]) {
+        NSLog(@"Error fetching Course");
+    };
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
