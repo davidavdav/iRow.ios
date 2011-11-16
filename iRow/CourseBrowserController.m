@@ -129,7 +129,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
-    cell.textLabel.text = c.name;
+    cell.textLabel.text = defaultName(c.name, @"unnname course");
     cell.detailTextLabel.text = dispLength(c.distance.floatValue);
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     
