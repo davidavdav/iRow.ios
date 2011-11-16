@@ -20,7 +20,6 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        self.title = @"Current Course";
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];
         courseData = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] courseData];
@@ -109,6 +108,7 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     if (course==nil) [self editPressed:self];
     else self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
+    self.title = defaultName(course.name, @"Current Course");
 //    name = [NSString stringWithFormat:@"%@ – %@",courseData.waterway,dispLength(courseData.length)];
 //    waterway = courseData.waterway;
 }
