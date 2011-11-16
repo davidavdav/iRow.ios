@@ -18,6 +18,7 @@ enum {
 #define kSpeedFactorKmph (3.6)
 #define kSpeedFactorMph (2.237415)
 
+#define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"mph"
 
 // these are probably relatively slow methods...
 NSString * dispLength(CLLocationDistance l) {
@@ -101,3 +102,14 @@ NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
     return nil;
 }
 
+NSString * dispSpeedUnit(int unit) {
+    int us = Settings.sharedInstance.unitSystem;
+    static NSArray * labels;
+    if (labels == nil) labels = [NSArray arrayWithObjects:kSpeedLabels, nil];
+    if (unit == 2 && us==kUnitSystemImperial) unit++;
+    return [labels objectAtIndex:unit];
+}
+
+NSString * defaultName(NSString * name, NSString * def) {
+    return (name == nil || [name isEqualToString:@""]) ? def : name;
+}
