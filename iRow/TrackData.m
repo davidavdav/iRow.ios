@@ -14,14 +14,14 @@
 
 @implementation TrackData
 
-@synthesize locations, pins;
+@synthesize locations, pins, cumDist;
 
-- (id)init
-{
+- (id)init {
     self = [super init];
     if (self) {
         // Initialization code here.
         locations = [NSMutableArray arrayWithCapacity:1000];
+        cumDist = [NSMutableArray arrayWithCapacity:1000];
         pins = [NSMutableArray arrayWithCapacity:2];
     }
     
@@ -29,7 +29,10 @@
 }
 
 -(void)add:(CLLocation*)loc {
-    if (loc != nil) [locations addObject:loc];
+    if (loc==nil) return;
+    float prevDist = (self.count) ? [cumDist.lastObject floatValue] : 0;
+    [cumDist addObject:[NSNumber numberWithFloat:prevDist+[loc distanceFromLocation:locations.lastObject]]];
+    [locations addObject:loc];
 }
 
 -(void)addPin:(NSString*)name atLocation:(CLLocation *)loc {
@@ -42,12 +45,14 @@
 
 -(void)reset {
     [locations removeAllObjects];
+    [cumDist removeAllObjects];
     [pins removeAllObjects];
 }
 
 // trivial distance calculation
 -(CLLocationDistance)totalDistance {
     if (locations.count < 2) return 0;
+    return [cumDist.lastObject floatValue];
     CLLocation * last = nil;
     CLLocationDistance d=0;
     for (CLLocation * l in locations) {
@@ -145,6 +150,33 @@
     return locations.count;
 }
 
+-(CLLocation*)interpolate:(double)distance {
+    if (distance<0) return self.startLocation;
+    if (distance>self.totalDistance) return self.stopLocation;
+    int a=0, b=self.count-1; 
+    while (b-a > 1) {
+        int m =  (a+b)/2;
+        if ([[cumDist objectAtIndex:m] floatValue] > distance)
+            b=m;
+        else 
+            a=m;
+    }
+    CLLocation * la = [locations objectAtIndex:a];
+    CLLocation * lb = [locations objectAtIndex:b];
+    double da = [[cumDist objectAtIndex:a] floatValue], db=[[cumDist objectAtIndex:b] floatValue];
+    double frac = (distance - da) / (db-da);
+    CLLocationCoordinate2D p; 
+    p.longitude = (1-frac)*la.coordinate.longitude + frac*lb.coordinate.longitude;
+    p.latitude = (1-frac)*la.coordinate.latitude + frac * lb.coordinate.latitude;
+    CLLocationSpeed speed = (1-frac)*la.speed + frac*lb.speed;
+    CLLocationDirection course = (1-frac)*la.course + frac*lb.course; // potentially wrong arond 360
+    CLLocationDistance alt = (1-frac)*la.altitude + frac*lb.altitude;
+    CLLocationAccuracy horAcc = (1-frac)*la.horizontalAccuracy + frac*lb.horizontalAccuracy;
+    CLLocationAccuracy vertAcc = (1-frac)*la.verticalAccuracy + frac*lb.verticalAccuracy;
+    NSTimeInterval t = (1-frac) * la.timestamp.timeIntervalSince1970 + frac*lb.timestamp.timeIntervalSince1970;
+    return [[CLLocation alloc] initWithCoordinate:p altitude:alt horizontalAccuracy:horAcc verticalAccuracy:vertAcc course:course speed:speed timestamp:[NSDate dateWithTimeIntervalSince1970:t]];
+}
+
 -(void)encodeWithCoder:(NSCoder *)enc {
     [enc encodeObject:locations forKey:@"locations"];
 }
@@ -152,10 +184,13 @@
 -(id)initWithCoder:(NSCoder *)dec {
 	self = [super init];
 	if (self != nil) {
-        locations = [dec decodeObjectForKey:@"locations"];
+        locations = [NSMutableArray arrayWithCapacity:1000];
+        cumDist = [NSMutableArray arrayWithCapacity:1000];
+        for (CLLocation * l in [dec decodeObjectForKey:@"locations"]) [self add:l]; // does cumDist as well...
         pins = [NSMutableArray arrayWithCapacity:2];
         [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
         [self addPin:@"finish" atLocation:[locations lastObject]];
+        
     }
     return self;
 }

@@ -13,9 +13,11 @@
 @interface TrackData : NSObject <NSCoding> {
     NSMutableArray * locations;
     NSMutableArray * pins;
+    NSMutableArray * cumDist;
 }
 @property (strong, readonly) NSMutableArray *  locations;
 @property (strong, readonly) NSMutableArray *  pins;
+@property (strong, readonly) NSMutableArray * cumDist;
 
 -(void)add:(CLLocation*)loc;
 -(void)addPin:(NSString*)name atLocation:(CLLocation*)loc;
@@ -29,5 +31,6 @@
 -(CLLocation*)stopLocation;
 -(MKCoordinateRegion)region;
 -(int)count;
+-(CLLocation*)interpolate:(double)distance;
 
 @end
