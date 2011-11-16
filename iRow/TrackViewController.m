@@ -101,6 +101,9 @@ enum {
     } 
 }
 
+-(void)setTitleToTrackName {
+    self.title = defaultName(track.name, @"Track");
+}
 
 #pragma mark - View lifecycle
 
@@ -120,6 +123,7 @@ enum {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];    
         trackData = [NSKeyedUnarchiver unarchiveObjectWithData:track.track];
     }
+    [self setTitleToTrackName];
 }
 
 - (void)viewDidUnload
@@ -132,7 +136,6 @@ enum {
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.title = track.name ? track.name : @"Track";
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -218,10 +221,12 @@ enum {
                 case 0:
                     cell.textLabel.text = @"Name";
                     textField.text = track.name;
+                    textField.placeholder = @"track name";
                     break;
                 case 1:
                     cell.textLabel.text = @"Location";
                     textField.text = track.locality;
+                    textField.placeholder = @"track location";
                     break;
                 default:
                     break;
@@ -326,7 +331,7 @@ enum {
     switch (textField.tag) {
         case 0:
             track.name = textField.text;
-            self.title = track.name ? track.name : @"Track";
+            [self setTitleToTrackName];
             break;
         case 1:
             track.locality = textField.text;
