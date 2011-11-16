@@ -77,6 +77,7 @@
 		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
 		63BC789F14726B7500DF6671 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC789E14726B7500DF6671 /* Track.m */; };
 		63BC78A214726B9300DF6671 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC78A114726B9300DF6671 /* Course.m */; };
+		63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */; };
 		63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */; };
 		63E3ADBB146201D8009FAECE /* TrackData.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADB9146201D8009FAECE /* TrackData.m */; };
 		63E3ADCD146290BC009FAECE /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCC146290BC009FAECE /* utilities.m */; };
@@ -200,6 +201,7 @@
 		63BC789E14726B7500DF6671 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63BC78A014726B9300DF6671 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63BC78A114726B9300DF6671 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
+		63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLCameraButtonRecordOn.png; sourceTree = "<group>"; };
 		63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarInfoDark@2x.png"; sourceTree = "<group>"; };
 		63E3ADB9146201D8009FAECE /* TrackData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackData.m; sourceTree = "<group>"; };
 		63E3ADBA146201D8009FAECE /* TrackData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackData.h; sourceTree = "<group>"; };
@@ -330,6 +332,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */,
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
 				63BC78A014726B9300DF6671 /* Course.h */,
 				63BC78A114726B9300DF6671 /* Course.m */,
@@ -465,8 +468,8 @@
 				6319A68214263D590035EB18 /* ErgometerViewController.h */,
 				6319A68314263D590035EB18 /* ErgometerViewController.m */,
 				6319A69014263D590035EB18 /* ErgometerViewController.xib */,
-				63E3ADB9146201D8009FAECE /* TrackData.m */,
 				63E3ADBA146201D8009FAECE /* TrackData.h */,
+				63E3ADB9146201D8009FAECE /* TrackData.m */,
 				634A7F841427DFE90001BF57 /* Stroke.h */,
 				634A7F851427DFE90001BF57 /* Stroke.m */,
 				634A7F6F1427311F0001BF57 /* Tracker.h */,
@@ -604,6 +607,7 @@
 				63F4B3DB1456CA8A00C68809 /* Icon.png in Resources */,
 				63F4B3DC1456CA8A00C68809 /* Icon@2x.png in Resources */,
 				63F4B3DD1456CA8A00C68809 /* iTunesArtwork in Resources */,
+				63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
