@@ -26,6 +26,7 @@ enum {
     Course * currentCourse;
     Boat * currentBoat;
     Rower * user;
+    int speedUnit;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -34,6 +35,8 @@ enum {
 
 @property (nonatomic, strong, setter=setUser:) Rower * user;
 @property (nonatomic, strong) Boat * currentBoat;
+
+@property (nonatomic) int speedUnit;
 
 +(Settings*)sharedInstance;
 // normal objects

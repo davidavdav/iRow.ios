@@ -13,6 +13,7 @@
 @synthesize courseData;
 @synthesize moc;
 @synthesize user, currentCourse, currentBoat;
+@synthesize speedUnit;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -27,6 +28,7 @@
         currentCourse = [self loadManagedObject:@"current_course"];
         currentBoat = [self loadManagedObject:@"currentBoat"];
         user = [self loadManagedObject:@"user"];
+        speedUnit = [[self loadObjectForKey:@"speedUnit"] intValue];
     }
     
     return self;
@@ -95,6 +97,11 @@
 -(void)setUser:(Rower *)u {
     user = u;
     [self setManagedObject:u forKey:@"user"];
+}
+
+-(void)setSpeedUnit:(int)su {
+    speedUnit = su;
+    [self setObject:[NSNumber numberWithInt:su] forKey:@"speedUnit"];
 }
 
 -(void)setCurrentBoat:(Boat *)b {
