@@ -61,8 +61,6 @@
 		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
-		63AE97171439817A00C63178 /* leftarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97151439817A00C63178 /* leftarrow.png */; };
-		63AE97181439817A00C63178 /* rightarrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE97161439817A00C63178 /* rightarrow.png */; };
 		63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */; };
 		63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE971F143BA50600C63178 /* UIButtonBarLocate.png */; };
 		63AE9728143CD66E00C63178 /* green-normal.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9725143CD66D00C63178 /* green-normal.png */; };
@@ -73,11 +71,15 @@
 		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
 		63AE973F14405EF400C63178 /* wait-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973D14405EF100C63178 /* wait-button.png */; };
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
-		63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */; };
-		63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B7D5D2142E4B600068BB62 /* GKClearButton.png */; };
 		63BC789F14726B7500DF6671 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC789E14726B7500DF6671 /* Track.m */; };
 		63BC78A214726B9300DF6671 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC78A114726B9300DF6671 /* Course.m */; };
 		63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */; };
+		63BC78B314742C2200DF6671 /* volume-slider-fat-knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */; };
+		63BC78B91474682200DF6671 /* volume-slider-fat-knob-red.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78B81474682000DF6671 /* volume-slider-fat-knob-red.png */; };
+		63BC78BC1474696900DF6671 /* volume-slider-fat-knob-red@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78BA1474696300DF6671 /* volume-slider-fat-knob-red@2x.png */; };
+		63BC78BD1474696900DF6671 /* volume-slider-fat-knob@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78BB1474696600DF6671 /* volume-slider-fat-knob@2x.png */; };
+		63BC78BF1474756700DF6671 /* PLCameraButtonRecordOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78BE1474756400DF6671 /* PLCameraButtonRecordOn@2x.png */; };
+		63BC78C1147475DE00DF6671 /* UIButtonBarLocate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78C0147475DD00DF6671 /* UIButtonBarLocate@2x.png */; };
 		63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */; };
 		63E3ADBB146201D8009FAECE /* TrackData.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADB9146201D8009FAECE /* TrackData.m */; };
 		63E3ADCD146290BC009FAECE /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCC146290BC009FAECE /* utilities.m */; };
@@ -183,8 +185,6 @@
 		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
-		63AE97151439817A00C63178 /* leftarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = leftarrow.png; path = "../../../../Desktop/iPhone Simulator 5.0 artwork/EventKitUI framework/leftarrow.png"; sourceTree = "<group>"; };
-		63AE97161439817A00C63178 /* rightarrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = rightarrow.png; path = "../../../../Desktop/iPhone Simulator 5.0 artwork/EventKitUI framework/rightarrow.png"; sourceTree = "<group>"; };
 		63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLBlueMinus@2x.png"; sourceTree = "<group>"; };
 		63AE971F143BA50600C63178 /* UIButtonBarLocate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UIButtonBarLocate.png; sourceTree = "<group>"; };
 		63AE9725143CD66D00C63178 /* green-normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "green-normal.png"; sourceTree = "<group>"; };
@@ -195,13 +195,17 @@
 		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
 		63AE973D14405EF100C63178 /* wait-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button.png"; sourceTree = "<group>"; };
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
-		63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "GKClearButton@2x.png"; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/AddressBookUI framework/GKClearButton@2x.png"; sourceTree = "<group>"; };
-		63B7D5D2142E4B600068BB62 /* GKClearButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = GKClearButton.png; path = "../../../../Desktop/iPhone Simulator 4.3 artwork/GameKit framework/GKClearButton.png"; sourceTree = "<group>"; };
 		63BC789D14726B7500DF6671 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		63BC789E14726B7500DF6671 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63BC78A014726B9300DF6671 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63BC78A114726B9300DF6671 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLCameraButtonRecordOn.png; sourceTree = "<group>"; };
+		63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "volume-slider-fat-knob.png"; sourceTree = "<group>"; };
+		63BC78B81474682000DF6671 /* volume-slider-fat-knob-red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "volume-slider-fat-knob-red.png"; sourceTree = "<group>"; };
+		63BC78BA1474696300DF6671 /* volume-slider-fat-knob-red@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "volume-slider-fat-knob-red@2x.png"; sourceTree = "<group>"; };
+		63BC78BB1474696600DF6671 /* volume-slider-fat-knob@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "volume-slider-fat-knob@2x.png"; sourceTree = "<group>"; };
+		63BC78BE1474756400DF6671 /* PLCameraButtonRecordOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLCameraButtonRecordOn@2x.png"; sourceTree = "<group>"; };
+		63BC78C0147475DD00DF6671 /* UIButtonBarLocate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarLocate@2x.png"; sourceTree = "<group>"; };
 		63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarInfoDark@2x.png"; sourceTree = "<group>"; };
 		63E3ADB9146201D8009FAECE /* TrackData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackData.m; sourceTree = "<group>"; };
 		63E3ADBA146201D8009FAECE /* TrackData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackData.h; sourceTree = "<group>"; };
@@ -332,7 +336,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */,
+				63BC78AF14742ABC00DF6671 /* png */,
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
 				63BC78A014726B9300DF6671 /* Course.h */,
 				63BC78A114726B9300DF6671 /* Course.m */,
@@ -345,33 +349,8 @@
 				63F4B3CF1456CA8A00C68809 /* iRow */,
 				63F4B3CD1456C3EA00C68809 /* glow-black.png */,
 				6356115F144CC642005A90E2 /* help */,
-				63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */,
-				63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */,
 				63E8014B14449A9500C826B1 /* Settings.bundle */,
-				63AE973D14405EF100C63178 /* wait-button.png */,
-				63AE973E14405EF300C63178 /* wait-button-highlight.png */,
-				63AE9733143CF9D200C63178 /* gray-normal.png */,
-				63AE9734143CF9D200C63178 /* gray-highlighted.png */,
-				63AE9735143CF9D300C63178 /* gray-disabled.png */,
-				63AE9725143CD66D00C63178 /* green-normal.png */,
-				63AE9726143CD66D00C63178 /* green-highlighted.png */,
-				63AE9727143CD66D00C63178 /* green-disabled.png */,
-				63AE971F143BA50600C63178 /* UIButtonBarLocate.png */,
-				63E8014114447ED700C826B1 /* PLBlueMinus.png */,
-				63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */,
-				63AE97151439817A00C63178 /* leftarrow.png */,
-				63AE97161439817A00C63178 /* rightarrow.png */,
-				63B7D5D2142E4B600068BB62 /* GKClearButton.png */,
-				63B7D5CF142E4B4E0068BB62 /* GKClearButton@2x.png */,
-				6354A907142C7EC800562991 /* stop-button.png */,
-				6354A908142C7EC800562991 /* stop-button-highlight.png */,
-				6354A902142C7CCA00562991 /* start-button.png */,
-				6354A903142C7CCA00562991 /* start-button-highlight.png */,
 				634A7F8B1428B19A0001BF57 /* stroke.filt */,
-				6319A68514263D590035EB18 /* first.png */,
-				6319A68714263D590035EB18 /* first@2x.png */,
-				6319A68C14263D590035EB18 /* second.png */,
-				6319A68E14263D590035EB18 /* second@2x.png */,
 				6319A67814263D590035EB18 /* iRow-Info.plist */,
 				6319A67914263D590035EB18 /* InfoPlist.strings */,
 				6319A67C14263D590035EB18 /* main.m */,
@@ -441,6 +420,41 @@
 				63157C16144B6DDD0057E1D7 /* info.html */,
 			);
 			name = help;
+			sourceTree = "<group>";
+		};
+		63BC78AF14742ABC00DF6671 /* png */ = {
+			isa = PBXGroup;
+			children = (
+				63BC78B81474682000DF6671 /* volume-slider-fat-knob-red.png */,
+				63BC78BA1474696300DF6671 /* volume-slider-fat-knob-red@2x.png */,
+				63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */,
+				63BC78BB1474696600DF6671 /* volume-slider-fat-knob@2x.png */,
+				63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */,
+				63BC78BE1474756400DF6671 /* PLCameraButtonRecordOn@2x.png */,
+				63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */,
+				63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */,
+				63AE973D14405EF100C63178 /* wait-button.png */,
+				63AE973E14405EF300C63178 /* wait-button-highlight.png */,
+				63AE9733143CF9D200C63178 /* gray-normal.png */,
+				63AE9734143CF9D200C63178 /* gray-highlighted.png */,
+				63AE9735143CF9D300C63178 /* gray-disabled.png */,
+				63AE9725143CD66D00C63178 /* green-normal.png */,
+				63AE9726143CD66D00C63178 /* green-highlighted.png */,
+				63AE9727143CD66D00C63178 /* green-disabled.png */,
+				63AE971F143BA50600C63178 /* UIButtonBarLocate.png */,
+				63BC78C0147475DD00DF6671 /* UIButtonBarLocate@2x.png */,
+				63E8014114447ED700C826B1 /* PLBlueMinus.png */,
+				63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */,
+				6354A907142C7EC800562991 /* stop-button.png */,
+				6354A908142C7EC800562991 /* stop-button-highlight.png */,
+				6354A902142C7CCA00562991 /* start-button.png */,
+				6354A903142C7CCA00562991 /* start-button-highlight.png */,
+				6319A68514263D590035EB18 /* first.png */,
+				6319A68714263D590035EB18 /* first@2x.png */,
+				6319A68C14263D590035EB18 /* second.png */,
+				6319A68E14263D590035EB18 /* second@2x.png */,
+			);
+			name = png;
 			sourceTree = "<group>";
 		};
 		63E3ADC3146206D1009FAECE /* Options */ = {
@@ -573,10 +587,6 @@
 				6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */,
 				6354A909142C7EC800562991 /* stop-button.png in Resources */,
 				6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */,
-				63B7D5D0142E4B4E0068BB62 /* GKClearButton@2x.png in Resources */,
-				63B7D5D3142E4B600068BB62 /* GKClearButton.png in Resources */,
-				63AE97171439817A00C63178 /* leftarrow.png in Resources */,
-				63AE97181439817A00C63178 /* rightarrow.png in Resources */,
 				63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */,
 				63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */,
 				63AE9728143CD66E00C63178 /* green-normal.png in Resources */,
@@ -608,6 +618,12 @@
 				63F4B3DC1456CA8A00C68809 /* Icon@2x.png in Resources */,
 				63F4B3DD1456CA8A00C68809 /* iTunesArtwork in Resources */,
 				63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */,
+				63BC78B314742C2200DF6671 /* volume-slider-fat-knob.png in Resources */,
+				63BC78B91474682200DF6671 /* volume-slider-fat-knob-red.png in Resources */,
+				63BC78BC1474696900DF6671 /* volume-slider-fat-knob-red@2x.png in Resources */,
+				63BC78BD1474696900DF6671 /* volume-slider-fat-knob@2x.png in Resources */,
+				63BC78BF1474756700DF6671 /* PLCameraButtonRecordOn@2x.png in Resources */,
+				63BC78C1147475DE00DF6671 /* UIButtonBarLocate@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
