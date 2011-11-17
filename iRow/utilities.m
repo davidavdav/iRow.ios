@@ -79,7 +79,7 @@ NSString * hms(NSTimeInterval t) {
     else return [NSString stringWithFormat:@"%d:%02d",m,s];
 }
 
-NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
+NSString * dispSpeedOnly(CLLocationSpeed speed, int speedUnit) {
     if (speed<0 || isnan(speed)) 
         return @"–"; // en-dash
     else {
@@ -110,6 +110,36 @@ NSString * dispSpeedUnit(int unit) {
     return [labels objectAtIndex:unit];
 }
 
+NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
+    return [NSString stringWithFormat:@"%@ %@", dispSpeedOnly(speed, speedUnit), dispSpeedUnit(speedUnit)];
+}
+
+NSString * dispMass(NSNumber * mass) {
+    if (mass == nil) return nil;
+    return [NSString stringWithFormat:@"%3.1f kg",mass.floatValue];
+}
+
+NSString * dispPower(NSNumber * power) {
+    if (power == nil) return nil;
+    return [NSString stringWithFormat:@"%1.0f W",power.floatValue];
+}
+
 NSString * defaultName(NSString * name, NSString * def) {
     return (name == nil || [name isEqualToString:@""]) ? def : name;
+}
+
+NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, NSManagedObjectContext * moc) {
+    NSFetchRequest * frq = [[NSFetchRequest alloc] init];
+    [frq setEntity:[NSEntityDescription entityForName:object inManagedObjectContext:moc]];
+    if (sortKey==nil) sortKey=@"name"; // default
+    NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+    NSArray * sds = [NSArray arrayWithObject:sd];
+    [frq setSortDescriptors:sds];
+    NSFetchedResultsController * frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+    NSError * error;
+    if (![frc performFetch:&error]) {
+        NSLog(@"Error fetching %@", sortKey);
+        return nil;
+    };
+    return frc;
 }
