@@ -7,6 +7,7 @@
 //
 
 #import "TrackData.h"
+#import "MyGeocoder.h"
 
 // minimum span of the map region, in meters.
 #define kMinMapSize (250)
@@ -14,7 +15,7 @@
 
 @implementation TrackData
 
-@synthesize locations, pins, cumDist;
+@synthesize locations, pins, cumDist, locality;
 
 - (id)init {
     self = [super init];
@@ -23,6 +24,7 @@
         locations = [NSMutableArray arrayWithCapacity:1000];
         cumDist = [NSMutableArray arrayWithCapacity:1000];
         pins = [NSMutableArray arrayWithCapacity:2];
+        geoCoder = [[MyGeocoder alloc] init];
     }
     
     return self;
@@ -33,6 +35,12 @@
     float prevDist = (self.count) ? [cumDist.lastObject floatValue] : 0;
     [cumDist addObject:[NSNumber numberWithFloat:prevDist+[loc distanceFromLocation:locations.lastObject]]];
     [locations addObject:loc];
+    if (locality == nil && locations.count==1) {
+        [geoCoder reverseGeocodeLocation:loc completionHandler:^(NSArray * placemarks, NSError * error) {
+            MKPlacemark * placemark = [placemarks objectAtIndex:0];
+            locality = placemark.locality;
+        }];
+    }
 }
 
 -(void)addPin:(NSString*)name atLocation:(CLLocation *)loc {
@@ -179,18 +187,20 @@
 
 -(void)encodeWithCoder:(NSCoder *)enc {
     [enc encodeObject:locations forKey:@"locations"];
+    [enc encodeObject:locality forKey:@"locality"];
 }
 
 -(id)initWithCoder:(NSCoder *)dec {
 	self = [super init];
 	if (self != nil) {
+        geoCoder = [[MyGeocoder alloc] init];        
         locations = [NSMutableArray arrayWithCapacity:1000];
         cumDist = [NSMutableArray arrayWithCapacity:1000];
+        locality = [dec decodeObjectForKey:@"locality"];
         for (CLLocation * l in [dec decodeObjectForKey:@"locations"]) [self add:l]; // does cumDist as well...
         pins = [NSMutableArray arrayWithCapacity:2];
         [self addPin:@"start" atLocation:[locations objectAtIndex:0]];
         [self addPin:@"finish" atLocation:[locations lastObject]];
-        
     }
     return self;
 }
