@@ -18,16 +18,20 @@
 -(NSString*)relativeDate {
     NSDateComponents * dc = [[NSCalendar currentCalendar] components:NSWeekCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit|NSSecondCalendarUnit fromDate:self toDate:[NSDate date] options:0];
 	NSDateFormatter * df = [[NSDateFormatter alloc] init];
-    if (dc.week) {
-        df.dateStyle = NSDateFormatterShortStyle;
+	NSTimeInterval tdiff = -[self timeIntervalSinceNow];
+    if (tdiff < 0 || tdiff > 7 * 24 * 3600) {
+        df.dateStyle = NSDateFormatterMediumStyle;
         df.timeStyle = NSDateFormatterNoStyle;
         return [df stringFromDate:self];
     } else if (dc.day) {
-        return [NSString stringWithFormat:@"%d days ago",dc.day];
+        df.dateFormat = @"EEEE";
+        return [df stringFromDate:self];
     } else if (dc.hour) {
-        return [NSString stringWithFormat:@"%d hours ago",dc.hour];
+        df.dateStyle = NSDateFormatterNoStyle;
+        df.timeStyle = NSDateFormatterShortStyle;
+        return [df stringFromDate:self];
     } else if (dc.minute) {
-        return [NSString stringWithFormat:@"%d minutes ago",dc.minute];
+        return [NSString stringWithFormat:@"%d minute%@ ago",dc.minute, dc.minute==1 ? @"" : @"s"];
     }
     return @"just now";
     /* old implementation:
