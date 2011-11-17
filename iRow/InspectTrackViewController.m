@@ -87,7 +87,7 @@
     here.coordinate = l.coordinate;
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms([l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]])];
     distLabel.text = dispLength(dist);
-    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeed(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
+    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
     return;
 }
 
@@ -103,7 +103,7 @@
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms([l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]])];
     CLLocationDistance d = [[trackData.cumDist objectAtIndex:index] floatValue];
     distLabel.text = dispLength(d);
-    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeed(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
+    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
     slider.value = d/trackData.totalDistance;
     return;   
 }
