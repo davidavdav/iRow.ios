@@ -102,6 +102,12 @@
     return 1;
 }
 
+-(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (frc.fetchedObjects.count == 0) return @"You can add a track by pressing 'Save Current Track' from the previous menu.";
+    else return @"You can remove tracks from the database by swiping horizontally.";
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
