@@ -80,9 +80,9 @@ enum {
 -(void)updateValues:(uint)mask {
     CFTimeInterval dur=totalTime;
     if (mask & kCurrentLocation) {
-        curSpeedLabel.text = dispSpeed(curSpeed, speedUnit);
+        curSpeedLabel.text = dispSpeedOnly(curSpeed, speedUnit);
         aveSpeed = totalDistance / totalTime;
-        aveSpeedLabel.text = dispSpeed(aveSpeed, speedUnit);
+        aveSpeedLabel.text = dispSpeedOnly(aveSpeed, speedUnit);
         double distance;
         switch (trackingState) {
             case kTrackingStateStopped:
