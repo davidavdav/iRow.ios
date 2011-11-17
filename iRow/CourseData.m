@@ -22,12 +22,14 @@
 
 -(void)encodeWithCoder:(NSCoder*)enc {
     [enc encodeObject:waypoints forKey:@"waypoints"];
+    if (waterway!=nil) [enc encodeObject:waterway forKey:@"waterway"];
 }
 
 -(id)initWithCoder:(NSCoder*)dec {
     self = [super init];
     if (self) {
         waypoints = (NSMutableArray*) [dec decodeObjectForKey:@"waypoints"];
+        waterway = (NSString*) [dec decodeObjectForKey:@"waterway"];
         direction=kDirectionForward;
         geoCoder = [[MyGeocoder alloc] init];
         [self update];
