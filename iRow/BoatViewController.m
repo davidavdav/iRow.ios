@@ -14,17 +14,6 @@
 @synthesize boat;
 @synthesize currentTextField;
 
-/*
--(void)setBoat:(Boat *)b {
-    boat = b; // where is retain?
-    name = b.name;
-    type = b.type;
-    year = b.buildDate;
-    mass = b.mass;
-    dragFactor = b.dragFactor;
-}
- */
-
 -(void)setEditing:(BOOL)e {
     editing = e;
     for (UITableViewCell * c in self.tableView.visibleCells) {
@@ -58,7 +47,6 @@
         dateFormatter.locale = [NSLocale currentLocale];
         dateFormatter.dateFormat = @"MMM YYYY";
         dateFormatter.timeZone = [NSTimeZone defaultTimeZone];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
     }
     return self;
 }
@@ -115,6 +103,8 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    if (boat==nil) [self editPressed:self];
+    else self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
 }
 
 - (void)viewDidUnload
