@@ -9,6 +9,7 @@
 #import "BoatBrowserController.h"
 #import "Settings.h"
 #import "BoatViewController.h"
+#import "utilities.h"
 
 @implementation BoatBrowserController
 
@@ -141,9 +142,9 @@
     
     // Configure the cell...
     Boat * b = [frc.fetchedObjects objectAtIndex:indexPath.row];
-    cell.textLabel.text = b.name;
+    cell.textLabel.text = defaultName(b.name, @"unnamed boat");
     cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@",b.type];
+    cell.detailTextLabel.text = defaultName(b.type, @"−"); // minus sign
     
     return cell;
 }
@@ -163,19 +164,25 @@
 }
 */
 
-/*
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        Boat * b = [frc.fetchedObjects objectAtIndex:indexPath.row];
+        [moc deleteObject:b];
+        NSError * error;
+        if (![moc save:&error]) {
+            NSLog(@"Cannot delete object %@", b);
+        } else {
+            [frc performFetch:&error];
+            [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
 
 /*
 // Override to support rearranging the table view.
