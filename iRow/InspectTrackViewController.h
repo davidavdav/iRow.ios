@@ -14,6 +14,7 @@
 @protocol HereAnnotationViewDelegte <NSObject>
 
 -(void)hereAnnotationMoved:(CLLocationCoordinate2D)coordinate index:(NSInteger)index;
+-(void)hereAnnotationPressed:(BOOL)down;
 
 @end
 

@@ -19,9 +19,11 @@
 @synthesize delegate;
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    for (UITouch * t in event.allTouches) {
-//        NSLog(@"began %@", t);
-    }
+    if (delegate && [delegate respondsToSelector:@selector(hereAnnotationPressed:)]) [delegate hereAnnotationPressed:YES];
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    if (delegate && [delegate respondsToSelector:@selector(hereAnnotationPressed:)]) [delegate hereAnnotationPressed:NO];    
 }
 
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -90,6 +92,12 @@
 }
 
 #pragma mark HereAnnotationViewDelegate
+-(void)hereAnnotationPressed:(BOOL)down {
+//    slider.backgroundColor = down ? [UIColor whiteColor] : [UIColor blackColor];
+    slider.highlighted = down;
+//    slider.thumbTintColor = down ? [UIColor redColor] : [UIColor whiteColor];
+}
+
 -(void)hereAnnotationMoved:(CLLocationCoordinate2D)coordinate index:(NSInteger)index {
     CLLocation * l = [trackData.locations objectAtIndex:index];
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms([l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]])];
@@ -119,7 +127,9 @@
     UIView * panel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, w, hSlider)];
     [self.view addSubview:panel];
     slider = [[UISlider alloc] initWithFrame:CGRectMake(10, h - hSlider, w-20, hSlider)];
-    [self.view addSubview:slider];
+    [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob-red"] forState:UIControlStateHighlighted];
+    [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob"] forState:UIControlStateNormal];
+   [self.view addSubview:slider];
     timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
     distLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 10, 100, 20)];
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(w-100-10, 10, 100, 20)];
