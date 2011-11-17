@@ -60,6 +60,8 @@
 		637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */; };
 		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
+		6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF0414755A3200F37863 /* SelectRowerViewController.m */; };
+		6386AF0A1475BCDF00F37863 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF091475BCDF00F37863 /* Track.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */; };
 		63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE971F143BA50600C63178 /* UIButtonBarLocate.png */; };
@@ -71,7 +73,6 @@
 		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
 		63AE973F14405EF400C63178 /* wait-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973D14405EF100C63178 /* wait-button.png */; };
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
-		63BC789F14726B7500DF6671 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC789E14726B7500DF6671 /* Track.m */; };
 		63BC78A214726B9300DF6671 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC78A114726B9300DF6671 /* Course.m */; };
 		63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */; };
 		63BC78B314742C2200DF6671 /* volume-slider-fat-knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */; };
@@ -183,6 +184,12 @@
 		637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-UIButtonBarContactAdd.png"; sourceTree = "<group>"; };
 		637052F3144CDD58004B25A0 /* help-course-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-selected.png"; sourceTree = "<group>"; };
 		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
+		6386AF021475590000F37863 /* SelectRowerViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewControllerDelegate.h; sourceTree = "<group>"; };
+		6386AF0414755A3200F37863 /* SelectRowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRowerViewController.m; sourceTree = "<group>"; };
+		6386AF0514755A3300F37863 /* SelectRowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewController.h; sourceTree = "<group>"; };
+		6386AF071475BAC500F37863 /* DataModel-1.0.2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel-1.0.2.xcdatamodel"; sourceTree = "<group>"; };
+		6386AF081475BCDF00F37863 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
+		6386AF091475BCDF00F37863 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLBlueMinus@2x.png"; sourceTree = "<group>"; };
@@ -195,8 +202,6 @@
 		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
 		63AE973D14405EF100C63178 /* wait-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button.png"; sourceTree = "<group>"; };
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
-		63BC789D14726B7500DF6671 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
-		63BC789E14726B7500DF6671 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		63BC78A014726B9300DF6671 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63BC78A114726B9300DF6671 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLCameraButtonRecordOn.png; sourceTree = "<group>"; };
@@ -278,6 +283,9 @@
 				6316B8671471838F00DF48CB /* TrackBrowserController.m */,
 				6316B86914718E4D00DF48CB /* InspectTrackViewController.h */,
 				6316B86A14718E4E00DF48CB /* InspectTrackViewController.m */,
+				6386AF0514755A3300F37863 /* SelectRowerViewController.h */,
+				6386AF0414755A3200F37863 /* SelectRowerViewController.m */,
+				6386AF021475590000F37863 /* SelectRowerViewControllerDelegate.h */,
 			);
 			name = Track;
 			sourceTree = "<group>";
@@ -338,10 +346,10 @@
 			children = (
 				63BC78AF14742ABC00DF6671 /* png */,
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
+				6386AF081475BCDF00F37863 /* Track.h */,
+				6386AF091475BCDF00F37863 /* Track.m */,
 				63BC78A014726B9300DF6671 /* Course.h */,
 				63BC78A114726B9300DF6671 /* Course.m */,
-				63BC789D14726B7500DF6671 /* Track.h */,
-				63BC789E14726B7500DF6671 /* Track.m */,
 				63E3ADE61466DC5E009FAECE /* Rower.h */,
 				63E3ADE71466DC5E009FAECE /* Rower.m */,
 				63E3ADDD1463C2E8009FAECE /* Boat.h */,
@@ -668,8 +676,9 @@
 				6316B8651470246200DF48CB /* RelativeDate.m in Sources */,
 				6316B8681471838F00DF48CB /* TrackBrowserController.m in Sources */,
 				6316B86B14718E4E00DF48CB /* InspectTrackViewController.m in Sources */,
-				63BC789F14726B7500DF6671 /* Track.m in Sources */,
 				63BC78A214726B9300DF6671 /* Course.m in Sources */,
+				6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */,
+				6386AF0A1475BCDF00F37863 /* Track.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -809,9 +818,10 @@
 			isa = XCVersionGroup;
 			children = (
 				63474AA51472677A00689568 /* DataModel-1.0.1.xcdatamodel */,
+				6386AF071475BAC500F37863 /* DataModel-1.0.2.xcdatamodel */,
 				635C33311461CDB1007C273F /* DataModel-1.0.xcdatamodel */,
 			);
-			currentVersion = 63474AA51472677A00689568 /* DataModel-1.0.1.xcdatamodel */;
+			currentVersion = 6386AF071475BAC500F37863 /* DataModel-1.0.2.xcdatamodel */;
 			path = DataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
