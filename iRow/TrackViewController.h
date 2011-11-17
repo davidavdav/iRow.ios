@@ -14,7 +14,7 @@
 #import "ErgometerViewController.h"
 
 
-@interface TrackViewController : UITableViewController <UITextFieldDelegate> {
+@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> {
     UIBarButtonItem * leftBarItem;
     Settings * settings;
     TrackData * trackData;
@@ -22,6 +22,8 @@
     ErgometerViewController * evc;
     int unitSystem;
     BOOL editing;
+    NSFetchedResultsController * frcBoats;
+    UITextField * boatTextView;
 }
 
 @property (strong, nonatomic) Track * track;

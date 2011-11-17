@@ -11,10 +11,13 @@
 #import "RelativeDate.h"
 #import "iRowAppDelegate.h"
 #import "InspectTrackViewController.h"
+#import "BoatBrowserController.h"
 
 enum {
-    kSecID=0,
-    kSecStats
+    kSecDetail=0,
+    kSecID,
+    kSecStats,
+    kSecRelations
 };
 
 enum {
@@ -23,7 +26,6 @@ enum {
     kTrackTime,
     kTrackAveSpeed,
     kTrackStrokeFreq,
-    kInspectTrack
 }; 
 
 @implementation TrackViewController
@@ -40,6 +42,16 @@ enum {
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
         unitSystem = evc.unitSystem;
+        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
+        [frq setEntity:[NSEntityDescription entityForName:@"Boat" inManagedObjectContext:settings.moc]];
+        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+        NSArray * sds = [NSArray arrayWithObject:sd];
+        [frq setSortDescriptors:sds];
+        frcBoats = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:settings.moc sectionNameKeyPath:nil cacheName:nil];
+        NSError * error;
+        if (![frcBoats performFetch:&error]) {
+            NSLog(@"Error fetching Course");
+        };
     }
     return self;
 }
@@ -53,13 +65,15 @@ enum {
 }
 -(void)editPressed:(id)sender {
     leftBarItem = self.navigationController.navigationItem.leftBarButtonItem;
-    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
-    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
+    [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
+    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
     if (track == nil) {
         track = (Track*)[NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:settings.moc];
         if (trackData) {
             track.track = [NSKeyedArchiver archivedDataWithRootObject:trackData];
             track.distance = [NSNumber numberWithFloat:trackData.totalDistance];
+            track.locality = trackData.locality;
+            track.boat = settings.currentBoat;
         }
         if (evc.stroke) track.strokes = [NSNumber numberWithInt:evc.stroke.strokes];
     } 
@@ -96,8 +110,10 @@ enum {
     for (UITableViewCell * c in self.tableView.visibleCells) {
         UITextField * tf = (UITextField*)c.accessoryView;
         tf.enabled = e;
-        tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
-        tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+        if (tf.tag<100) {
+            tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+            tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+        }
     } 
 }
 
@@ -164,16 +180,20 @@ enum {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 4;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
-        case 0:
+        case kSecID:
             return @"Identification";
             break;
-        case 1:
+        case kSecStats:
             return @"Statistics";
+            break;
+        case kSecRelations:
+            return @"Composition";
+            break;
         default:
             break;
     }
@@ -184,11 +204,18 @@ enum {
 {
     // Return the number of rows in the section.
     switch (section) {
-        case 0:
+        case kSecDetail:
+            return 1;
+            break;
+        case kSecID:
             return 2;
             break;
-        case 1:
-            return kInspectTrack+1;
+        case kSecStats:
+            return kTrackStrokeFreq+1;
+            break;
+        case kSecRelations:
+            return 2;
+            break;
         default:
             break;
     };
@@ -197,14 +224,21 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString * CellIdentifiers[2] = {@"Cell", @"Editable"};
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    int celltype = indexPath.section==kSecID || indexPath.section==kSecRelations;
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifiers[celltype]];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifiers[celltype]];
     }
     cell.accessoryType = UITableViewCellAccessoryNone;
     switch (indexPath.section) {
+        case kSecDetail:
+            cell.textLabel.text = @"Inspect track";
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
         case kSecID: {
             UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
             textField.delegate = self;
@@ -255,17 +289,49 @@ enum {
                     cell.textLabel.text = @"Average stroke frequency";
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%3.1f",60*track.strokes.intValue/trackData.totalTime];
                     break;
-                 case kInspectTrack:
-                    cell.textLabel.text = @"Inspect track";
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                default:
+                    break;
+            }
+            break;
+        case kSecRelations: {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
+            textField.delegate = self;
+            textField.textAlignment = UITextAlignmentRight;
+            textField.tag = 100+indexPath.row;
+            textField.enabled = editing;
+            textField.borderStyle = UITextBorderStyleNone;
+            textField.clearButtonMode = UITextFieldViewModeNever;
+            cell.accessoryView = textField;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            switch (indexPath.row) {
+                case 0: {
+                    cell.textLabel.text = @"Boat";
+                    textField.text = track.boat.name;
+                    textField.placeholder = @"pick a boat";
+                    UIPickerView * pickerView = [[UIPickerView alloc] init];
+                    pickerView.showsSelectionIndicator = YES;
+                    pickerView.delegate = self;
+                    pickerView.dataSource = self;
+                    NSInteger current = [frcBoats.fetchedObjects indexOfObject:track.boat];
+                    if (current==NSNotFound) current=frcBoats.fetchedObjects.count; // unknown
+                    [pickerView selectRow:current inComponent:0 animated:YES];
+                    textField.inputView = pickerView;
+                    boatTextView = textField; // for the picker to give a chance to rewrite the text
+                    break;
+                }
+                case 1:
+                    cell.textLabel.text = @"Rowers";
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",track.rowers.count];
                     break;
                 default:
                     break;
             }
+            break;
+        }
         default:
             break;
     }
-    // Configure the cell...
     
     return cell;
 }
@@ -313,19 +379,37 @@ enum {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section==1 && indexPath.row==kInspectTrack) {
-        InspectTrackViewController * itvc = [[InspectTrackViewController alloc] init];
-        itvc.track = track;
-        [self.navigationController pushViewController:itvc animated:YES];
+    switch (indexPath.section) {
+        case kSecDetail: {
+            InspectTrackViewController * itvc = [[InspectTrackViewController alloc] init];
+            itvc.track = track;
+            [self.navigationController pushViewController:itvc animated:YES];
+            break;
+        }
+/*        case kSecRelations: 
+            switch (indexPath.row) {
+                case 0: {
+                    BoatBrowserController * bbc = [[BoatBrowserController alloc] initWithStyle:UITableViewStylePlain];
+                    break;
+                }
+                default:
+                    break;
+            } */
+        default:
+            break;
     }
 }
 
+#pragma mark UITextFieldDelegte
+
 // this make return remove the keyboard
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return NO;
 }
 
+ 
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     NSLog(@"ended editing %d", textField.tag);
     switch (textField.tag) {
@@ -341,6 +425,28 @@ enum {
     }
 }
 
+#pragma mark UIPickerViewDelegate
 
+// we encode row = #boats for "unknown" option.
+
+-(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    if (row>=frcBoats.fetchedObjects.count) return @"unknown";
+    return [[frcBoats.fetchedObjects objectAtIndex:row] name];
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    track.boat = (row<frcBoats.fetchedObjects.count) ? [frcBoats.fetchedObjects objectAtIndex:row] : nil;    
+    boatTextView.text = track.boat.name;
+}
+
+#pragma mark UIPickerViewDataSource
+
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return frcBoats.fetchedObjects.count+1;
+}
 
 @end
