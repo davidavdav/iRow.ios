@@ -114,6 +114,13 @@
     return 1;
 }
 
+-(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (frc.fetchedObjects.count == 0) return @"You can add courses from the Map view by pressing the course button.";
+    else return @"You can remove courses from the database by swiping horizontally.  You can clear a course from the Map view by swiping the active course button.";
+}
+
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
