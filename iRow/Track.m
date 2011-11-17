@@ -2,7 +2,7 @@
 //  Track.m
 //  iRow
 //
-//  Created by David van Leeuwen on 15-11-11.
+//  Created by David van Leeuwen on 17-11-11.
 //  Copyright (c) 2011 strApps. All rights reserved.
 //
 
@@ -22,8 +22,10 @@
 @dynamic period;
 @dynamic strokes;
 @dynamic track;
+@dynamic waterway;
 @dynamic boat;
 @dynamic course;
 @dynamic rowers;
+@dynamic coxswain;
 
 @end

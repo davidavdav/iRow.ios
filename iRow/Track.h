@@ -2,7 +2,7 @@
 //  Track.h
 //  iRow
 //
-//  Created by David van Leeuwen on 15-11-11.
+//  Created by David van Leeuwen on 17-11-11.
 //  Copyright (c) 2011 strApps. All rights reserved.
 //
 
@@ -21,9 +21,11 @@
 @property (nonatomic, retain) NSNumber * period;
 @property (nonatomic, retain) NSNumber * strokes;
 @property (nonatomic, retain) NSData * track;
+@property (nonatomic, retain) NSString * waterway;
 @property (nonatomic, retain) Boat *boat;
 @property (nonatomic, retain) Course *course;
 @property (nonatomic, retain) NSSet *rowers;
+@property (nonatomic, retain) Rower *coxswain;
 @end
 
 @interface Track (CoreDataGeneratedAccessors)
