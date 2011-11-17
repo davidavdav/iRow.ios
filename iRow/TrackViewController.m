@@ -12,6 +12,7 @@
 #import "iRowAppDelegate.h"
 #import "InspectTrackViewController.h"
 #import "BoatBrowserController.h"
+#import "SelectRowerViewController.h"
 
 enum {
     kSecDetail=0,
@@ -21,11 +22,13 @@ enum {
 };
 
 enum {
-    kTrackDate=0,
-    kTrackDistance,
+    kTrackDistance=0,
     kTrackTime,
     kTrackAveSpeed,
     kTrackStrokeFreq,
+    kTrackDate,
+    kTotalMass,
+    kTotalPower,
 }; 
 
 @implementation TrackViewController
@@ -41,17 +44,9 @@ enum {
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
-        unitSystem = evc.unitSystem;
-        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
-        [frq setEntity:[NSEntityDescription entityForName:@"Boat" inManagedObjectContext:settings.moc]];
-        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        NSArray * sds = [NSArray arrayWithObject:sd];
-        [frq setSortDescriptors:sds];
-        frcBoats = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:settings.moc sectionNameKeyPath:nil cacheName:nil];
-        NSError * error;
-        if (![frcBoats performFetch:&error]) {
-            NSLog(@"Error fetching Course");
-        };
+        speedUnit = evc.speedUnit;
+        frcBoats = fetchedResultController(@"Boat", @"name", settings.moc);
+        frcRowers = fetchedResultController(@"Rower", @"name", settings.moc);
     }
     return self;
 }
@@ -109,12 +104,19 @@ enum {
     editing = e;
     for (UITableViewCell * c in self.tableView.visibleCells) {
         UITextField * tf = (UITextField*)c.accessoryView;
-        tf.enabled = e;
-        if (tf.tag<100) {
-            tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+        if (tf!=nil) {
+            tf.enabled = e;
+            if (tf.tag<100) // not for boat...
+                tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
             tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+        } 
+        if (c == rowersCell) {
+            c.detailTextLabel.backgroundColor = [UIColor whiteColor];
         }
-    } 
+    }
+    NSMutableIndexSet * is = [NSMutableIndexSet indexSetWithIndex:kSecDetail];
+    [is addIndex:kSecStats];
+    [self.tableView reloadSections:is withRowAnimation:UITableViewRowAnimationTop];
 }
 
 -(void)setTitleToTrackName {
@@ -205,16 +207,16 @@ enum {
     // Return the number of rows in the section.
     switch (section) {
         case kSecDetail:
-            return 1;
+            return 1 * (1-editing);
             break;
         case kSecID:
             return 2;
             break;
         case kSecStats:
-            return kTrackStrokeFreq+1;
+            return 7 * (1-editing);
             break;
         case kSecRelations:
-            return 2;
+            return 3;
             break;
         default:
             break;
@@ -226,7 +228,7 @@ enum {
 {
     static NSString * CellIdentifiers[2] = {@"Cell", @"Editable"};
     
-    int celltype = indexPath.section==kSecID || indexPath.section==kSecRelations;
+    int celltype = indexPath.section==kSecID || (indexPath.section==kSecRelations && indexPath.row == 0);
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifiers[celltype]];
     if (cell == nil) {
@@ -279,34 +281,48 @@ enum {
                     break;
                 case kTrackTime:
                     cell.textLabel.text = @"Time";
-                    cell.detailTextLabel.text = hms(trackData.totalTime);
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.totalTime)];
                     break;
                 case kTrackAveSpeed:
                     cell.textLabel.text = @"Average speed";
-                    cell.detailTextLabel.text = dispSpeed(trackData.averageSpeed, unitSystem);
+                    cell.detailTextLabel.text = dispSpeed(trackData.averageSpeed, speedUnit);
                     break;
                 case kTrackStrokeFreq:
                     cell.textLabel.text = @"Average stroke frequency";
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%3.1f",60*track.strokes.intValue/trackData.totalTime];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%3.1f s/m",60*track.strokes.intValue/trackData.totalTime];
                     break;
+                case kTotalMass: {
+                    float mass = 0;
+                    for (Rower * r in track.rowers) mass += r.mass.floatValue;
+                    mass += track.coxswain.mass.floatValue + track.boat.mass.floatValue;
+                    cell.textLabel.text = @"Total mass in boat";
+                    cell.detailTextLabel.text = dispMass([NSNumber numberWithFloat:mass]);
+                    break;
+                }
+                case kTotalPower: {
+                    float power = 0;
+                    for (Rower * r in track.rowers) power += r.power.floatValue;
+                    cell.textLabel.text = @"Total power at oars";
+                    cell.detailTextLabel.text = dispPower([NSNumber numberWithFloat:power]);
+                    break;
+                }
                 default:
                     break;
             }
             break;
         case kSecRelations: {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
-            textField.delegate = self;
-            textField.textAlignment = UITextAlignmentRight;
-            textField.tag = 100+indexPath.row;
-            textField.enabled = editing;
-            textField.borderStyle = UITextBorderStyleNone;
-            textField.clearButtonMode = UITextFieldViewModeNever;
-            cell.accessoryView = textField;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             switch (indexPath.row) {
                 case 0: {
                     cell.textLabel.text = @"Boat";
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
+                    textField.delegate = self;
+                    textField.textAlignment = UITextAlignmentRight;
+                    textField.tag = 100+indexPath.row;
+                    textField.enabled = editing;
+                    textField.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+                    textField.clearButtonMode = UITextFieldViewModeNever;
+                    cell.accessoryView = textField;
                     textField.text = track.boat.name;
                     textField.placeholder = @"pick a boat";
                     UIPickerView * pickerView = [[UIPickerView alloc] init];
@@ -320,10 +336,21 @@ enum {
                     boatTextView = textField; // for the picker to give a chance to rewrite the text
                     break;
                 }
-                case 1:
+                case 1: {
                     cell.textLabel.text = @"Rowers";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%d",track.rowers.count];
+                    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                    rowersCell = cell;
                     break;
+                }
+                case 2: {
+                    cell.textLabel.text = @"Coxswain";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    cell.detailTextLabel.text = defaultName(track.coxswain.name, @"none");
+                    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                    break;
+                }                    
                 default:
                     break;
             }
@@ -386,15 +413,30 @@ enum {
             [self.navigationController pushViewController:itvc animated:YES];
             break;
         }
-/*        case kSecRelations: 
+        case kSecRelations: 
             switch (indexPath.row) {
-                case 0: {
-                    BoatBrowserController * bbc = [[BoatBrowserController alloc] initWithStyle:UITableViewStylePlain];
+                case 2: if (!editing) break; 
+                case 1: {
+                    SelectRowerViewController * srvc = [[SelectRowerViewController alloc] initWithStyle:UITableViewStylePlain];
+                    if (editing) {
+                        srvc.rowers = frcRowers.fetchedObjects;
+                        if (indexPath.row==1) 
+                            srvc.selected = [NSMutableSet setWithSet:track.rowers];
+                        else
+                            [srvc setCoxswain:track.coxswain];
+                    } else {
+                        NSSortDescriptor * sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+                        srvc.rowers = [track.rowers sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]];
+                    }
+                    srvc.editing = editing;
+                    srvc.delegate = self;
+                    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:srvc];
+                    [self.navigationController presentModalViewController:nav animated:YES];
                     break;
                 }
                 default:
                     break;
-            } */
+            } 
         default:
             break;
     }
@@ -447,6 +489,18 @@ enum {
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
     return frcBoats.fetchedObjects.count+1;
+}
+
+#pragma mark SelectRowerViewControllerDelegate
+
+-(void)selectedRowers:(NSSet *)rowers {
+    track.rowers = rowers;
+    [self.tableView reloadData];
+}
+
+-(void)selectedCoxswain:(Rower *)rower {
+    track.coxswain = rower;
+    [self.tableView reloadData];
 }
 
 @end

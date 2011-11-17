@@ -12,18 +12,20 @@
 #import "Track.h"
 #import "TrackData.h"
 #import "ErgometerViewController.h"
+#import "SelectRowerViewControllerDelegate.h"
 
 
-@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource> {
+@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, SelectRowerViewControllerDelegate> {
     UIBarButtonItem * leftBarItem;
     Settings * settings;
     TrackData * trackData;
     Track * track;
     ErgometerViewController * evc;
-    int unitSystem;
+    int speedUnit;
     BOOL editing;
-    NSFetchedResultsController * frcBoats;
+    NSFetchedResultsController * frcBoats, *frcRowers;
     UITextField * boatTextView;
+    UITableViewCell * rowersCell;
 }
 
 @property (strong, nonatomic) Track * track;
