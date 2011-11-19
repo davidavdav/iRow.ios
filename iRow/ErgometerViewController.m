@@ -215,6 +215,7 @@ enum {
     [self updateValues:kCurrentLocation];
     int index=speedUnit + (speedUnit==kSpeedDistanceUnitPerHour) * unitSystem;
     aveSpeedUnitLabel.text = curSpeedUnitLabel.text = [labels objectAtIndex:index];
+    Settings.sharedInstance.speedUnit = speedUnit;
 }
 
 -(void)changeSpeedUp:(id)sender {
