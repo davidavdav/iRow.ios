@@ -408,8 +408,10 @@ enum {
 {
     switch (indexPath.section) {
         case kSecDetail: {
+            if (trackData.count<2) break;
             InspectTrackViewController * itvc = [[InspectTrackViewController alloc] init];
-            itvc.track = track;
+            itvc.trackData = trackData;
+            itvc.title = (track.name == nil || [track.name isEqualToString:@""]) ? @"Track details" : [NSString stringWithFormat:@"Details for %@",track.name];
             [self.navigationController pushViewController:itvc animated:YES];
             break;
         }
