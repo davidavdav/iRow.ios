@@ -38,7 +38,7 @@
     if (locality == nil && locations.count==1) {
         [geoCoder reverseGeocodeLocation:loc completionHandler:^(NSArray * placemarks, NSError * error) {
             MKPlacemark * placemark = [placemarks objectAtIndex:0];
-            locality = placemark.locality;
+            self.locality = placemark.locality;
         }];
     }
 }
@@ -55,6 +55,7 @@
     [locations removeAllObjects];
     [cumDist removeAllObjects];
     [pins removeAllObjects];
+    self.locality=nil;
 }
 
 // trivial distance calculation

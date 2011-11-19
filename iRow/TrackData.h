@@ -21,7 +21,7 @@
 @property (strong, readonly) NSMutableArray *  locations;
 @property (strong, readonly) NSMutableArray *  pins;
 @property (strong, readonly) NSMutableArray * cumDist;
-@property (strong, readonly) NSString * locality;
+@property (strong, nonatomic) NSString * locality;
 
 -(void)add:(CLLocation*)loc;
 -(void)addPin:(NSString*)name atLocation:(CLLocation*)loc;
