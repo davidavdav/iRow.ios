@@ -32,7 +32,6 @@
 @interface InspectTrackViewController : UIViewController <MKMapViewDelegate, HereAnnotationViewDelegte> {
     MKMapView * mapView;
     UIView * infoView;
-    Track * track;
     TrackData * trackData;
     MKPolyline * polyLine;
     UISlider * slider;
@@ -41,6 +40,6 @@
     
 }
 
-@property (nonatomic, strong) Track * track;
+@property (nonatomic, strong) TrackData * trackData;
 
 @end

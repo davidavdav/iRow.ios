@@ -51,7 +51,7 @@
 
 @implementation InspectTrackViewController
 
-@synthesize track;
+@synthesize trackData;
 
 /*
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -141,9 +141,7 @@
     [panel addSubview:timeLabel];
     [panel addSubview:distLabel];
     [panel addSubview:speedLabel];
-    if (track != nil) {
-        self.title = (track.name == nil || [track.name isEqualToString:@""]) ? @"Track details" : [NSString stringWithFormat:@"Details for %@",track.name];
-        trackData = [NSKeyedUnarchiver unarchiveObjectWithData:track.track];
+    if (trackData != nil) {
         polyLine = trackData.polyLine;
         [mapView addOverlay:polyLine];
         [mapView setRegion:trackData.region];
