@@ -29,6 +29,8 @@
         shiftLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.75];
         shiftLabel.textAlignment = UITextAlignmentCenter;
         shiftLabel.textColor = [UIColor whiteColor];
+        has430 = [[[UIDevice currentDevice] systemVersion] compare:@"4.3" options:NSNumericSearch] != NSOrderedAscending;
+
     }
     
     return self;
@@ -42,7 +44,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [super touchesBegan:touches withEvent:event];
     if (enableShift) {
-        [self performSelector:@selector(unhide) withObject:nil afterDelay:0.5];
+        if (has430) [self performSelector:@selector(unhide) withObject:nil afterDelay:0.5];
         origCenter = self.center;
         shifted = NO;
     }

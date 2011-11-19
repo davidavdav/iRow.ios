@@ -17,6 +17,7 @@
     BOOL deleteSelected;
     id _target;
     SEL _action;
+    BOOL has430;
 }
 
 @property BOOL enableShift;
