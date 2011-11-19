@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import "Settings.h"
-#import "ErgometerViewController.h"
 
 @interface OptionsViewController : UITableViewController {
-    ErgometerViewController * evc;
     NSArray * sectionTitles;
     NSManagedObjectContext * moc;
     NSFetchedResultsController * frcRower;

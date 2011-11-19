@@ -16,7 +16,7 @@
 #import "RowerBrowserController.h"
 #import "TrackViewController.h"
 #import "TrackBrowserController.h"
-#import "iRowAppDelegate.h"
+#import "ErgometerViewController.h"
 
 #define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
 enum {
@@ -34,8 +34,6 @@ enum {
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
-        evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
         self.title = @"Options";
         self.tabBarItem.image = [UIImage imageNamed:@"UIButtonBarInfoDark"];
         sectionTitles = [NSArray arrayWithObjects:kSectionTitles,nil];
@@ -248,6 +246,7 @@ enum {
         case kSectionTrack:
             switch (indexPath.row) {
                 case 0: {
+                ErgometerViewController * evc = (ErgometerViewController*)[self.tabBarController.viewControllers objectAtIndex:0];
                     if (evc.tracker.track.count<2) {
                         UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"You must have recorded a track.  You can do that in the Ergometer view." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [a show];
