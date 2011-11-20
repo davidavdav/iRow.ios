@@ -40,6 +40,7 @@
 -(void)settingsChanged:(id)sender {
     // change of unit system?
     int us = Settings.sharedInstance.unitSystem;
+    // we choose to do this because this is sort-of a notification for the viewcontrollers...
     if (us != ergometerViewController.unitSystem)
         ergometerViewController.unitSystem = mapViewController.unitSystem = us;
     ergometerViewController.stroke.sensitivity = Settings.sharedInstance.logSensitivity;
