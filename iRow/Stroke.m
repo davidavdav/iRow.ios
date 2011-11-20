@@ -7,12 +7,9 @@
 //
 
 #import "Stroke.h"
+#import "utilities.h"
 
 #define kMaxSamples (1000)
-
-#define kMinStrokeSens (0.05)
-#define kMaxStrokeSens (0.5)
-#define kLogSensRange (2.0)
 
 @implementation Stroke
 
@@ -82,7 +79,7 @@
     strokes = 0;
 }
 -(void)setSensitivity:(float)logSens {
-    threshold = kMaxStrokeSens * pow(kMinStrokeSens/kMaxStrokeSens,logSens/kLogSensRange);
+    threshold = strokeSensitivity(logSens);
 }
 
 
