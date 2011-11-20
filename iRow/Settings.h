@@ -45,6 +45,7 @@ enum {
 @property double logSensitivity;
 
 +(Settings*)sharedInstance;
+-(void)reloadUserDefaults;
 // normal objects
 -(void)setObject:(id)object forKey:(NSString*)key;
 -(id)loadObjectForKey:(NSString*)key;

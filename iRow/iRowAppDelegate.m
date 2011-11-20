@@ -39,6 +39,7 @@
 // this will fire for _any_ change in settings, including the ones we write ourselves...
 -(void)settingsChanged:(id)sender {
     // change of unit system?
+    [Settings.sharedInstance reloadUserDefaults];
     int us = Settings.sharedInstance.unitSystem;
     // we choose to do this because this is sort-of a notification for the viewcontrollers...
     if (us != ergometerViewController.unitSystem)

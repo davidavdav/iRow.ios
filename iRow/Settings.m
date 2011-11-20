@@ -29,8 +29,7 @@
         currentBoat = [self loadManagedObject:@"currentBoat"];
         user = [self loadManagedObject:@"user"];
         speedUnit = [[self loadObjectForKey:@"speedUnit"] intValue];
-        logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
-        unitSystem = [ud integerForKey:@"unit_system"];
+        [self reloadUserDefaults];
     }
     
     return self;
@@ -42,6 +41,11 @@
 		settings = [[Settings alloc] init];
 	}
 	return settings;
+}
+
+-(void)reloadUserDefaults {
+    logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
+    unitSystem = [ud integerForKey:@"unit_system"];    
 }
 
 -(void)setObject:(id)object forKey:(NSString *)key {
