@@ -70,7 +70,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     loadButton = [[UIBarButtonItem alloc] initWithTitle:@"Load" style:UIBarButtonItemStyleDone target:self action:@selector(setCurrentBoat:)];
-    if ([self.navigationItem respondsToSelector:@selector(setRightBarButtonItems)]) 
+    if ([self.navigationItem respondsToSelector:@selector(setRightBarButtonItems:)]) 
         self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBoat:)], loadButton, nil];
     else 
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBoat:)];
