@@ -10,6 +10,13 @@
 #import <CoreLocation/CoreLocation.h>
 #import <CoreData/CoreData.h>
 
+// constants for the stroke sensitivity
+#define kMinStrokeSens (0.05)
+#define kMaxStrokeSens (0.5)
+#define kLogSensRange (2.0)
+
+double strokeSensitivity(double logSensitivity);
+
 // some utility functions
 NSString * dispLength(CLLocationDistance l);
 NSString * dispLengthOnly(CLLocationDistance l);

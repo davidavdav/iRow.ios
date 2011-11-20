@@ -143,3 +143,7 @@ NSFetchedResultsController * fetchedResultController(NSString * object, NSString
     };
     return frc;
 }
+
+double strokeSensitivity(double logSensitivity) {
+    return kMaxStrokeSens * pow(kMinStrokeSens/kMaxStrokeSens,logSensitivity/kLogSensRange);
+}
