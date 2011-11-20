@@ -6,17 +6,19 @@
 //  Copyright (c) 2011 strApps. All rights reserved.
 //
 
-#import "OptionsViewController.h"
-#import "InfoViewController.h"
-#import "CourseViewController.h"
-#import "CourseBrowserController.h"
+#import "ErgometerViewController.h"
 #import "Settings.h"
-#import "BoatBrowserController.h"
-#import "RowerViewController.h"
-#import "RowerBrowserController.h"
+#import "OptionsViewController.h"
 #import "TrackViewController.h"
 #import "TrackBrowserController.h"
-#import "ErgometerViewController.h"
+#import "CourseViewController.h"
+#import "CourseBrowserController.h"
+#import "InfoViewController.h"
+#import "SettingsViewController.h"
+#import "RowerViewController.h"
+#import "RowerBrowserController.h"
+#import "BoatBrowserController.h"
+
 
 #define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
 enum {
@@ -136,7 +138,7 @@ enum {
             return 2;
             break;
         case kSectionHelp:
-            return 1;
+            return 2;
         case kSectionRowers:
             return 2;
         case kSectionBoats:
@@ -156,6 +158,7 @@ enum {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
     cell.detailTextLabel.text = nil;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     switch (indexPath.section) {
         case kSectionTrack:
         case kSectionCourse:
@@ -167,11 +170,17 @@ enum {
                     cell.textLabel.text = [NSString stringWithFormat:@"Browse %@s", [sectionTitles objectAtIndex:indexPath.section]];
                     break;
             }
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case kSectionHelp:
-            cell.textLabel.text = @"Quick help";
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"Quick help";
+                    break;
+                case 1:
+                    cell.textLabel.text = @"Settings";
+                default:
+                    break;
+            }
             break;
         case kSectionRowers:
             switch (indexPath.row) {
@@ -293,11 +302,17 @@ enum {
             break;
         case kSectionHelp:
             switch (indexPath.row) {
-                case 0:
+                case 0: {
                     ;
                     InfoViewController * ivc = [[InfoViewController alloc] init];
                     [self.navigationController pushViewController:ivc animated:YES];
                     break;
+                }
+                case 1: {
+                    SettingsViewController * svc = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:svc animated:YES];
+                    break;
+                }
             }
             break;
         case kSectionRowers:
