@@ -62,6 +62,7 @@
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
 		6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF0414755A3200F37863 /* SelectRowerViewController.m */; };
 		6386AF0A1475BCDF00F37863 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF091475BCDF00F37863 /* Track.m */; };
+		638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638EC0C014783BC9004B1B02 /* SettingsViewController.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */; };
 		63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE971F143BA50600C63178 /* UIButtonBarLocate.png */; };
@@ -187,9 +188,11 @@
 		6386AF021475590000F37863 /* SelectRowerViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewControllerDelegate.h; sourceTree = "<group>"; };
 		6386AF0414755A3200F37863 /* SelectRowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRowerViewController.m; sourceTree = "<group>"; };
 		6386AF0514755A3300F37863 /* SelectRowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewController.h; sourceTree = "<group>"; };
-		6386AF071475BAC500F37863 /* DataModel-1.1.xcdatamodel */ = {isa = PBXFileReference; path = "DataModel-1.1.xcdatamodel"; sourceTree = "<group>"; };
+		6386AF071475BAC500F37863 /* DataModel-1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel-1.1.xcdatamodel"; sourceTree = "<group>"; };
 		6386AF081475BCDF00F37863 /* Track.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Track.h; sourceTree = "<group>"; };
 		6386AF091475BCDF00F37863 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
+		638EC0BF14783BC9004B1B02 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		638EC0C014783BC9004B1B02 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLBlueMinus@2x.png"; sourceTree = "<group>"; };
@@ -374,7 +377,6 @@
 				63351FCA14682547000E759A /* RowerBrowserController.m */,
 				63E3ADE31466DA9D009FAECE /* RowerViewController.h */,
 				63E3ADE41466DA9E009FAECE /* RowerViewController.m */,
-				63351FD4146850A7000E759A /* Info */,
 			);
 			name = Rower;
 			sourceTree = "<group>";
@@ -384,6 +386,8 @@
 			children = (
 				63157C13144B6C2A0057E1D7 /* InfoViewController.h */,
 				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
+				638EC0BF14783BC9004B1B02 /* SettingsViewController.h */,
+				638EC0C014783BC9004B1B02 /* SettingsViewController.m */,
 			);
 			name = Info;
 			sourceTree = "<group>";
@@ -473,6 +477,7 @@
 				6316B8591470043C00DF48CB /* Track */,
 				6316B84A146A745300DF48CB /* Course */,
 				63351FD314685076000E759A /* Rower */,
+				63351FD4146850A7000E759A /* Info */,
 				63351FD514686C5A000E759A /* Boat */,
 				63351FD6146878E5000E759A /* MyDatePicker.h */,
 				63351FD7146878E5000E759A /* MyDatePicker.m */,
@@ -679,6 +684,7 @@
 				63BC78A214726B9300DF6671 /* Course.m in Sources */,
 				6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */,
 				6386AF0A1475BCDF00F37863 /* Track.m in Sources */,
+				638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
