@@ -29,6 +29,8 @@
         currentBoat = [self loadManagedObject:@"currentBoat"];
         user = [self loadManagedObject:@"user"];
         speedUnit = [[self loadObjectForKey:@"speedUnit"] intValue];
+        logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
+        unitSystem = [ud integerForKey:@"unit_system"];
     }
     
     return self;
@@ -110,13 +112,23 @@
 }
 
 -(int)unitSystem {
-    return [[ud valueForKey:@"unit_system"] intValue];
+    return unitSystem;
+}
+
+-(void)setUnitSystem:(int)us {
+    unitSystem = us;
+    [ud setInteger:us forKey:@"unit_system"];
+    [ud synchronize];
 }
 
 -(double)logSensitivity {
-    return [[ud valueForKey:@"stroke_sensitivity"] doubleValue];
+    return logSensitivity;
 }
 
-
+-(void)setLogSensitivity:(double)ls {
+    logSensitivity = ls;
+    [ud setDouble:logSensitivity forKey:@"stroke_sensitivity"];
+    [ud synchronize];
+}
 
 @end

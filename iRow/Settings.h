@@ -27,6 +27,8 @@ enum {
     Boat * currentBoat;
     Rower * user;
     int speedUnit;
+    double logSensitivity;
+    int unitSystem;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -38,6 +40,10 @@ enum {
 
 @property (nonatomic) int speedUnit;
 
+// from the general settings:
+@property int unitSystem;
+@property double logSensitivity;
+
 +(Settings*)sharedInstance;
 // normal objects
 -(void)setObject:(id)object forKey:(NSString*)key;
@@ -45,10 +51,5 @@ enum {
 // core data objects (i.e., pointers to them)
 -(void)setManagedObject:(NSManagedObject*)mo forKey:(NSString*) key;
 -(id)loadManagedObject:(NSString*)key;
-
-// from the general settings:
--(int)unitSystem;
--(double)logSensitivity;
-
 
 @end
