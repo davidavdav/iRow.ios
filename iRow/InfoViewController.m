@@ -41,7 +41,7 @@
 - (void)loadView {
 	[super loadView];
 	CGRect frame = self.view.bounds;
-    frame.size.height = frame.size.height - self.tabBarController.tabBar.bounds.size.height;
+    frame.size.height = frame.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
 	webView = [[UIWebView alloc] initWithFrame:frame];
 	webView.scalesPageToFit = NO;
 	webView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
