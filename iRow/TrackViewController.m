@@ -70,7 +70,10 @@ enum {
             track.locality = trackData.locality;
             track.boat = settings.currentBoat;
         }
-        if (evc.stroke) track.strokes = [NSNumber numberWithInt:evc.stroke.strokes];
+        if (evc.stroke) {
+            track.strokes = [NSNumber numberWithInt:evc.stroke.strokes];
+            track.motion = [NSKeyedArchiver archivedDataWithRootObject:evc.stroke];
+        }
     } 
     self.editing = YES;
 }
@@ -136,10 +139,12 @@ enum {
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     if (track==nil) { 
         trackData = evc.tracker.track;
+        stroke = evc.stroke;
         [self editPressed:self]; // prepare to save this track, create a new instance of track
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];    
         trackData = [NSKeyedUnarchiver unarchiveObjectWithData:track.track];
+        stroke = [NSKeyedUnarchiver unarchiveObjectWithData:track.motion];
     }
     [self setTitleToTrackName];
 }
@@ -411,6 +416,7 @@ enum {
             if (trackData.count<2) break;
             InspectTrackViewController * itvc = [[InspectTrackViewController alloc] init];
             itvc.trackData = trackData;
+            itvc.stroke = stroke;
             itvc.title = (track.name == nil || [track.name isEqualToString:@""]) ? @"Track details" : [NSString stringWithFormat:@"Details for %@",track.name];
             [self.navigationController pushViewController:itvc animated:YES];
             break;

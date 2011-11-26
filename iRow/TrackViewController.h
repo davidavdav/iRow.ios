@@ -13,6 +13,7 @@
 #import "TrackData.h"
 #import "ErgometerViewController.h"
 #import "SelectRowerViewControllerDelegate.h"
+#import "Stroke.h"
 
 
 @interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, SelectRowerViewControllerDelegate> {
@@ -20,6 +21,7 @@
     Settings * settings;
     TrackData * trackData;
     Track * track;
+    Stroke * stroke;
     ErgometerViewController * evc;
     int speedUnit;
     BOOL editing;
