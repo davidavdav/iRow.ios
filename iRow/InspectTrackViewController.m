@@ -9,6 +9,13 @@
 #import "InspectTrackViewController.h"
 #import "utilities.h"
 #import "Settings.h"
+#import "Vector.h"
+#import "Filter.h"
+
+enum {
+    kPaneMap=0,
+    kPaneStroke
+} selectedPaneType;
 
 @implementation HereAnnotation
 @end
@@ -52,6 +59,7 @@
 @implementation InspectTrackViewController
 
 @synthesize trackData;
+@synthesize stroke;
 
 /*
 -(id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -81,13 +89,40 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+-(void)updateStroke:(CFTimeInterval)t {
+    // find out the relevant trigger moments for this time
+    int ti = lround(t/stroke.period); // time index
+    int a=0, b=Ntrigger-1;
+    while (b-a>1) {
+        int m = (b+a)/2;
+        if (trigger[m] > ti) 
+            b=m;
+        else
+            a=m;
+    } // trigger[a] <= ti <= trigger[b]
+    [plot reset];
+    int A = MAX(0,a-2), B = MIN(Ntrigger-2, a-1+2);
+    NSLog(@"%d - %d", A, B);
+    for (; A<B; A++) {
+        [plot.plotArea penup];
+        float length = trigger[A+1]-trigger[A];
+        for (int j=trigger[A]; j<trigger[A+1]; j++) {
+            [plot plotX:(j-trigger[A])/length Y:yacc.x[j]];
+        }
+    }
+    [plot.plotArea setNeedsDisplay];
+}
+
 -(void)sliderChanged:(id)sender {
-    double dist = slider.value * trackData.totalDistance;
-    CLLocation * l = [trackData interpolate:dist];
+//    double dist = slider.value * trackData.totalDistance;
+    double time = slider.value * trackData.totalTime;
+    CLLocation * l = [trackData interpolateTime:time];
     here.coordinate = l.coordinate;
-    timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms([l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]])];
-    distLabel.text = dispLength(dist);
+//    CFTimeInterval dt = [l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]];
+    timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(time)];
+    distLabel.text = dispLength(l.altitude); // special encoding
     speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
+    if (selectedPane == kPaneStroke) [self updateStroke:time];
     return;
 }
 
@@ -108,39 +143,97 @@
     return;   
 }
 
+-(void)setTrigger {
+    float threshold = stroke.threshold;
+    int sign=1;
+    if (trigger != NULL) free(trigger);
+    MALLOC(int, trigger, yacc.length/2); // _should_ be big enough
+    int N=0;
+    for (int i=0; i<yacc.length; i++) {
+        float yf = [bpf sample:yacc.x[i]];
+        if (yf * sign < 0 && fabs(yf)>threshold) {
+            sign = (yf>0) ? 1 : -1;
+            if (sign>0) { // count positive accelerations...
+                trigger[N++] = i;
+            }
+        }
+    }
+    trigger = realloc(trigger, N*sizeof(int));
+    Ntrigger = N;
+}
+
+-(void)loadPlot:(UIView*)view {
+    plot = [[Plot alloc] initWithFrame:view.bounds];
+    [plot setMarginLeft:40 right:10 bottom:20 top:20]; // inset for the bars themselves
+    [plot setLimitsXmin:0 Xmax:1 Ymin:-1 Ymax:1];
+    plot.showXaxis = YES;
+    plot.lineWidth = 1;
+    [plot setup];
+    [view addSubview:plot];
+    if (stroke == nil) return;
+    bpf = [[Filter alloc] initWithFilter:stroke.bpy];
+    yacc = [stroke accData:1]; // 1: Y accel
+    // this follows the same algorithm as in stroke:
+    [self setTrigger];
+    [self updateStroke:0];
+}
 
 #pragma mark - View lifecycle
 
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
+    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     [super loadView];
-    CGRect frame = self.view.bounds;
-    CGFloat h = frame.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
-    CGFloat w = frame.size.width;
-    CGFloat hSlider = 40, hLabel = 40;
-    frame.size.height = h - hLabel - hSlider;
-    frame.origin.y = hLabel;
-    mapView = [[MKMapView alloc] initWithFrame:frame];
-    [self.view addSubview:mapView];
+    NSLog(@"%f super", CFAbsoluteTimeGetCurrent()-start);
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style:UIBarButtonItemStylePlain target:self action:@selector(switchPressed:)];
+    CGFloat h = self.view.bounds.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
+    CGFloat w = self.view.frame.size.width;
+    CGFloat hSlider = 60, hLabel = 40, hScrollView = h-hLabel-hSlider;
+    // scrollview: underlying all other views
+    scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, hLabel, w, hScrollView)];    
+    scrollView.contentSize = CGSizeMake(2*w, hScrollView);
+    scrollView.pagingEnabled = YES;
+    scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    scrollView.delegate = self;
+    [self.view addSubview:scrollView];
+    NSLog(@"%f scrollView", CFAbsoluteTimeGetCurrent()-start);    
+    // mapview on the first pane
+    mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, w, hScrollView)];
+    [scrollView addSubview:mapView];
     mapView.delegate = self;
-    UIView * panel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, w, hSlider)];
-    [self.view addSubview:panel];
+    NSLog(@"%f mapView", CFAbsoluteTimeGetCurrent()-start);
+    //slider below, fixed
     slider = [[UISlider alloc] initWithFrame:CGRectMake(10, h - hSlider, w-20, hSlider)];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob-red"] forState:UIControlStateHighlighted];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob"] forState:UIControlStateNormal];
-   [self.view addSubview:slider];
+    [self.view addSubview:slider];
+    NSLog(@"%f slider", CFAbsoluteTimeGetCurrent()-start);
+    //labels above, fixed
+    UIView * panel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, w, hSlider)];
+    [self.view addSubview:panel];
     timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
-    distLabel = [[UILabel alloc] initWithFrame:CGRectMake(120, 10, 100, 20)];
+    distLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 10, 100, 20)];
     speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(w-100-10, 10, 100, 20)];
     for (UILabel * l in [NSArray arrayWithObjects:timeLabel,distLabel,speedLabel,nil] ) {
         l.textColor = UIColor.whiteColor;
         l.backgroundColor = UIColor.blackColor;
         l.font = [UIFont systemFontOfSize:20];
     }
+    distLabel.textAlignment = UITextAlignmentCenter;
+    speedLabel.textAlignment = UITextAlignmentRight;
     [panel addSubview:timeLabel];
     [panel addSubview:distLabel];
     [panel addSubview:speedLabel];
+    NSLog(@"%f labels", CFAbsoluteTimeGetCurrent()-start);
+    // graph on the second scrollview pane
+    UIView * graphView = [[UIView alloc] initWithFrame:CGRectMake(w, 0, w, hScrollView)];    
+    graphView.backgroundColor = [UIColor whiteColor];
+    [scrollView addSubview:graphView];
+    [self loadPlot:graphView];
+//    [self performSelector:@selector(loadPlot:) withObject:graphView afterDelay:0.1];
+//    [NSThread detachNewThreadSelector:@selector(loadPlot:) toTarget:self withObject:graphView];
+    NSLog(@"%f plot", CFAbsoluteTimeGetCurrent()-start);
     if (trackData != nil) {
         polyLine = trackData.polyLine;
         [mapView addOverlay:polyLine];
@@ -151,9 +244,22 @@
         here = [[HereAnnotation alloc] init];
         [self sliderChanged:self];    
         [mapView addAnnotation:here];
+        NSLog(@"%f annotations", CFAbsoluteTimeGetCurrent()-start);
     }
 }
 
+-(void)switchPressed:(id)sender {
+    CGPoint o = selectedPane ? CGPointZero : CGPointMake(scrollView.contentSize.width/2, 0);
+    if (selectedPane == kPaneMap) 
+        [self updateStroke:slider.value * trackData.totalTime];
+    [scrollView setContentOffset:o animated:YES];
+    
+}
+
+-(void)scrollViewDidScroll:(UIScrollView *)sv {
+    selectedPane = sv.contentOffset.x > sv.contentSize.width/4; 
+    self.title = selectedPane==kPaneMap ? @"Track map" : @"Stroke profile";
+}
 
 /*
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.

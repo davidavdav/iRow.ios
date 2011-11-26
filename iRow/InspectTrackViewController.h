@@ -10,6 +10,8 @@
 #import <MapKit/MapKit.h>
 #import "Track.h"
 #import "TrackData.h"
+#import "Stroke.h"
+#import "Plot.h"
 
 @protocol HereAnnotationViewDelegte <NSObject>
 
@@ -29,7 +31,8 @@
 @property (nonatomic, strong) id <HereAnnotationViewDelegte> delegate;
 @end
 
-@interface InspectTrackViewController : UIViewController <MKMapViewDelegate, HereAnnotationViewDelegte> {
+@interface InspectTrackViewController : UIViewController <MKMapViewDelegate, HereAnnotationViewDelegte, UIScrollViewDelegate> {
+    UIScrollView * scrollView;
     MKMapView * mapView;
     UIView * infoView;
     TrackData * trackData;
@@ -37,9 +40,18 @@
     UISlider * slider;
     UILabel * timeLabel, * distLabel, * speedLabel;
     HereAnnotation * here;
-    
+    Plot * plot;
+    Stroke * stroke;
+    int selectedPane;
+    // this should probably move to its own object...
+    Filter * bpf;
+    Vector * yacc;
+    int * trigger;
+    int Ntrigger;
 }
 
+//these must be set form the caller
 @property (nonatomic, strong) TrackData * trackData;
+@property (nonatomic, strong) Stroke * stroke;
 
 @end
