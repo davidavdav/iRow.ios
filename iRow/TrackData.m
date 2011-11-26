@@ -30,10 +30,12 @@
     return self;
 }
 
+// FIXME: we must still correct for horizontalAccuracy here.  
 -(void)add:(CLLocation*)loc {
     if (loc==nil) return;
     float prevDist = (self.count) ? [cumDist.lastObject floatValue] : 0;
-    [cumDist addObject:[NSNumber numberWithFloat:prevDist+[loc distanceFromLocation:locations.lastObject]]];
+    CLLocationDistance dist = [loc distanceFromLocation:locations.lastObject];
+    [cumDist addObject:[NSNumber numberWithFloat:prevDist+MAX(dist,0)]];
     [locations addObject:loc];
     if (locality == nil && locations.count==1) {
         [geoCoder reverseGeocodeLocation:loc completionHandler:^(NSArray * placemarks, NSError * error) {
@@ -62,17 +64,20 @@
 -(CLLocationDistance)totalDistance {
     if (locations.count < 2) return 0;
     return [cumDist.lastObject floatValue];
-    CLLocation * last = nil;
+    // not executed code...
+/*    CLLocation * last = nil;
     CLLocationDistance d=0;
     for (CLLocation * l in locations) {
         if (l.horizontalAccuracy > 0) {
             if (last != nil) {
-                d += [l distanceFromLocation:last];
+                CLLocationDistance diff = [l distanceFromLocation:last]; // can diff be < 0?
+                if (diff>0) d += diff;
             }
             last = l;
         }
     }
     return d;
+ */
 }
 
 -(NSTimeInterval)totalTime {
@@ -180,6 +185,35 @@
     CLLocationSpeed speed = (1-frac)*la.speed + frac*lb.speed;
     CLLocationDirection course = (1-frac)*la.course + frac*lb.course; // potentially wrong arond 360
     CLLocationDistance alt = (1-frac)*la.altitude + frac*lb.altitude;
+    CLLocationAccuracy horAcc = (1-frac)*la.horizontalAccuracy + frac*lb.horizontalAccuracy;
+    CLLocationAccuracy vertAcc = (1-frac)*la.verticalAccuracy + frac*lb.verticalAccuracy;
+    NSTimeInterval t = (1-frac) * la.timestamp.timeIntervalSince1970 + frac*lb.timestamp.timeIntervalSince1970;
+    return [[CLLocation alloc] initWithCoordinate:p altitude:alt horizontalAccuracy:horAcc verticalAccuracy:vertAcc course:course speed:speed timestamp:[NSDate dateWithTimeIntervalSince1970:t]];
+}
+
+-(CLLocation*)interpolateTime:(double)time {
+    if (time<0) return self.startLocation;
+    if (time>self.totalTime) return self.stopLocation;
+    NSDate * startDate = self.startLocation.timestamp;
+    int a=0, b=self.count-1; 
+    while (b-a > 1) {
+        int m =  (a+b)/2;
+        if ([[(CLLocation*)[locations objectAtIndex:m] timestamp] timeIntervalSinceDate:startDate] > time)
+            b=m;
+        else 
+            a=m;
+    }
+    CLLocation * la = [locations objectAtIndex:a];
+    CLLocation * lb = [locations objectAtIndex:b];
+    double ta = [[(CLLocation*)[locations objectAtIndex:a] timestamp] timeIntervalSinceDate:startDate], tb=[[(CLLocation*)[locations objectAtIndex:b] timestamp] timeIntervalSinceDate:startDate];
+    double frac = (time - ta) / (tb-ta);
+    CLLocationCoordinate2D p; 
+    p.longitude = (1-frac)*la.coordinate.longitude + frac*lb.coordinate.longitude;
+    p.latitude = (1-frac)*la.coordinate.latitude + frac * lb.coordinate.latitude;
+    CLLocationSpeed speed = (1-frac)*la.speed + frac*lb.speed;
+    CLLocationDirection course = (1-frac)*la.course + frac*lb.course; // potentially wrong arond 360
+    // altitude encodes total distance...
+    CLLocationDistance alt = [[cumDist objectAtIndex:a] floatValue] + [la distanceFromLocation:[[CLLocation alloc]initWithLatitude:p.latitude longitude:p.longitude]];
     CLLocationAccuracy horAcc = (1-frac)*la.horizontalAccuracy + frac*lb.horizontalAccuracy;
     CLLocationAccuracy vertAcc = (1-frac)*la.verticalAccuracy + frac*lb.verticalAccuracy;
     NSTimeInterval t = (1-frac) * la.timestamp.timeIntervalSince1970 + frac*lb.timestamp.timeIntervalSince1970;

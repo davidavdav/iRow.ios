@@ -36,5 +36,6 @@
 -(MKCoordinateRegion)region;
 -(int)count;
 -(CLLocation*)interpolate:(double)distance;
+-(CLLocation*)interpolateTime:(double)time;
 
 @end
