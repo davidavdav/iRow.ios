@@ -60,6 +60,9 @@
 		637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */; };
 		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
+		637AAA91147BC5B300B60976 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8C147BC5B200B60976 /* Plot.m */; };
+		637AAA92147BC5B300B60976 /* PlotArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8E147BC5B200B60976 /* PlotArea.m */; };
+		637AAA93147BC5B300B60976 /* PlotAxis.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA90147BC5B200B60976 /* PlotAxis.m */; };
 		6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF0414755A3200F37863 /* SelectRowerViewController.m */; };
 		6386AF0A1475BCDF00F37863 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF091475BCDF00F37863 /* Track.m */; };
 		638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638EC0C014783BC9004B1B02 /* SettingsViewController.m */; };
@@ -185,6 +188,13 @@
 		637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-UIButtonBarContactAdd.png"; sourceTree = "<group>"; };
 		637052F3144CDD58004B25A0 /* help-course-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-selected.png"; sourceTree = "<group>"; };
 		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
+		637AAA8B147BC5B200B60976 /* Plot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plot.h; sourceTree = "<group>"; };
+		637AAA8C147BC5B200B60976 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
+		637AAA8D147BC5B200B60976 /* PlotArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotArea.h; sourceTree = "<group>"; };
+		637AAA8E147BC5B200B60976 /* PlotArea.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlotArea.m; sourceTree = "<group>"; };
+		637AAA8F147BC5B200B60976 /* PlotArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotArea.h; sourceTree = "<group>"; };
+		637AAA90147BC5B200B60976 /* PlotAxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlotAxis.m; sourceTree = "<group>"; };
+		637AAA95147BC92400B60976 /* PlotAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotAxis.h; sourceTree = "<group>"; };
 		6386AF021475590000F37863 /* SelectRowerViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewControllerDelegate.h; sourceTree = "<group>"; };
 		6386AF0414755A3200F37863 /* SelectRowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRowerViewController.m; sourceTree = "<group>"; };
 		6386AF0514755A3300F37863 /* SelectRowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewController.h; sourceTree = "<group>"; };
@@ -338,6 +348,7 @@
 				63AE97091430E48E00C63178 /* Settings.m */,
 				63E3ADC414620709009FAECE /* Ergometer */,
 				63E3ADC51462072B009FAECE /* Map */,
+				637AAA89147BC57D00B60976 /* Plotting */,
 				63E3ADC3146206D1009FAECE /* Options */,
 				6319A67714263D590035EB18 /* Supporting Files */,
 			);
@@ -432,6 +443,20 @@
 				63157C16144B6DDD0057E1D7 /* info.html */,
 			);
 			name = help;
+			sourceTree = "<group>";
+		};
+		637AAA89147BC57D00B60976 /* Plotting */ = {
+			isa = PBXGroup;
+			children = (
+				637AAA8B147BC5B200B60976 /* Plot.h */,
+				637AAA8C147BC5B200B60976 /* Plot.m */,
+				637AAA8D147BC5B200B60976 /* PlotArea.h */,
+				637AAA8E147BC5B200B60976 /* PlotArea.m */,
+				637AAA8F147BC5B200B60976 /* PlotArea.h */,
+				637AAA95147BC92400B60976 /* PlotAxis.h */,
+				637AAA90147BC5B200B60976 /* PlotAxis.m */,
+			);
+			name = Plotting;
 			sourceTree = "<group>";
 		};
 		63BC78AF14742ABC00DF6671 /* png */ = {
@@ -685,6 +710,9 @@
 				6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */,
 				6386AF0A1475BCDF00F37863 /* Track.m in Sources */,
 				638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */,
+				637AAA91147BC5B300B60976 /* Plot.m in Sources */,
+				637AAA92147BC5B300B60976 /* PlotArea.m in Sources */,
+				637AAA93147BC5B300B60976 /* PlotAxis.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
