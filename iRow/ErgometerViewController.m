@@ -289,6 +289,8 @@ enum {
             startTime = CFAbsoluteTimeGetCurrent();
             startStroke = stroke.strokes;
             [tracker.track reset];
+            [stroke reset];
+            [stroke startRecording];
             [self locationUpdate:self];
             // userinterface changes
             totalStrokesLabel.textColor = timeLabel.textColor = distanceLabel.textColor = (mapViewController.validCourse) ? [UIColor blueColor] : [UIColor blackColor];
@@ -298,6 +300,7 @@ enum {
             break;
         case kTrackingStateTracking:
             trackingState = kTrackingStateStopped;
+            [stroke stopRecording];
             totalTime = CFAbsoluteTimeGetCurrent() - startTime;
             totalStrokes = stroke.strokes - startStroke;
             totalDistance = tracker.track.totalDistance;
