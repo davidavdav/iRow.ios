@@ -18,29 +18,37 @@
 -(void)stroke:(id)sender;
 @end
 
-@interface Stroke : NSObject {
+@interface Stroke : NSObject <NSCoding> {
     CMMotionManager * motionManager;
     NSTimer * motionTimer;
     int size, N, ptr;
-    Matrix * acc;
+    Matrix * acc; // current period of data
+    NSMutableArray * strokeData; // all stroke data
     CFTimeInterval period, duration;
     int sign;
     Filter * bpx, * bpy;
     int strokes;
     id<StrokeDelegate> delegate;
     float threshold;
+    BOOL recording;
 }
 
 @property (strong, nonatomic) CMMotionManager * motionManager;
+@property (strong, nonatomic) Matrix * acc;
 @property (readonly) int strokes;
+@property (readonly) CFTimeInterval period;
 @property (strong, nonatomic) id<StrokeDelegate> delegate;
+@property (readonly) Filter * bpy;
+@property (readonly) float threshold;
 
 
 -(id)initWithPeriod:(CFTimeInterval)period duration:(CFTimeInterval)duration;
 -(void)add:(CMAcceleration)acc;
 -(void)reset;
 -(void)setSensitivity:(float)logSens;
+-(void)startRecording;
+-(void)stopRecording;
 
--(CMAcceleration)gravity;
+-(Vector*)accData:(NSInteger)dim;
 
 @end
