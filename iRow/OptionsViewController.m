@@ -18,6 +18,7 @@
 #import "RowerViewController.h"
 #import "RowerBrowserController.h"
 #import "BoatBrowserController.h"
+#import "utilities.h"
 
 
 #define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
@@ -42,18 +43,7 @@ enum {
         settings = Settings.sharedInstance;
         moc = settings.moc;
         // rower database
-        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
-        [frq setEntity:[NSEntityDescription entityForName:@"Rower" inManagedObjectContext:moc]];
-        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        NSArray * sds = [NSArray arrayWithObject:sd];
-        [frq setSortDescriptors:sds];
-        NSError * error;
-        frcRower = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-        if (![frcRower performFetch:&error]) {
-            NSLog(@"Problem executing fetch request %@", [error localizedDescription]);
-        }
-        frcRower.delegate = (id)self;
-
+        frcRower = fetchedResultController(@"Rower", @"name", YES, moc);
     }
     return self;
 }
