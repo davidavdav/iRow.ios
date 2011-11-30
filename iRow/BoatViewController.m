@@ -8,6 +8,7 @@
 
 #import "BoatViewController.h"
 #import "Settings.h"
+#import "utilities.h"
 
 @implementation BoatViewController
 
@@ -199,7 +200,7 @@
         case 3:
             cell.textLabel.text = @"Mass (kg)";
             textField.placeholder = @"mass in kg";
-            textField.text = boat.mass ? [NSString stringWithFormat:@"%3.1f",boat.mass.floatValue] : nil;
+            textField.text = dispMass(boat.mass);
             textField.keyboardType = UIKeyboardTypeDecimalPad;
            break;
         case 4:
