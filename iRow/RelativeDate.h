@@ -14,5 +14,6 @@
 -(NSString*)relativeDate;
 -(NSString*)mediumDate;
 -(NSString*)shortTime;
+-(NSString*) mediumshortDateTime;
 
 @end
