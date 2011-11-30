@@ -45,8 +45,8 @@ enum {
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
         speedUnit = evc.speedUnit;
-        frcBoats = fetchedResultController(@"Boat", @"name", settings.moc);
-        frcRowers = fetchedResultController(@"Rower", @"name", settings.moc);
+        frcBoats = fetchedResultController(@"Boat", @"name", YES, settings.moc);
+        frcRowers = fetchedResultController(@"Rower", @"name", YES, settings.moc);
     }
     return self;
 }
@@ -68,12 +68,13 @@ enum {
             track.track = [NSKeyedArchiver archivedDataWithRootObject:trackData];
             track.distance = [NSNumber numberWithFloat:trackData.totalDistance];
             track.locality = trackData.locality;
-            track.boat = settings.currentBoat;
+            track.name = [trackData.startLocation.timestamp mediumshortDateTime];
         }
         if (evc.stroke) {
             track.strokes = [NSNumber numberWithInt:evc.stroke.strokes];
             track.motion = [NSKeyedArchiver archivedDataWithRootObject:evc.stroke];
         }
+        track.boat = settings.currentBoat;
     } 
     self.editing = YES;
 }
