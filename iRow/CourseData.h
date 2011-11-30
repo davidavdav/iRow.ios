@@ -30,7 +30,7 @@ enum {
 // @property (strong, nonatomic) CourseAnnotation * start, * finish;
 @property int direction;
 @property (readonly) CLLocationDistance length;
-@property (readonly) NSString * waterway;
+@property (nonatomic, strong) NSString * waterway;
 
 -(CourseAnnotation*)addWaypoint:(CLLocationCoordinate2D)loc;
 -(void)removeWaypoint:(MKPointAnnotation*)point;

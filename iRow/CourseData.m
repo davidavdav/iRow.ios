@@ -228,6 +228,7 @@
 
 -(void)clear {
     [waypoints removeAllObjects];
+    self.waterway = nil;
 //    self.start = self.finish = nil;
 }
 
