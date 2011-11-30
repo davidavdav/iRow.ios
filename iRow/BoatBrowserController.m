@@ -20,16 +20,7 @@
         // Custom initialization
         self.title = @"Boats";
         moc = Settings.sharedInstance.moc;
-        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
-        [frq setEntity:[NSEntityDescription entityForName:@"Boat" inManagedObjectContext:moc]];
-        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        NSArray * sds = [NSArray arrayWithObject:sd];
-        [frq setSortDescriptors:sds];
-        NSError * error;
-        frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-        if (![frc performFetch:&error]) {
-            NSLog(@"Problem executing fetch request %@", [error localizedDescription]);
-        }
+        frc = fetchedResultController(@"Boat", @"name", YES, moc);
 //        frc.delegate = (id) self;
     }
     return self;
