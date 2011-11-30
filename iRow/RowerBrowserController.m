@@ -10,6 +10,7 @@
 #import "Settings.h"
 #import "Rower.h"
 #import "RowerViewController.h"
+#import "utilities.h"
 
 @implementation RowerBrowserController
 
@@ -30,15 +31,9 @@
     if (self) {
         // Custom initialization
         self.title = @"Rowing mates";
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPressed:)];
         moc = Settings.sharedInstance.moc;
-        NSFetchRequest * frq = [[NSFetchRequest alloc] init];
-        [frq setEntity:[NSEntityDescription entityForName:@"Rower" inManagedObjectContext:moc]];
-        NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-        NSArray * sds = [NSArray arrayWithObject:sd];
-        [frq setSortDescriptors:sds];
-        frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
-        frc.delegate = (id) self;
+        frc = fetchedResultController(@"Rower", @"name", YES, moc);
+//        frc.delegate = (id) self;
 //        [self fetchOtherRowers];
     }
     return self;
@@ -70,6 +65,7 @@
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPressed:)];
 }
 
 - (void)viewDidUnload
@@ -138,7 +134,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     Rower * r = [rowers objectAtIndex:indexPath.row];
     cell.textLabel.text = r.name;
-    cell.detailTextLabel.text = [NSString stringWithFormat:@"%1.0f kg",r.mass.floatValue];
+    cell.detailTextLabel.text = dispMass(r.mass);
     // Configure the cell...
     
     return cell;
