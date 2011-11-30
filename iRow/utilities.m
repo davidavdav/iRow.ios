@@ -128,11 +128,11 @@ NSString * defaultName(NSString * name, NSString * def) {
     return (name == nil || [name isEqualToString:@""]) ? def : name;
 }
 
-NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, NSManagedObjectContext * moc) {
+NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, BOOL ascending, NSManagedObjectContext * moc) {
     NSFetchRequest * frq = [[NSFetchRequest alloc] init];
     [frq setEntity:[NSEntityDescription entityForName:object inManagedObjectContext:moc]];
     if (sortKey==nil) sortKey=@"name"; // default
-    NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:YES];
+    NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending];
     NSArray * sds = [NSArray arrayWithObject:sd];
     [frq setSortDescriptors:sds];
     NSFetchedResultsController * frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];

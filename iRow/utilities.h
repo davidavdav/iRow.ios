@@ -33,4 +33,4 @@ NSString * dispPower(NSNumber * power);
 
 NSString * defaultName(NSString * name, NSString * def);
 
-NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, NSManagedObjectContext * moc);
+NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, BOOL ascending, NSManagedObjectContext * moc);
