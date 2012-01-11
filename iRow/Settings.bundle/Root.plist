@@ -20,7 +20,7 @@
 			<key>Key</key>
 			<string>stroke_sensitivity</string>
 			<key>DefaultValue</key>
-			<integer>1</integer>
+			<real>1.4</real>
 			<key>MinimumValue</key>
 			<integer>0</integer>
 			<key>MaximumValue</key>
