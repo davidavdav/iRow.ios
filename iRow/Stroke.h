@@ -31,6 +31,7 @@
     id<StrokeDelegate> delegate;
     float threshold;
     BOOL recording;
+    FILE * file;
 }
 
 @property (strong, nonatomic) CMMotionManager * motionManager;

@@ -71,13 +71,18 @@
         bpx = [[Filter alloc] initWithFile:@"stroke"];
         bpy = [[Filter alloc] initWithFilter:bpx];
         strokes = 0;
+#if TARGET_IPHONE_SIMULATOR
+        motionTimer = [NSTimer scheduledTimerWithTimeInterval:period target:self selector:@selector(inspectMotionSimulator:) userInfo:nil repeats:YES];
+		NSString * path = [[NSBundle mainBundle] pathForResource:@"yacc" ofType:@"10Hz"];
+		file = fopen([path UTF8String], "rt");
+#else
         motionTimer = [NSTimer scheduledTimerWithTimeInterval:period target:self selector:@selector(inspectMotion:) userInfo:nil repeats:YES];
-        
+#endif
     }
     
     return self;
 }
-    
+
 -(void)add:(CMAcceleration)a {
 //    double xacc = [bpx sample:a.x];
     CFAbsoluteTime time = CFAbsoluteTimeGetCurrent();
@@ -105,6 +110,13 @@
 
 -(void)inspectMotion:(id)sender {
     [self add:motionManager.deviceMotion.userAcceleration];
+}
+
+-(void)inspectMotionSimulator:(id)sender {
+    double yacc;
+    fscanf(file, "%lf", &yacc);
+    CMAcceleration acc = {0,yacc,0};    
+    [self add:acc];
 }
 
 -(void)startRecording {
