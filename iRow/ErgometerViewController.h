@@ -49,7 +49,7 @@ enum {
     Stroke * stroke;
     float dTmotion;
     CFAbsoluteTime lastStrokeTime;
-    int startStroke; 
+//    int startStroke; 
     int speedUnit;
     // display values
     CFAbsoluteTime startTime;

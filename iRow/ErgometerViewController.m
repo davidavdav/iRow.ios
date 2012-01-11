@@ -281,13 +281,13 @@ enum {
                 totalOrLeft.text = @"Still to go…";
                 [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
                 startTime = CFAbsoluteTimeGetCurrent();
-                startStroke = stroke.strokes;
+//                startStroke = stroke.strokes;
                 break;
             } // else fall through
         case kTrackingStateWaiting:
             trackingState = kTrackingStateTracking;
             startTime = CFAbsoluteTimeGetCurrent();
-            startStroke = stroke.strokes;
+//            startStroke = stroke.strokes;
             [tracker.track reset];
             [stroke reset];
             [stroke startRecording];
@@ -302,7 +302,8 @@ enum {
             trackingState = kTrackingStateStopped;
             [stroke stopRecording];
             totalTime = CFAbsoluteTimeGetCurrent() - startTime;
-            totalStrokes = stroke.strokes - startStroke;
+//            totalStrokes = stroke.strokes - startStroke;
+            totalStrokes = stroke.strokes;
             totalDistance = tracker.track.totalDistance;
             // user interface changes
             [tracker.track addPin:@"finish" atLocation:tracker.track.stopLocation];
@@ -328,7 +329,8 @@ enum {
 
 #pragma mark StrokeDelegate
 -(void)stroke:(id)sender {
-    if (trackingState) totalStrokes = stroke.strokes - startStroke;
+    if (trackingState) totalStrokes = stroke.strokes; // - startStroke;
+//    NSLog(@"%d %d", totalStrokes, startStroke);
     CFAbsoluteTime now = CFAbsoluteTimeGetCurrent();
     if (lastStrokeTime>0) {
         CFTimeInterval period = now - lastStrokeTime;
