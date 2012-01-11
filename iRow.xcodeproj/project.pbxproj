@@ -63,6 +63,7 @@
 		637AAA91147BC5B300B60976 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8C147BC5B200B60976 /* Plot.m */; };
 		637AAA92147BC5B300B60976 /* PlotArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8E147BC5B200B60976 /* PlotArea.m */; };
 		637AAA93147BC5B300B60976 /* PlotAxis.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA90147BC5B200B60976 /* PlotAxis.m */; };
+		637AAA9B14869F5200B60976 /* yacc.10Hz in Resources */ = {isa = PBXBuildFile; fileRef = 637AAA9A14869F5200B60976 /* yacc.10Hz */; };
 		6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF0414755A3200F37863 /* SelectRowerViewController.m */; };
 		6386AF0A1475BCDF00F37863 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF091475BCDF00F37863 /* Track.m */; };
 		638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638EC0C014783BC9004B1B02 /* SettingsViewController.m */; };
@@ -195,6 +196,8 @@
 		637AAA8F147BC5B200B60976 /* PlotArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotArea.h; sourceTree = "<group>"; };
 		637AAA90147BC5B200B60976 /* PlotAxis.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlotAxis.m; sourceTree = "<group>"; };
 		637AAA95147BC92400B60976 /* PlotAxis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotAxis.h; sourceTree = "<group>"; };
+		637AAA991485978800B60976 /* iRow.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = iRow.entitlements; sourceTree = "<group>"; };
+		637AAA9A14869F5200B60976 /* yacc.10Hz */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = yacc.10Hz; sourceTree = "<group>"; };
 		6386AF021475590000F37863 /* SelectRowerViewControllerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewControllerDelegate.h; sourceTree = "<group>"; };
 		6386AF0414755A3200F37863 /* SelectRowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectRowerViewController.m; sourceTree = "<group>"; };
 		6386AF0514755A3300F37863 /* SelectRowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectRowerViewController.h; sourceTree = "<group>"; };
@@ -340,6 +343,7 @@
 		6319A67614263D590035EB18 /* iRow */ = {
 			isa = PBXGroup;
 			children = (
+				637AAA991485978800B60976 /* iRow.entitlements */,
 				63E3ADCB146290BC009FAECE /* utilities.h */,
 				63E3ADCC146290BC009FAECE /* utilities.m */,
 				6319A67F14263D590035EB18 /* iRowAppDelegate.h */,
@@ -358,6 +362,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				637AAA9A14869F5200B60976 /* yacc.10Hz */,
 				63BC78AF14742ABC00DF6671 /* png */,
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
 				6386AF081475BCDF00F37863 /* Track.h */,
@@ -662,6 +667,7 @@
 				63BC78BD1474696900DF6671 /* volume-slider-fat-knob@2x.png in Resources */,
 				63BC78BF1474756700DF6671 /* PLCameraButtonRecordOn@2x.png in Resources */,
 				63BC78C1147475DE00DF6671 /* UIButtonBarLocate@2x.png in Resources */,
+				637AAA9B14869F5200B60976 /* yacc.10Hz in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +811,7 @@
 		6319A69914263D590035EB18 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iRow/iRow.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iRow/iRow-Prefix.pch";
 				INFOPLIST_FILE = "iRow/iRow-Info.plist";
@@ -816,6 +823,7 @@
 		6319A69A14263D590035EB18 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = iRow/iRow.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "iRow/iRow-Prefix.pch";
 				INFOPLIST_FILE = "iRow/iRow-Info.plist";
