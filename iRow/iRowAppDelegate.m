@@ -187,11 +187,12 @@
 	
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL * iCloud = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+    NSLog(@"%@", iCloud);
 	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
 							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
 							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
                              // these lines are for possible iCloud support
-                             @"iRow.contentname", NSPersistentStoreUbiquitousContentNameKey,
+                             @"iRow", NSPersistentStoreUbiquitousContentNameKey,
                              iCloud, NSPersistentStoreUbiquitousContentURLKey,
                              nil];
 	if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
@@ -222,9 +223,16 @@
 		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  I cannot initialize the courses/tracks database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  One way out is to re-initialize the database." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Initialize",nil];
         [alert show];
     }    
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];
     return persistentStoreCoordinator_;
 }
+
+-(void)iCloudUpdate:(NSNotification*)notification {
+    NSLog(@"iCloud triggered");
+    [managedObjectContext_ mergeChangesFromContextDidSaveNotification:notification];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"iCloud update" object:notification];
+}
+
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex==0) return;
