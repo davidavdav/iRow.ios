@@ -12,10 +12,11 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import <CoreData/CoreData.h>
+#import "SelectRowerViewController.h"
 
 typedef void(^newObjectMade) (id new);
 
-@interface RowerViewController : UITableViewController <ABPeoplePickerNavigationControllerDelegate, UITextFieldDelegate,UIPickerViewDelegate> {
+@interface RowerViewController : UITableViewController <ABPeoplePickerNavigationControllerDelegate, UITextFieldDelegate,UIPickerViewDelegate, SelectRowerViewControllerDelegate> {
 	Settings * settings;
     NSArray * fields;
     UIBarButtonItem * leftBarItem;
@@ -23,6 +24,7 @@ typedef void(^newObjectMade) (id new);
     Rower * rower;
     newObjectMade completionBlock;
     BOOL editing;
+    BOOL rowerChosen;
 }
 
 @property (nonatomic, strong) Rower * rower;

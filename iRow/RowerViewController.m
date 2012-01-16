@@ -7,6 +7,7 @@
 //
 
 #import "RowerViewController.h"
+#import "utilities.h"
 
 @implementation RowerViewController
 
@@ -56,7 +57,10 @@
 
 -(void)cancelPressed:(id)sender {
     [self restoreButtons];
-    [settings.moc rollback];
+    if (rowerChosen) 
+            self.rower=nil; // this is the time to cancel the rower info
+    else 
+        [settings.moc rollback];
     [self.tableView reloadData]; // restore old values
 }
 
@@ -138,7 +142,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-	static int nrows[] = {5,1};
+	static int nrows[] = {5,2};
     return nrows[section];
 }
 
@@ -223,11 +227,27 @@
 			}
 			break;
         }
-		case 1:
-			cell.textLabel.text = @"Choose from addressbook";
-			cell.detailTextLabel.text = @""; // lazy
-			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		default:
+		case 1: 
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"Choose from addressbook";
+                    cell.detailTextLabel.text = @""; // lazy
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+                case 1:
+                    cell.textLabel.text = @"Choose existing rower";
+                    cell.detailTextLabel.text = @"";
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    break;
+                case 2:
+                    cell.textLabel.text = @"Clear this entry";
+                    cell.detailTextLabel.text = @"";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    break;
+                default:
+                    break;
+            }
+					default:
 			break;
 	}
     return cell;
@@ -344,15 +364,45 @@
             
 			break;
 		case 1:
+            switch (indexPath.row) {
+                case 0: {
+                    ABPeoplePickerNavigationController * ppnc = [[ABPeoplePickerNavigationController alloc] init];
+                    ppnc.peoplePickerDelegate = self;
+                    [ppnc setDisplayedProperties:[NSArray arrayWithObjects:[NSNumber numberWithInt:kABPersonFirstNameProperty],[NSNumber numberWithInt:kABPersonLastNameProperty],[NSNumber numberWithInt:kABPersonEmailProperty],nil]];	
+                    [self presentModalViewController:ppnc animated:YES];
+                    break;
+                }
+                case 1: {
+                    SelectRowerViewController * srvc = [[SelectRowerViewController alloc] initWithStyle:UITableViewStylePlain];
+                    NSFetchedResultsController * frc = fetchedResultController(@"Rower", @"name", YES, settings.moc);
+                    srvc.rowers = frc.fetchedObjects;
+                    srvc.editing = YES;
+                    srvc.multiple = NO;
+                    srvc.delegate = self;
+                    UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:srvc];
+                    [self.navigationController presentModalViewController:nav animated:YES];
+                    break;
+                }
+                default:
+                    break;
+            }
 			;
 			// this navigation controllew won't be upside down. 
-			ABPeoplePickerNavigationController * ppnc = [[ABPeoplePickerNavigationController alloc] init];
-			ppnc.peoplePickerDelegate = self;
-			[ppnc setDisplayedProperties:[NSArray arrayWithObjects:[NSNumber numberWithInt:kABPersonFirstNameProperty],[NSNumber numberWithInt:kABPersonLastNameProperty],[NSNumber numberWithInt:kABPersonEmailProperty],nil]];	
-			[self presentModalViewController:ppnc animated:YES];
+			
 			break;
 	}
 }
+
+// somewhat strage name...
+-(void)selectedCoxswain:(Rower *)r {
+    if (r) {
+        [settings.moc rollback]; // we don't want to create a new entity, really
+        self.rower = r;
+        [self.tableView reloadData];
+        rowerChosen = YES;
+    }
+}
+
 
 #pragma mark -
 #pragma mark peoplePickerDelegate
