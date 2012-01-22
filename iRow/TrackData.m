@@ -16,6 +16,7 @@
 @implementation TrackData
 
 @synthesize locations, pins, cumDist, locality;
+@synthesize minSpeed;
 
 - (id)init {
     self = [super init];
@@ -60,6 +61,13 @@
     self.locality=nil;
 }
 
+// as locations, but a subset with speed > minSpeed
+-(NSArray*)rowingLocations {
+    NSMutableArray * locs = [[NSMutableArray alloc] initWithCapacity:locations.count];
+    for (CLLocation * l in locations) if (l.speed>minSpeed) [locs addObject:l];
+    return locs;
+}
+
 // trivial distance calculation
 -(CLLocationDistance)totalDistance {
     if (locations.count < 2) return 0;
@@ -80,9 +88,31 @@
  */
 }
 
+-(CLLocationDistance)totalRowingDistance {
+    if (minSpeed<=0) return [self totalDistance];
+    CLLocationDistance d = 0;
+//    NSTimeInterval t = 0;
+    for (int i=0; i< locations.count-1; i++) {
+        CLLocation * l = [locations objectAtIndex:i];
+        if (l.speed>minSpeed) {
+            d += [[cumDist objectAtIndex:i+1] floatValue] - [[cumDist objectAtIndex:i] floatValue];
+ //           t += [l.timestamp timeIntervalSinceDate:[(CLLocation*)[locations objectAtIndex:i+1] timestamp]];
+        }
+    }
+    return d;
+}
+
 -(NSTimeInterval)totalTime {
     if (locations.count<2) return 0;
     return [self.stopLocation.timestamp timeIntervalSinceDate:self.startLocation.timestamp];
+}
+
+-(NSTimeInterval)rowingTime {
+    if (locations.count<2) return 0;
+    if (minSpeed<=0) return [self totalTime];
+    int s=0;
+    for (CLLocation * l in locations) s += l.speed>minSpeed;
+    return s;
 }
 
 // This computes average GPS speed.  We could also try to integrate the location, bu the path has to be smoothed first...
@@ -95,6 +125,20 @@
             n++;
         }
     }
+    if (n) return s/n;
+    else return 0;
+}
+
+-(CLLocationSpeed)averageRowingSpeed {
+    if (minSpeed<=0) return [self averageSpeed];
+    CLLocationSpeed s = 0;
+    int n=0;
+    for (CLLocation * l in locations) {
+        if (l.speed>minSpeed) {
+            s += l.speed;
+            n++;
+        }
+    }    
     if (n) return s/n;
     else return 0;
 }
@@ -114,6 +158,12 @@
  }
  */
 
+-(MKPolyline*)polylineWithCoordinates:(CLLocationCoordinate2D*)coordinates count:(int)count title:(NSString*)title {
+    MKPolyline * p = [MKPolyline polylineWithCoordinates:coordinates count:count];
+    p.title = title;
+    return p;
+}
+
 -(MKPolyline*)polyLine {
     CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
     int n=0;
@@ -122,10 +172,37 @@
             trackdata[n++] = l.coordinate;
         }
     }
-    MKPolyline * polyline = [MKPolyline polylineWithCoordinates:trackdata count:n];
+    MKPolyline * polyline = [self polylineWithCoordinates:trackdata count:n title:@"faster"];
     free(trackdata);
     return polyline;
 }
+
+// this splits the coordinates up in two categories: faster and slower.  
+-(NSArray*)rowingPolyLines {
+    if (minSpeed<=0) return [NSArray arrayWithObject:[self polyLine]];
+    CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
+    NSMutableArray * polyLines = [[NSMutableArray alloc] initWithCapacity:10];
+    int n=0;
+    BOOL slower = YES;
+    for (CLLocation * l in locations) {
+        if (l.horizontalAccuracy>0) {
+            if (slower ^ (l.speed > minSpeed)) 
+                trackdata[n++] = l.coordinate;
+            else {
+                if (n) {
+                    [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:slower ? @"slower" : @"faster"]];
+                    n=0;
+                }
+                slower = !slower;
+            }
+        }
+        
+    }
+    if (n) [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:slower ? @"slower" : @"faster"]];
+    free(trackdata);
+    return polyLines;
+}
+
 
 //-(NSArray*)pinData {
 //    return pins;
