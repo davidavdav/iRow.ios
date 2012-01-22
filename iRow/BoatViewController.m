@@ -200,7 +200,7 @@
         case 3:
             cell.textLabel.text = @"Mass (kg)";
             textField.placeholder = @"mass in kg";
-            textField.text = dispMass(boat.mass);
+            textField.text = dispMass(boat.mass, NO);
             textField.keyboardType = UIKeyboardTypeDecimalPad;
            break;
         case 4:
