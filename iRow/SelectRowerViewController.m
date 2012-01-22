@@ -132,7 +132,7 @@
     if (editing) {
         cell.accessoryType = [selected containsObject:rower] ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;        
     } else {
-        cell.detailTextLabel.text = defaultName(dispPower(rower.power), defaultName(dispMass(rower.mass), @"−"));
+        cell.detailTextLabel.text = defaultName(dispPower(rower.power), defaultName(dispMass(rower.mass, YES), @"−"));
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
