@@ -31,12 +31,12 @@
 @property (nonatomic, strong) id <HereAnnotationViewDelegte> delegate;
 @end
 
+
 @interface InspectTrackViewController : UIViewController <MKMapViewDelegate, HereAnnotationViewDelegte, UIScrollViewDelegate> {
     UIScrollView * scrollView;
     MKMapView * mapView;
     UIView * infoView;
     TrackData * trackData;
-    MKPolyline * polyLine;
     UISlider * slider;
     UILabel * timeLabel, * distLabel, * speedLabel;
     HereAnnotation * here;

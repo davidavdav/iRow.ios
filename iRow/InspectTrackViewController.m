@@ -38,18 +38,23 @@ enum {
         CLLocationCoordinate2D c = [mapView convertPoint:[t locationInView:self] toCoordinateFromView:self];
 //        NSLog(@"moved %f %f", c.longitude, c.latitude);
         MKMapPoint mp = MKMapPointForCoordinate(c);
-        MKPolyline * pl = [mapView.overlays objectAtIndex:0];
         CLLocationDistance min = 1e9;
-        int mi = -1;
-        for (int i=0; i<pl.pointCount; i++) {
-            CLLocationDistance d = MKMetersBetweenMapPoints(mp, pl.points[i]);
-            if (d<min) {
-                min=d;
-                mi=i;
+        int mi = -1, offset=0, minoffset=-1;
+        MKPolyline * minp;
+        for (MKPolyline * pl in mapView.overlays) {
+            for (int i=0; i<pl.pointCount; i++) {
+                CLLocationDistance d = MKMetersBetweenMapPoints(mp, pl.points[i]);
+                if (d<min) {
+                    min=d;
+                    mi=i;
+                    minp=pl;
+                    minoffset=offset;
+                }
             }
+            offset += pl.pointCount;
         }
-        self.annotation.coordinate = MKCoordinateForMapPoint(pl.points[mi]);
-        if (delegate) [delegate hereAnnotationMoved:self.annotation.coordinate index:mi];
+        self.annotation.coordinate = MKCoordinateForMapPoint(minp.points[mi]);
+        if (delegate) [delegate hereAnnotationMoved:self.annotation.coordinate index:minoffset+mi];
     }    
 }
 
@@ -139,7 +144,7 @@ enum {
     CLLocationDistance d = [[trackData.cumDist objectAtIndex:index] floatValue];
     distLabel.text = dispLength(d);
     speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
-    slider.value = d/trackData.totalDistance;
+    slider.value = d/trackData.totalDistance; // FIXME must be based on a truncated cumdist
     return;   
 }
 
@@ -185,7 +190,7 @@ enum {
 {
     CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     [super loadView];
-    NSLog(@"%f super", CFAbsoluteTimeGetCurrent()-start);
+//    NSLog(@"%f super", CFAbsoluteTimeGetCurrent()-start);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style:UIBarButtonItemStylePlain target:self action:@selector(switchPressed:)];
     CGFloat h = self.view.bounds.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
     CGFloat w = self.view.frame.size.width;
@@ -197,18 +202,18 @@ enum {
     scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     scrollView.delegate = self;
     [self.view addSubview:scrollView];
-    NSLog(@"%f scrollView", CFAbsoluteTimeGetCurrent()-start);    
+//    NSLog(@"%f scrollView", CFAbsoluteTimeGetCurrent()-start);    
     // mapview on the first pane
     mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, 0, w, hScrollView)];
     [scrollView addSubview:mapView];
     mapView.delegate = self;
-    NSLog(@"%f mapView", CFAbsoluteTimeGetCurrent()-start);
+//    NSLog(@"%f mapView", CFAbsoluteTimeGetCurrent()-start);
     //slider below, fixed
     slider = [[UISlider alloc] initWithFrame:CGRectMake(10, h - hSlider, w-20, hSlider)];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob-red"] forState:UIControlStateHighlighted];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob"] forState:UIControlStateNormal];
     [self.view addSubview:slider];
-    NSLog(@"%f slider", CFAbsoluteTimeGetCurrent()-start);
+//    NSLog(@"%f slider", CFAbsoluteTimeGetCurrent()-start);
     //labels above, fixed
     UIView * panel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, w, hSlider)];
     [self.view addSubview:panel];
@@ -225,7 +230,7 @@ enum {
     [panel addSubview:timeLabel];
     [panel addSubview:distLabel];
     [panel addSubview:speedLabel];
-    NSLog(@"%f labels", CFAbsoluteTimeGetCurrent()-start);
+//    NSLog(@"%f labels", CFAbsoluteTimeGetCurrent()-start);
     // graph on the second scrollview pane
     UIView * graphView = [[UIView alloc] initWithFrame:CGRectMake(w, 0, w, hScrollView)];    
     graphView.backgroundColor = [UIColor whiteColor];
@@ -233,10 +238,13 @@ enum {
     [self loadPlot:graphView];
 //    [self performSelector:@selector(loadPlot:) withObject:graphView afterDelay:0.1];
 //    [NSThread detachNewThreadSelector:@selector(loadPlot:) toTarget:self withObject:graphView];
-    NSLog(@"%f plot", CFAbsoluteTimeGetCurrent()-start);
+//    NSLog(@"%f plot", CFAbsoluteTimeGetCurrent()-start);
     if (trackData != nil) {
-        polyLine = trackData.polyLine;
-        [mapView addOverlay:polyLine];
+        for (MKPolyline * p in trackData.rowingPolyLines) {
+//            NSLog(@"%@ %d", polyLine, polyLine.pointCount);
+            NSLog(@"%@", p.title);
+            [mapView addOverlay:p];
+        }
         [mapView setRegion:trackData.region];
         [mapView addAnnotations:trackData.pins];
         // slider 
@@ -244,7 +252,7 @@ enum {
         here = [[HereAnnotation alloc] init];
         [self sliderChanged:self];    
         [mapView addAnnotation:here];
-        NSLog(@"%f annotations", CFAbsoluteTimeGetCurrent()-start);
+//        NSLog(@"%f annotations", CFAbsoluteTimeGetCurrent()-start);
     }
 }
 
@@ -285,9 +293,10 @@ enum {
 // this draws the track
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {
-    if (overlay == polyLine) {
+    if ([overlay isKindOfClass:[MKPolyline class]]) {
         MKPolylineView * trackView = [[MKPolylineView alloc] initWithPolyline:overlay];
-        trackView.strokeColor = [UIColor purpleColor];
+        NSLog(@"%@", overlay.title);
+        trackView.strokeColor = [overlay.title isEqualToString:@"faster"] ? [UIColor purpleColor] : [UIColor redColor];
         trackView.lineWidth = 5;
 /* 
   UIGestureRecognizer * rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(trackTouched:)];
