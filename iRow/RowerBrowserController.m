@@ -134,7 +134,7 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     Rower * r = [rowers objectAtIndex:indexPath.row];
     cell.textLabel.text = r.name;
-    cell.detailTextLabel.text = dispMass(r.mass);
+    cell.detailTextLabel.text = dispMass(r.mass, YES);
     // Configure the cell...
     
     return cell;
