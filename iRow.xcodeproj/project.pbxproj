@@ -248,7 +248,7 @@
 		63E3ADE91466E265009FAECE /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		63E3ADEA1466E266009FAECE /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = System/Library/Frameworks/AddressBookUI.framework; sourceTree = SDKROOT; };
 		63E8014114447ED700C826B1 /* PLBlueMinus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLBlueMinus.png; sourceTree = "<group>"; };
-		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		63E8014B14449A9500C826B1 /* Settings.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = Settings.bundle; sourceTree = "<group>"; };
 		63F4B3CD1456C3EA00C68809 /* glow-black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "glow-black.png"; sourceTree = "<group>"; };
 		63F4B3D01456CA8A00C68809 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
 		63F4B3D11456CA8A00C68809 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
@@ -343,7 +343,6 @@
 		6319A67614263D590035EB18 /* iRow */ = {
 			isa = PBXGroup;
 			children = (
-				637AAA991485978800B60976 /* iRow.entitlements */,
 				63E3ADCB146290BC009FAECE /* utilities.h */,
 				63E3ADCC146290BC009FAECE /* utilities.m */,
 				6319A67F14263D590035EB18 /* iRowAppDelegate.h */,
@@ -362,6 +361,7 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				637AAA991485978800B60976 /* iRow.entitlements */,
 				637AAA9A14869F5200B60976 /* yacc.10Hz */,
 				63BC78AF14742ABC00DF6671 /* png */,
 				635C33301461CDB1007C273F /* DataModel.xcdatamodeld */,
