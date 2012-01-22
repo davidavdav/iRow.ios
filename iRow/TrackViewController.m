@@ -26,14 +26,20 @@ enum {
     kTrackTime,
     kTrackAveSpeed,
     kTrackStrokeFreq,
+    kSlider,
     kTrackDate,
     kTotalMass,
     kTotalPower,
 }; 
 
+// range of min speed slider, in m/s
+#define kMinSpeed (0)
+#define kMaxSpeed (24.0/3.6)
+
 @implementation TrackViewController
 
 @synthesize track;
+@synthesize distanceLabel, timeLabel, aveStrokeFreqLabel, aveSpeedLabel, minSpeedLabel;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -47,6 +53,7 @@ enum {
         speedUnit = evc.speedUnit;
         frcBoats = fetchedResultController(@"Boat", @"name", YES, settings.moc);
         frcRowers = fetchedResultController(@"Rower", @"name", YES, settings.moc);
+        minSpeed = settings.minSpeed;
     }
     return self;
 }
@@ -58,6 +65,30 @@ enum {
     
     // Release any cached data, images, etc that aren't in use.
 }
+
+-(void)setRightBarButtons:(BOOL)edit {
+/*
+ if ([self.navigationItem respondsToSelector:@selector(setRightBarButtonItems:animated:)]) {
+        UIBarButtonItem * actionItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionPressed:)];
+        if (edit)
+            [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)],actionItem,nil] animated:YES];
+        else
+            [self.navigationItem setRightBarButtonItems:[NSArray arrayWithObjects:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)],actionItem,nil] animated:YES];
+    } else {
+ */ 
+    if (edit) 
+            [self.navigationItem setRightBarButtonItem:self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)] animated:YES];
+        else
+            [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
+//    }
+}
+
+/*
+-(void)actionPressed:(id)sender {
+    slider.hidden = !slider.hidden;
+}
+*/
+ 
 -(void)editPressed:(id)sender {
     leftBarItem = self.navigationController.navigationItem.leftBarButtonItem;
     [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
@@ -107,13 +138,15 @@ enum {
 -(void)setEditing:(BOOL)e {
     editing = e;
     for (UITableViewCell * c in self.tableView.visibleCells) {
-        UITextField * tf = (UITextField*)c.accessoryView;
-        if (tf!=nil) {
-            tf.enabled = e;
-            if (tf.tag<100) // not for boat...
-                tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
-            tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
-        } 
+        if ([c.accessoryView isKindOfClass:[UITextField class]]) {
+            UITextField * tf = (UITextField*)c.accessoryView;
+            if (tf!=nil) {
+                tf.enabled = e;
+                if (tf.tag<100) // not for boat...
+                    tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+                tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+            }
+        }
         if (c == rowersCell) {
             c.detailTextLabel.backgroundColor = [UIColor whiteColor];
         }
@@ -143,11 +176,22 @@ enum {
         stroke = evc.stroke;
         [self editPressed:self]; // prepare to save this track, create a new instance of track
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];    
+//        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];    
+        [self setRightBarButtons:YES];
         trackData = [NSKeyedUnarchiver unarchiveObjectWithData:track.track];
         stroke = [NSKeyedUnarchiver unarchiveObjectWithData:track.motion];
     }
+    trackData.minSpeed = minSpeed;
     [self setTitleToTrackName];
+ /*
+    CGRect f = self.tableView.bounds;
+    UIView * sliderView = [[UIView alloc] initWithFrame:CGRectMake(0, f.size.height - 120, f.size.width, 40)];
+    slider = [[UISlider alloc] initWithFrame:sliderView.bounds];
+    slider.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    [sliderView addSubview:slider];
+    [self.tableView.superview addSubview:sliderView];
+    slider.hidden = NO;
+ */
 }
 
 - (void)viewDidUnload
@@ -219,7 +263,7 @@ enum {
             return 2;
             break;
         case kSecStats:
-            return 7 * (1-editing);
+            return 8 * (1-editing);
             break;
         case kSecRelations:
             return 3;
@@ -232,9 +276,11 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * CellIdentifiers[2] = {@"Cell", @"Editable"};
+    static NSString * CellIdentifiers[4] = {@"Cell", @"Editable", @"Sliding", @"Updateable"};
     
     int celltype = indexPath.section==kSecID || (indexPath.section==kSecRelations && indexPath.row == 0);
+    if (indexPath.section == kSecStats && indexPath.row == kSlider) celltype = 2;
+    if (indexPath.section == kSecStats && indexPath.row < kSlider) celltype = 3;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifiers[celltype]];
     if (cell == nil) {
@@ -283,26 +329,30 @@ enum {
                     break;
                 case kTrackDistance:
                     cell.textLabel.text = @"Distance";
-                    cell.detailTextLabel.text = dispLength(trackData.totalDistance);
+                    cell.detailTextLabel.text = dispLength(trackData.totalRowingDistance);
+                    self.distanceLabel = cell.detailTextLabel;
                     break;
                 case kTrackTime:
                     cell.textLabel.text = @"Time";
-                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.totalTime)];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.rowingTime)];
+                    self.timeLabel = cell.detailTextLabel;
                     break;
                 case kTrackAveSpeed:
                     cell.textLabel.text = @"Average speed";
-                    cell.detailTextLabel.text = dispSpeed(trackData.averageSpeed, speedUnit);
+                    cell.detailTextLabel.text = dispSpeed(trackData.averageRowingSpeed, speedUnit);
+                    self.aveSpeedLabel = cell.detailTextLabel;
                     break;
                 case kTrackStrokeFreq:
-                    cell.textLabel.text = @"Average stroke frequency";
+                    cell.textLabel.text = @"Average stroke freq.";
                     cell.detailTextLabel.text = [NSString stringWithFormat:@"%3.1f s/m",60*track.strokes.intValue/trackData.totalTime];
+                    self.aveStrokeFreqLabel = cell.detailTextLabel;
                     break;
                 case kTotalMass: {
                     float mass = 0;
                     for (Rower * r in track.rowers) mass += r.mass.floatValue;
                     mass += track.coxswain.mass.floatValue + track.boat.mass.floatValue;
                     cell.textLabel.text = @"Total mass in boat";
-                    cell.detailTextLabel.text = dispMass([NSNumber numberWithFloat:mass]);
+                    cell.detailTextLabel.text = dispMass([NSNumber numberWithFloat:mass], YES);
                     break;
                 }
                 case kTotalPower: {
@@ -310,6 +360,18 @@ enum {
                     for (Rower * r in track.rowers) power += r.power.floatValue;
                     cell.textLabel.text = @"Total power at oars";
                     cell.detailTextLabel.text = dispPower([NSNumber numberWithFloat:power]);
+                    break;
+                }
+                case kSlider: {
+                    UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
+//                    slider.value = log(minSpeed/kMinSpeed) / log(kMaxSpeed/kMinSpeed);
+                    slider.value = (minSpeed-kMinSpeed) / (kMaxSpeed-kMinSpeed);
+                    cell.accessoryView = slider;
+                    cell.textLabel.text = @"min";
+                    cell.detailTextLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
+                    self.minSpeedLabel = cell.detailTextLabel;
+                    [slider addTarget:self action:@selector(minSpeedChanged:) forControlEvents:UIControlEventValueChanged];
+                    [slider addTarget:self action:@selector(minSpeedReleased:) forControlEvents:UIControlEventTouchUpInside];
                     break;
                 }
                 default:
@@ -369,6 +431,25 @@ enum {
     return cell;
 }
 
+
+-(void)minSpeedChanged:(id)sender {
+    UISlider * s = (UISlider*)sender;
+    // return kMaxStrokeSens * pow(kMinStrokeSens/kMaxStrokeSens,logSensitivity/kLogSensRange);
+//    minSpeed = kMinSpeed * pow(kMaxSpeed/kMinSpeed, s.value);
+//    if (minSpeed < 1.1 * kMinSpeed) minSpeed = 0;
+    minSpeed = kMinSpeed + s.value * (kMaxSpeed - kMinSpeed);
+    trackData.minSpeed = minSpeed;
+    distanceLabel.text = dispLength(trackData.totalRowingDistance);
+    minSpeedLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
+    timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.rowingTime)];
+    aveSpeedLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit);
+//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSecStats] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+-(void)minSpeedReleased:(id)sender {
+    settings.minSpeed = minSpeed;
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -422,7 +503,18 @@ enum {
             [self.navigationController pushViewController:itvc animated:YES];
             break;
         }
-        case kSecRelations: 
+/*        case kSecStats:
+            switch (indexPath.row) {
+                case 1: {
+//                    sliding = YES;
+                    [self.tableView reloadData];
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+ */        case kSecRelations: 
             switch (indexPath.row) {
                 case 2: if (!editing) break; 
                 case 1: {
@@ -451,6 +543,14 @@ enum {
     }
 }
 
+/*
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (sliding && indexPath.section == kSecStats && indexPath.row==1) 
+        return 80;
+    else 
+        return 40;
+}
+*/
 #pragma mark UITextFieldDelegte
 
 // this make return remove the keyboard

@@ -28,8 +28,13 @@
     NSFetchedResultsController * frcBoats, *frcRowers;
     UITextField * boatTextView;
     UITableViewCell * rowersCell;
+    double minSpeed;
+    UILabel * distanceLabel, * minSpeedLabel, * timeLabel, * aveSpeedLabel, * aveStrokeFreqLabel;
+//    UISlider * slider;
+//    BOOL sliding;
 }
 
 @property (strong, nonatomic) Track * track;
+@property (strong, nonatomic) UILabel *distanceLabel, * minSpeedLabel, * timeLabel, * aveSpeedLabel, * aveStrokeFreqLabel;
 
 @end
