@@ -114,9 +114,12 @@ NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
     return [NSString stringWithFormat:@"%@ %@", dispSpeedOnly(speed, speedUnit), dispSpeedUnit(speedUnit)];
 }
 
-NSString * dispMass(NSNumber * mass) {
+NSString * dispMass(NSNumber * mass, BOOL unit) {
     if (mass == nil) return nil;
-    return [NSString stringWithFormat:@"%3.1f kg",mass.floatValue];
+    if (unit) 
+        return [NSString stringWithFormat:@"%3.1f kg",mass.floatValue];
+    else 
+        return [NSString stringWithFormat:@"%3.1f",mass.floatValue];
 }
 
 NSString * dispPower(NSNumber * power) {

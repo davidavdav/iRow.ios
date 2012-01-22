@@ -28,7 +28,7 @@ NSString * dispSpeedOnly(CLLocationSpeed speed, int speedUnit);
 NSString * dispSpeedUnit(int unit);
 NSString * dispSpeed(CLLocationSpeed speed, int speedUnit);
 
-NSString * dispMass(NSNumber * weight);
+NSString * dispMass(NSNumber * weight, BOOL unit);
 NSString * dispPower(NSNumber * power);
 
 NSString * defaultName(NSString * name, NSString * def);
