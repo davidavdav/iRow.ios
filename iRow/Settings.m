@@ -14,6 +14,7 @@
 @synthesize moc;
 @synthesize user, currentCourse, currentBoat;
 @synthesize speedUnit;
+@synthesize minSpeed;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -28,7 +29,8 @@
         currentCourse = [self loadManagedObject:@"current_course"];
         currentBoat = [self loadManagedObject:@"currentBoat"];
         user = [self loadManagedObject:@"user"];
-        speedUnit = [[self loadObjectForKey:@"speedUnit"] intValue];
+        speedUnit = [ud integerForKey:@"speedUnit"];
+        minSpeed = [ud doubleForKey:@"minSpeed"];
         [self reloadUserDefaults];
     }
     
@@ -107,7 +109,8 @@
 
 -(void)setSpeedUnit:(int)su {
     speedUnit = su;
-    [self setObject:[NSNumber numberWithInt:su] forKey:@"speedUnit"];
+    [ud setInteger:su forKey:@"speedUnit"];
+    [ud synchronize];
 }
 
 -(void)setCurrentBoat:(Boat *)b {
@@ -132,6 +135,12 @@
 -(void)setLogSensitivity:(double)ls {
     logSensitivity = ls;
     [ud setDouble:logSensitivity forKey:@"stroke_sensitivity"];
+    [ud synchronize];
+}
+
+-(void)setMinSpeed:(double)ms {
+    minSpeed = ms;
+    [ud setDouble:minSpeed forKey:@"minSpeed"];
     [ud synchronize];
 }
 
