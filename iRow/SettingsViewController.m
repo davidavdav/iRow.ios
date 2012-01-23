@@ -5,6 +5,7 @@
 //  Created by David van Leeuwen on 19-11-11.
 //  Copyright (c) 2011 strApps. All rights reserved.
 //
+// in this controller I declare the spcial accessoryviews statically, i.e., as ivars.  
 
 #import "SettingsViewController.h"
 #import "utilities.h"
@@ -25,7 +26,9 @@
         logSensitivity = settings.logSensitivity;
         unitSystems = [NSArray arrayWithObjects:@"Metric", @"Imperial", nil];
         textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];
-
+        strokeViewSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        strokeViewSwitch.on = settings.showStrokeProfile;
+        [strokeViewSwitch addTarget:self action:@selector(strokeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
     }
     return self;
 }
@@ -89,7 +92,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -100,6 +103,25 @@
         case 1:
             return @"Distances and speed";
             break;
+        case 2:
+            return @"Experimental";
+            break;
+        default:
+            break;
+    }
+    return nil;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return @"A setting more to the right makes it more likely that a stroke is corrctly picked up from the accelerometers"; 
+            break;
+        case 1:
+            return @"The speed unit itself can be changed by tapping the speed from the ergometer tab"; 
+            break;
+        case 2:
+            return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.";
         default:
             break;
     }
@@ -143,6 +165,10 @@
             textField.inputView = pickerView;
             break;
         }
+        case 2:
+            cell.textLabel.text = @"Stoke profile support";
+            cell.accessoryView = strokeViewSwitch;
+            break;
         default:
             break;
     }
@@ -201,6 +227,8 @@
      */
 }
 
+#pragma mark - UI events
+
 -(void)sliderChanged:(UISlider*)slider {
     logSensitivity = kLogSensMin + (kLogSensMax - kLogSensMin)*slider.value;
     self.title = [NSString stringWithFormat:@"%3.2f", strokeSensitivity(logSensitivity)];
@@ -210,6 +238,10 @@
 -(void)sliderDone:(id)sender {
     settings.logSensitivity = logSensitivity;
     self.title = @"Settings";
+}
+
+-(void) strokeSwitchChanged:(id)sender {
+    settings.showStrokeProfile = strokeViewSwitch.on;
 }
 
 #pragma mark UIPickerViewDatasource

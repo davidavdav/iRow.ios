@@ -15,6 +15,7 @@
     double logSensitivity;
     NSArray * unitSystems;
     UITextField * textField;
+    UISwitch * strokeViewSwitch;
 }
 
 @end
