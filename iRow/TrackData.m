@@ -183,22 +183,21 @@
     CLLocationCoordinate2D * trackdata = (CLLocationCoordinate2D*) calloc(sizeof(CLLocationCoordinate2D), locations.count);
     NSMutableArray * polyLines = [[NSMutableArray alloc] initWithCapacity:10];
     int n=0;
-    BOOL slower = YES;
+    BOOL faster = NO;
     for (CLLocation * l in locations) {
-        if (l.horizontalAccuracy>0) {
-            if (slower ^ (l.speed > minSpeed)) 
-                trackdata[n++] = l.coordinate;
-            else {
+        if (l.horizontalAccuracy>=0) {
+            if (faster ^ (l.speed > minSpeed)) {
                 if (n) {
-                    [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:slower ? @"slower" : @"faster"]];
+                    [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:faster ? @"faster" : @"slower"]];
                     n=0;
                 }
-                slower = !slower;
+                faster = !faster;
             }
+            trackdata[n++] = l.coordinate;
         }
         
     }
-    if (n) [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:slower ? @"slower" : @"faster"]];
+    if (n) [polyLines addObject:[self polylineWithCoordinates:trackdata count:n title:faster ? @"faster" : @"slower"]];
     free(trackdata);
     return polyLines;
 }
