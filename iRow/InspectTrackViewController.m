@@ -107,7 +107,7 @@ enum {
     } // trigger[a] <= ti <= trigger[b]
     [plot reset];
     int A = MAX(0,a-2), B = MIN(Ntrigger-2, a-1+2);
-    NSLog(@"%d - %d", A, B);
+//    NSLog(@"%d - %d", A, B);
     for (; A<B; A++) {
         [plot.plotArea penup];
         float length = trigger[A+1]-trigger[A];
@@ -188,15 +188,18 @@ enum {
 // Implement loadView to create a view hierarchy programmatically, without using a nib.
 - (void)loadView
 {
-    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
+//    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     [super loadView];
 //    NSLog(@"%f super", CFAbsoluteTimeGetCurrent()-start);
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style:UIBarButtonItemStylePlain target:self action:@selector(switchPressed:)];
+//    NSLog(@"%d", Settings.sharedInstance.showStrokeProfile);
+    if (Settings.sharedInstance.showStrokeProfile)
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style:UIBarButtonItemStylePlain target:self action:@selector(switchPressed:)];
     CGFloat h = self.view.bounds.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
     CGFloat w = self.view.frame.size.width;
     CGFloat hSlider = 60, hLabel = 40, hScrollView = h-hLabel-hSlider;
     // scrollview: underlying all other views
     scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, hLabel, w, hScrollView)];    
+    scrollView.scrollEnabled = Settings.sharedInstance.showStrokeProfile;
     scrollView.contentSize = CGSizeMake(2*w, hScrollView);
     scrollView.pagingEnabled = YES;
     scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
@@ -241,8 +244,8 @@ enum {
 //    NSLog(@"%f plot", CFAbsoluteTimeGetCurrent()-start);
     if (trackData != nil) {
         for (MKPolyline * p in trackData.rowingPolyLines) {
-//            NSLog(@"%@ %d", polyLine, polyLine.pointCount);
-            NSLog(@"%@", p.title);
+//            NSLog(@"%@ %d", p, p.pointCount);
+//            NSLog(@"%@", p.title);
             [mapView addOverlay:p];
         }
         [mapView setRegion:trackData.region];
@@ -295,7 +298,7 @@ enum {
 {
     if ([overlay isKindOfClass:[MKPolyline class]]) {
         MKPolylineView * trackView = [[MKPolylineView alloc] initWithPolyline:overlay];
-        NSLog(@"%@", overlay.title);
+//        NSLog(@"%@", overlay.title);
         trackView.strokeColor = [overlay.title isEqualToString:@"faster"] ? [UIColor purpleColor] : [UIColor redColor];
         trackView.lineWidth = 5;
 /* 
