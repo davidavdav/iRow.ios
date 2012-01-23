@@ -30,6 +30,7 @@ enum {
     double logSensitivity;
     int unitSystem;
     double minSpeed; // minimum speed for autostart/stop
+    BOOL showStrokeProfile;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -40,8 +41,8 @@ enum {
 @property (nonatomic, strong) Boat * currentBoat;
 
 @property (nonatomic) int speedUnit;
-
 @property (nonatomic) double minSpeed;
+@property (nonatomic) BOOL showStrokeProfile;
 
 // from the general settings:
 @property int unitSystem;

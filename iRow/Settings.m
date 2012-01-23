@@ -15,6 +15,7 @@
 @synthesize user, currentCourse, currentBoat;
 @synthesize speedUnit;
 @synthesize minSpeed;
+@synthesize showStrokeProfile;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -31,6 +32,7 @@
         user = [self loadManagedObject:@"user"];
         speedUnit = [ud integerForKey:@"speedUnit"];
         minSpeed = [ud doubleForKey:@"minSpeed"];
+        showStrokeProfile = [ud boolForKey:@"showStrokeProfile"];
         [self reloadUserDefaults];
     }
     
@@ -141,6 +143,12 @@
 -(void)setMinSpeed:(double)ms {
     minSpeed = ms;
     [ud setDouble:minSpeed forKey:@"minSpeed"];
+    [ud synchronize];
+}
+
+-(void)setShowStrokeProfile:(BOOL)s {
+    showStrokeProfile = s;
+    [ud setBool:showStrokeProfile forKey:@"showStrokeProfile"];
     [ud synchronize];
 }
 
