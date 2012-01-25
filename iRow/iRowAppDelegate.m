@@ -32,19 +32,33 @@
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nav, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
+    // deal with old bundle...
+    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"]; // May contain Root.plist and en.lproj
+    BOOL dir;
+    // remove old settings bundle
+    if ([[NSFileManager defaultManager] fileExistsAtPath:settingsBundle isDirectory:&dir] && dir) {
+        NSError * error;
+        NSString * old = [NSString stringWithFormat:@"%@.old",settingsBundle];
+        if (![[NSFileManager defaultManager] moveItemAtPath:settingsBundle toPath:old error:&error]) {
+              NSLog(@"Error removing defaults: %@", error.localizedDescription);
+        } else {
+            UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"The external settings (in the iPhone settings App) have been removed, and replaced with setting available from the options tab" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [a show];
+        }
+    }
     return YES;
 }
 
 // this will fire for _any_ change in settings, including the ones we write ourselves...
 -(void)settingsChanged:(id)sender {
     // change of unit system?
+    Settings * settings = Settings.sharedInstance;
+    int oldUnitSystem = settings.unitSystem, oldSpeedUnit = settings.speedUnit;
     [Settings.sharedInstance reloadUserDefaults];
-    int us = Settings.sharedInstance.unitSystem;
+//    if (oldUnitSystem != settings.unitSystem) 
     // we choose to do this because this is sort-of a notification for the viewcontrollers...
-    if (us != ergometerViewController.unitSystem)
-        ergometerViewController.unitSystem = mapViewController.unitSystem = us;
-    ergometerViewController.stroke.sensitivity = Settings.sharedInstance.logSensitivity;
+//  ergometerViewController.stroke.sensitivity = Settings.sharedInstance.logSensitivity;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -65,7 +79,6 @@
      */
     [ergometerViewController.tracker.locationManager stopUpdatingLocation];
     [ergometerViewController.tracker stopTimer];
-    [[Settings sharedInstance] setObject:[NSNumber numberWithInt:ergometerViewController.speedUnit] forKey:@"speedUnit"];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -76,7 +89,6 @@
     if (ergometerViewController.trackingState != kTrackingStateStopped) 
         [ergometerViewController.tracker.locationManager startUpdatingLocation];
     [ergometerViewController.tracker startTimer];
-    ergometerViewController.speedUnit = [[[Settings sharedInstance] loadObjectForKey:@"speedUnit"] intValue];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
