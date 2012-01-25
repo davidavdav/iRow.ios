@@ -37,7 +37,7 @@ enum {
 @property (nonatomic, strong) CourseData * courseData;
 @property (nonatomic, strong) Course * currentCourse;
 
-@property (nonatomic, strong, setter=setUser:) Rower * user;
+@property (nonatomic, strong) Rower * user;
 @property (nonatomic, strong) Boat * currentBoat;
 
 @property (nonatomic) int speedUnit;
@@ -45,8 +45,8 @@ enum {
 @property (nonatomic) BOOL showStrokeProfile;
 
 // from the general settings:
-@property int unitSystem;
-@property double logSensitivity;
+@property (nonatomic) int unitSystem;
+@property (nonatomic) double logSensitivity;
 
 +(Settings*)sharedInstance;
 -(void)reloadUserDefaults;

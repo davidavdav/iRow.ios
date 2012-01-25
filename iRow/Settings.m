@@ -48,8 +48,9 @@
 }
 
 -(void)reloadUserDefaults {
-    logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
-    unitSystem = [ud integerForKey:@"unit_system"];    
+    if ([ud objectForKey:@"stroke_sensitivity"]==nil) logSensitivity = 1.4;
+    else logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
+    unitSystem = [ud integerForKey:@"unit_system"]; // default 0: metric
 }
 
 -(void)setObject:(id)object forKey:(NSString *)key {
@@ -113,6 +114,7 @@
     speedUnit = su;
     [ud setInteger:su forKey:@"speedUnit"];
     [ud synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"unitsChanged" object:nil];
 }
 
 -(void)setCurrentBoat:(Boat *)b {
@@ -128,6 +130,7 @@
     unitSystem = us;
     [ud setInteger:us forKey:@"unit_system"];
     [ud synchronize];
+    [[NSNotificationQueue defaultQueue] enqueueNotification:[NSNotification notificationWithName:@"unitsChanged" object:nil] postingStyle:NSPostWhenIdle];
 }
 
 -(double)logSensitivity {
@@ -138,6 +141,7 @@
     logSensitivity = ls;
     [ud setDouble:logSensitivity forKey:@"stroke_sensitivity"];
     [ud synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"sensitivityChanged" object:nil];
 }
 
 -(void)setMinSpeed:(double)ms {
