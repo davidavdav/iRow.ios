@@ -25,12 +25,18 @@
         unitSystem = settings.unitSystem;
         logSensitivity = settings.logSensitivity;
         unitSystems = [NSArray arrayWithObjects:@"Metric", @"Imperial", nil];
-        textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];
+        unitSystemTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];
+        speedUnitTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];
         strokeViewSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         strokeViewSwitch.on = settings.showStrokeProfile;
         [strokeViewSwitch addTarget:self action:@selector(strokeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"unitsChanged" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,10 +121,10 @@
 -(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return @"A setting more to the right makes it more likely that a stroke is corrctly picked up from the accelerometers"; 
+            return @"A setting more to the right makes it more likely that a stroke is corrcetly picked up from the accelerometers"; 
             break;
         case 1:
-            return @"The speed unit itself can be changed by tapping the speed from the ergometer tab"; 
+            return @"The speed unit can also be changed by tapping the speed from the ergometer tab"; 
             break;
         case 2:
             return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.";
@@ -131,7 +137,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1;
+    return 1 + (section==1);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -153,16 +159,31 @@
             break;
         }
         case 1: {
-            cell.textLabel.text = @"Unit system";
-            cell.accessoryView = textField;
-            textField.text = [unitSystems objectAtIndex:unitSystem];
-            textField.textAlignment = UITextAlignmentRight;
             UIPickerView * pickerView = [[UIPickerView alloc] init];
+            pickerView.tag = indexPath.row;
             pickerView.delegate = self;
             pickerView.dataSource = self;
             pickerView.showsSelectionIndicator = YES;
-            [pickerView selectRow:unitSystem inComponent:0 animated:YES];
-            textField.inputView = pickerView;
+            switch (indexPath.row) {
+                case 0: 
+                    cell.textLabel.text = @"Unit system";
+                    cell.accessoryView = unitSystemTextField;
+                    unitSystemTextField.text = [unitSystems objectAtIndex:unitSystem];
+                    unitSystemTextField.textAlignment = UITextAlignmentRight;
+                    [pickerView selectRow:unitSystem inComponent:0 animated:YES];
+                    unitSystemTextField.inputView = pickerView;
+                    break;
+                case 1: 
+                    cell.textLabel.text = @"Speed unit";
+                    cell.accessoryView = speedUnitTextField;
+                    speedUnitTextField.text = dispSpeedUnit(settings.speedUnit, NO);
+                    speedUnitTextField.textAlignment = UITextAlignmentRight;
+                    [pickerView selectRow:settings.speedUnit inComponent:0 animated:YES];
+                    speedUnitTextField.inputView = pickerView;
+                    break;
+                default:
+                    break;
+            }
             break;
         }
         case 2:
@@ -214,6 +235,16 @@
 }
 */
 
+-(void)unitsChanged:(NSNotification*)notification {
+    NSLog(@"notification");
+    // This doesn't work, it takes the keyboard down. 
+//    [self.tableView reloadData];
+    unitSystemTextField.text = [unitSystems objectAtIndex:settings.unitSystem];
+    speedUnitTextField.text = dispSpeedUnit(settings.speedUnit, NO);
+    [(UIPickerView*)speedUnitTextField.inputView reloadComponent:0];
+    [(UIPickerView*)unitSystemTextField.inputView reloadComponent:0];
+}
+
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -250,22 +281,47 @@
 }
 
 -(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return 2;
+    return 2 + pickerView.tag;
 }
 
 -(CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
-    return 100;
+    return 100*(1+pickerView.tag);
 }
 
 #pragma mark UIPickerViewDelegate
 
 -(NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return [unitSystems objectAtIndex:row];
+//    NSLog(@"%d %@", pickerView.tag, pickerView);
+    switch (pickerView.tag) {
+        case 0:
+            return [unitSystems objectAtIndex:row];
+            break;
+        case 1:
+            return dispSpeedUnit(row, NO);
+            break;
+        default:
+            break;
+    }
+    return nil;
 }
 
+//
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component  {
-    textField.text = [unitSystems objectAtIndex:row];
-    settings.unitSystem = row;
+    switch (pickerView.tag) {
+        case 0:
+            unitSystemTextField.text = [unitSystems objectAtIndex:row];
+            settings.unitSystem = row;
+            if (settings.speedUnit==kSpeedDistanceUnitPerHour) speedUnitTextField.text = dispSpeedUnit(settings.speedUnit, NO);
+            [(UIPickerView*)speedUnitTextField.inputView reloadComponent:0];
+            break;
+        case 1:
+            speedUnitTextField.text = dispSpeedUnit(row, NO);
+            settings.speedUnit = row;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 @end

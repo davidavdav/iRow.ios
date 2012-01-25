@@ -14,8 +14,9 @@
     int unitSystem;
     double logSensitivity;
     NSArray * unitSystems;
-    UITextField * textField;
+    UITextField * unitSystemTextField;
     UISwitch * strokeViewSwitch;
+    UITextField * speedUnitTextField;
 }
 
 @end
