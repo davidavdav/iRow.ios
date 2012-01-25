@@ -23,7 +23,6 @@
     Track * track;
     Stroke * stroke;
     ErgometerViewController * evc;
-    int speedUnit;
     BOOL editing;
     NSFetchedResultsController * frcBoats, *frcRowers;
     UITextField * boatTextView;
