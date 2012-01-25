@@ -7,7 +7,6 @@
 //
 
 #import "ErgometerViewController.h"
-#import "Settings.h"
 #import "utilities.h"
 
 #define kStrokeAveragingDuration (10.0)
@@ -18,7 +17,6 @@ enum {
     kCumulatives=0x4
 };
 
-#define kSpeedLabels @"m:s / 500 m", @"m/s", @"km/h", @"mph"
 
 @implementation ErgometerViewController
 
@@ -29,7 +27,7 @@ enum {
 
 @synthesize tracker, trackingState;
 
-@synthesize speedUnit, unitSystem, stroke;
+@synthesize stroke;
 
 @synthesize mapViewController;
 
@@ -39,6 +37,7 @@ enum {
     if (self) {
         self.title = NSLocalizedString(@"Ergometer", @"Ergometer");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
+        settings = Settings.sharedInstance;
         // location tracking
         dTlocation = 1.0;
         lastStrokeTime = 0;
@@ -54,7 +53,6 @@ enum {
         stroke.sensitivity = Settings.sharedInstance.logSensitivity;
         // init of vars
         trackingState = kTrackingStateStopped;
-        speedUnit = [[[Settings sharedInstance] loadObjectForKey:@"speedUnit"] intValue];
         curSpeed = -1; // invalid
         aveSpeed = -1;
         strokeFreq = 0;
@@ -65,6 +63,8 @@ enum {
         for (int i=0; i<6; i++) buttonImage[i] = [UIImage imageNamed:[imageNames objectAtIndex:i]];
 //        NSLog(@"%f %f", buttonImage[0].size.width, buttonImage[0].size.height);
         // mapviewcontroller must be set from appdelegate
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sensitivityChanged:) name:@"sensitivityChanged" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
 }
@@ -80,9 +80,9 @@ enum {
 -(void)updateValues:(uint)mask {
     CFTimeInterval dur=totalTime;
     if (mask & kCurrentLocation) {
-        curSpeedLabel.text = dispSpeedOnly(curSpeed, speedUnit);
+        curSpeedLabel.text = dispSpeedOnly(curSpeed, settings.speedUnit);
         aveSpeed = totalDistance / totalTime;
-        aveSpeedLabel.text = dispSpeedOnly(aveSpeed, speedUnit);
+        aveSpeedLabel.text = dispSpeedOnly(aveSpeed, settings.speedUnit);
         double distance;
         switch (trackingState) {
             case kTrackingStateStopped:
@@ -152,6 +152,13 @@ enum {
     [startButton setTitle:title forState:UIControlStateNormal];
 }
 
+-(void)changeSpeedUnit {
+    [self updateValues:kCurrentLocation];
+    int index=settings.speedUnit + (settings.speedUnit==kSpeedDistanceUnitPerHour) * settings.unitSystem;
+    aveSpeedUnitLabel.text = curSpeedUnitLabel.text = dispSpeedUnit(index, NO);
+}
+
+
 #pragma mark - View lifecycle
 
 // this may also be called after another tab was selected.  Or not. 
@@ -178,7 +185,8 @@ enum {
     strokeBeat.alpha = 0;
     [self updateValues:kCurrentLocation | kCurrentStroke | kCumulatives];
     [self setButtonAppearance];
-    [self setUnitSystem:Settings.sharedInstance.unitSystem];
+    [self changeSpeedUnit];
+    [self updateValues:kCurrentStroke|kCurrentLocation|kCumulatives];
 }
 
 - (void)viewDidUnload
@@ -209,22 +217,14 @@ enum {
 	[super viewDidDisappear:animated];
 }
 
--(void)changeSpeedUnit {
-    static NSArray * labels = nil;
-    if (labels==nil) labels = [NSArray arrayWithObjects:kSpeedLabels, nil];
-    [self updateValues:kCurrentLocation];
-    int index=speedUnit + (speedUnit==kSpeedDistanceUnitPerHour) * unitSystem;
-    aveSpeedUnitLabel.text = curSpeedUnitLabel.text = [labels objectAtIndex:index];
-    Settings.sharedInstance.speedUnit = speedUnit;
-}
 
 -(void)changeSpeedUp:(id)sender {
-    speedUnit = (speedUnit+1) % 3;
+    settings.speedUnit = (settings.speedUnit+1) % 3;
     [self changeSpeedUnit];
 }
 
 -(void)changeSpeedDown:(id)sender {
-    speedUnit = (speedUnit+2) % 3;
+    settings.speedUnit = (settings.speedUnit+2) % 3;
     [self changeSpeedUnit];
 }
 
@@ -320,12 +320,13 @@ enum {
     [self setButtonAppearance];
 }
 
--(void)setUnitSystem:(int)us {
-    unitSystem = us;
-    [self changeSpeedUnit];
-    [self updateValues:kCurrentStroke|kCurrentLocation|kCumulatives];
+-(void)sensitivityChanged:(NSNotification*)notification {
+     stroke.sensitivity = settings.logSensitivity;
 }
 
+-(void)unitsChanged:(NSNotification*)notification {
+    [self changeSpeedUnit];
+}
 
 #pragma mark StrokeDelegate
 -(void)stroke:(id)sender {

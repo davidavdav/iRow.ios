@@ -13,12 +13,7 @@
 #import "Tracker.h"
 #import "Stroke.h"
 #import "MapViewController.h"
-
-enum {
-    kSpeedTimePer500m,
-    kSpeedMeterPerSecond,
-    kSpeedDistanceUnitPerHour,
-} speedUnit;
+#import "Settings.h"
 
 enum {
     kTrackingStateStopped=0,
@@ -50,7 +45,6 @@ enum {
     float dTmotion;
     CFAbsoluteTime lastStrokeTime;
 //    int startStroke; 
-    int speedUnit;
     // display values
     CFAbsoluteTime startTime;
     CLLocationSpeed curSpeed, aveSpeed;
@@ -58,7 +52,7 @@ enum {
     int totalStrokes;
     CFTimeInterval totalTime;
     double totalDistance, finishDistance;
-    int unitSystem;
+    Settings * settings;
     double positionAccuracy;
 }
 
@@ -83,9 +77,6 @@ enum {
 @property (readonly) int trackingState;
 
 @property (strong, nonatomic) MapViewController * mapViewController;
-
-@property (nonatomic) int speedUnit;
-@property (nonatomic, setter=setUnitSystem:) int unitSystem;
 
 -(IBAction)startPressed:(id)sender;
 
