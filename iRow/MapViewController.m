@@ -26,7 +26,6 @@ enum {
 @synthesize trackPins, coursePins;
 @synthesize currentTrackPolyLine, currentCoursePolyline;
 @synthesize courseData, courseMode;
-@synthesize unitSystem;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -39,6 +38,7 @@ enum {
 //        if (courseData==nil) courseData = [[CourseData alloc] init];
         NSArray * images = [NSArray arrayWithObjects:@"gray-normal", @"gray-highlighted", @"green-normal", @"green-highlighted", nil];
         for (int i=0; i<4; i++) buttonImage[i] = [UIImage imageNamed:[images objectAtIndex:i]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
 }
@@ -116,6 +116,14 @@ enum {
     pinButton.hidden = !courseMode;
 }
 
+// called from notification, triggered when setttings changed...
+-(void)unitsChanged:(NSNotification*)notification {
+//    NSLog(@"map set units");
+    [courseData update]; // update annotation distances, in the labels
+    distanceLabel.text = dispLength(courseData.length);
+}
+
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
@@ -168,7 +176,7 @@ enum {
 //    zoomModeControl.alpha = 0.9;
     [mapView addSubview:zoomModeControl];
     zoomMode = kZoomModeHere;
-    [self setUnitSystem:Settings.sharedInstance.unitSystem];
+    [self unitsChanged:nil]; // initialize...
     crossHair = [[CrossHair alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
     crossHair.center = mapView.center;
     crossHair.hidden = YES;
@@ -283,12 +291,6 @@ enum {
     if (zoomMode == kZoomModeTrack) [self zoom];
 }
 
-// called from appDelegate, triggered from setttings changed...
--(void)setUnitSystem:(int)us {
-    unitSystem = us;
-    [courseData update]; // update annotation distances, in the labels
-    distanceLabel.text = dispLength(courseData.length);
-}
 
 #pragma mark MKMapViewDelegate
 // centers the map as soon as location is found

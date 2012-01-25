@@ -35,7 +35,6 @@
     int zoomMode;
     BOOL courseMode;
     BOOL showCoursePins;
-    int unitSystem;
     int mySelectionCount;
     MKPointAnnotation * selectedPin;
     CrossHair * crossHair;
@@ -47,8 +46,6 @@
 @property (strong, nonatomic) MKPolyline * currentTrackPolyLine, * currentCoursePolyline;
 @property (strong, nonatomic) CourseData * courseData;
 @property (readonly) BOOL courseMode;
-
-@property (nonatomic, setter=setUnitSystem:) int unitSystem;
 
 -(BOOL)validCourse;
 -(BOOL)outsideCourse;
