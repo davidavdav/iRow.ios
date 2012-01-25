@@ -25,8 +25,8 @@ enum {
     kTrackDistance=0,
     kTrackTime,
     kTrackAveSpeed,
-    kTrackStrokeFreq,
     kSlider,
+    kTrackStrokeFreq,
     kTrackDate,
     kTotalMass,
     kTotalPower,
@@ -50,13 +50,18 @@ enum {
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
-        speedUnit = evc.speedUnit;
         frcBoats = fetchedResultController(@"Boat", @"name", YES, settings.moc);
         frcRowers = fetchedResultController(@"Rower", @"name", YES, settings.moc);
         minSpeed = settings.minSpeed;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
 }
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"unitsChanged" object:nil];
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -339,7 +344,7 @@ enum {
                     break;
                 case kTrackAveSpeed:
                     cell.textLabel.text = @"Average speed";
-                    cell.detailTextLabel.text = dispSpeed(trackData.averageRowingSpeed, speedUnit);
+                    cell.detailTextLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit, NO);
                     self.aveSpeedLabel = cell.detailTextLabel;
                     break;
                 case kTrackStrokeFreq:
@@ -442,12 +447,17 @@ enum {
     distanceLabel.text = dispLength(trackData.totalRowingDistance);
     minSpeedLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.rowingTime)];
-    aveSpeedLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit);
+    aveSpeedLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit, NO);
 //    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSecStats] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 -(void)minSpeedReleased:(id)sender {
     settings.minSpeed = minSpeed;
+}
+
+-(void)unitsChanged:(NSNotification*)notification {
+    aveSpeedLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit, NO);
+    minSpeedLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
 }
 
 /*
