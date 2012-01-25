@@ -81,9 +81,13 @@ enum {
     self = [super init];
     if (self) {
         // hmm
-    
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
+}
+
+-(void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"unitsChanged" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -126,11 +130,15 @@ enum {
 //    CFTimeInterval dt = [l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]];
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(time)];
     distLabel.text = dispLength(l.altitude); // special encoding
-    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
+    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit, YES)];
     if (selectedPane == kPaneStroke) [self updateStroke:time];
     return;
 }
 
+-(void)unitsChanged:(NSNotification*)notification {
+    [self sliderChanged:self];
+}
+    
 #pragma mark HereAnnotationViewDelegate
 -(void)hereAnnotationPressed:(BOOL)down {
 //    slider.backgroundColor = down ? [UIColor whiteColor] : [UIColor blackColor];
@@ -143,7 +151,7 @@ enum {
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms([l.timestamp timeIntervalSinceDate:[(CLLocation*)[trackData.locations objectAtIndex:0] timestamp]])];
     CLLocationDistance d = [[trackData.cumDist objectAtIndex:index] floatValue];
     distLabel.text = dispLength(d);
-    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit)];
+    speedLabel.text = [NSString stringWithFormat:@"%@ %@",dispSpeedOnly(l.speed, Settings.sharedInstance.speedUnit),dispSpeedUnit(Settings.sharedInstance.speedUnit, NO)];
     slider.value = d/trackData.totalDistance; // FIXME must be based on a truncated cumdist
     return;   
 }
@@ -220,9 +228,9 @@ enum {
     //labels above, fixed
     UIView * panel = [[UIView alloc] initWithFrame:CGRectMake(0, 0, w, hSlider)];
     [self.view addSubview:panel];
-    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 20)];
-    distLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 10, 100, 20)];
-    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(w-100-10, 10, 100, 20)];
+    timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 100, 20)]; // 10--110
+    distLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 10, 90, 20)]; // 110--210
+    speedLabel = [[UILabel alloc] initWithFrame:CGRectMake(w-110-10, 10, 110, 20)]; // 210--310
     for (UILabel * l in [NSArray arrayWithObjects:timeLabel,distLabel,speedLabel,nil] ) {
         l.textColor = UIColor.whiteColor;
         l.backgroundColor = UIColor.blackColor;
