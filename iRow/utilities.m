@@ -9,12 +9,6 @@
 #import "utilities.h"
 #import "Settings.h"
 
-enum {
-    kSpeedTimePer500m,
-    kSpeedMeterPerSecond,
-    kSpeedDistanceUnitPerHour,
-} speedUnit;
-
 #define kSpeedFactorKmph (3.6)
 #define kSpeedFactorMph (2.237415)
 
@@ -102,16 +96,17 @@ NSString * dispSpeedOnly(CLLocationSpeed speed, int speedUnit) {
     return nil;
 }
 
-NSString * dispSpeedUnit(int unit) {
+NSString * dispSpeedUnit(int unit, BOOL compact) {
     int us = Settings.sharedInstance.unitSystem;
     static NSArray * labels;
     if (labels == nil) labels = [NSArray arrayWithObjects:kSpeedLabels, nil];
     if (unit == 2 && us==kUnitSystemImperial) unit++;
-    return [labels objectAtIndex:unit];
+    if (unit==0 && compact) return @"/500m";
+    else return [labels objectAtIndex:unit];
 }
 
-NSString * dispSpeed(CLLocationSpeed speed, int speedUnit) {
-    return [NSString stringWithFormat:@"%@ %@", dispSpeedOnly(speed, speedUnit), dispSpeedUnit(speedUnit)];
+NSString * dispSpeed(CLLocationSpeed speed, int speedUnit, BOOL compact) {
+    return [NSString stringWithFormat:@"%@ %@", dispSpeedOnly(speed, speedUnit), dispSpeedUnit(speedUnit, compact)];
 }
 
 NSString * dispMass(NSNumber * mass, BOOL unit) {

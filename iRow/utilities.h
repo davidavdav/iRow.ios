@@ -15,6 +15,12 @@
 #define kMaxStrokeSens (0.5)
 #define kLogSensRange (2.0)
 
+enum {
+    kSpeedTimePer500m,
+    kSpeedMeterPerSecond,
+    kSpeedDistanceUnitPerHour,
+} speedUnitConstants;
+
 double strokeSensitivity(double logSensitivity);
 
 // some utility functions
@@ -25,8 +31,8 @@ NSString * dispLengthUnit(CLLocationDistance l);
 NSString * hms(NSTimeInterval t);
 
 NSString * dispSpeedOnly(CLLocationSpeed speed, int speedUnit);
-NSString * dispSpeedUnit(int unit);
-NSString * dispSpeed(CLLocationSpeed speed, int speedUnit);
+NSString * dispSpeedUnit(int unit, BOOL compact);
+NSString * dispSpeed(CLLocationSpeed speed, int speedUnit, BOOL compact);
 
 NSString * dispMass(NSNumber * weight, BOOL unit);
 NSString * dispPower(NSNumber * power);
