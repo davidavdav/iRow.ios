@@ -121,10 +121,10 @@
 -(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return @"A setting more to the right makes it more likely that a stroke is corrcetly picked up from the accelerometers"; 
+            return @"A setting more to the right makes it more likely that a stroke is correctly picked up from the accelerometers"; 
             break;
         case 1:
-            return @"The speed unit can also be changed by tapping the speed from the ergometer tab"; 
+            return @"The speed unit can also be changed by tapping the speed from the ergometer tab."; 
             break;
         case 2:
             return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.";
