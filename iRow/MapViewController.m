@@ -207,7 +207,7 @@ enum {
 
 
 -(void)pinButtonPressed:(id)sender {
-    MKPointAnnotation * new = [courseData addWaypoint:mapView.centerCoordinate];
+    CourseAnnotation * new = [courseData addWaypoint:mapView.centerCoordinate];
     [mapView addAnnotation:new];
     [self updateCourse];
 }
