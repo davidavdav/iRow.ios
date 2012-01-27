@@ -198,15 +198,25 @@
     NSError *error = nil;
 	
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    NSURL * iCloud = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
-    NSLog(@"%@", iCloud);
-	NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
-							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
-                             // these lines are for possible iCloud support
-                             @"iRow", NSPersistentStoreUbiquitousContentNameKey,
-                             iCloud, NSPersistentStoreUbiquitousContentURLKey,
-                             nil];
+    NSFileManager * fm = [NSFileManager defaultManager];
+    NSDictionary *options;
+    NSURL * iCloud;
+    BOOL iCloudAvalable = [fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloud = [fm URLForUbiquityContainerIdentifier:nil]) != nil;
+    if (iCloudAvalable) {
+        NSLog(@"%@", iCloud);
+        options = [NSDictionary dictionaryWithObjectsAndKeys:
+                    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                    [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
+                    // these lines are for possible iCloud support
+                    @"iRow", NSPersistentStoreUbiquitousContentNameKey,
+                    iCloud, NSPersistentStoreUbiquitousContentURLKey,
+                    nil];
+    } else {
+        options = [NSDictionary dictionaryWithObjectsAndKeys:
+                   [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                   [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
+                   nil];
+    }
 	if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
         /*
          Replace this implementation with code to handle the error appropriately.
@@ -235,7 +245,7 @@
 		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  I cannot initialize the courses/tracks database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  One way out is to re-initialize the database." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Initialize",nil];
         [alert show];
     }    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];
+    if (iCloudAvalable) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];
     return persistentStoreCoordinator_;
 }
 
