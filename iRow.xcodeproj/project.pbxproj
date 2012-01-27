@@ -87,6 +87,7 @@
 		63BC78BF1474756700DF6671 /* PLCameraButtonRecordOn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78BE1474756400DF6671 /* PLCameraButtonRecordOn@2x.png */; };
 		63BC78C1147475DE00DF6671 /* UIButtonBarLocate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78C0147475DD00DF6671 /* UIButtonBarLocate@2x.png */; };
 		63C6786714CFEC9100170945 /* help-options.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6786614CFEC9100170945 /* help-options.png */; };
+		63C6787014D06D7000170945 /* AppleAccountSettings_icloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 63C6786F14D06D7000170945 /* AppleAccountSettings_icloud.png */; };
 		63CC2E3B14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */; };
 		63E3ADBB146201D8009FAECE /* TrackData.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADB9146201D8009FAECE /* TrackData.m */; };
 		63E3ADCD146290BC009FAECE /* utilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E3ADCC146290BC009FAECE /* utilities.m */; };
@@ -228,6 +229,7 @@
 		63BC78BE1474756400DF6671 /* PLCameraButtonRecordOn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLCameraButtonRecordOn@2x.png"; sourceTree = "<group>"; };
 		63BC78C0147475DD00DF6671 /* UIButtonBarLocate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarLocate@2x.png"; sourceTree = "<group>"; };
 		63C6786614CFEC9100170945 /* help-options.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "help-options.png"; path = "lib/help-options.png"; sourceTree = SOURCE_ROOT; };
+		63C6786F14D06D7000170945 /* AppleAccountSettings_icloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AppleAccountSettings_icloud.png; sourceTree = "<group>"; };
 		63CC2E3A14561A4200AC07E0 /* UIButtonBarInfoDark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "UIButtonBarInfoDark@2x.png"; sourceTree = "<group>"; };
 		63E3ADB9146201D8009FAECE /* TrackData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackData.m; sourceTree = "<group>"; };
 		63E3ADBA146201D8009FAECE /* TrackData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackData.h; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 		6356115F144CC642005A90E2 /* help */ = {
 			isa = PBXGroup;
 			children = (
+				63C6786F14D06D7000170945 /* AppleAccountSettings_icloud.png */,
 				63C6786614CFEC9100170945 /* help-options.png */,
 				637052F5144CE137004B25A0 /* help-finish.png */,
 				637052F3144CDD58004B25A0 /* help-course-selected.png */,
@@ -668,6 +671,7 @@
 				63BC78C1147475DE00DF6671 /* UIButtonBarLocate@2x.png in Resources */,
 				637AAA9B14869F5200B60976 /* yacc.10Hz in Resources */,
 				63C6786714CFEC9100170945 /* help-options.png in Resources */,
+				63C6787014D06D7000170945 /* AppleAccountSettings_icloud.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
