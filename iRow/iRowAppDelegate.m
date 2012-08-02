@@ -53,8 +53,8 @@
 // this will fire for _any_ change in settings, including the ones we write ourselves...
 -(void)settingsChanged:(id)sender {
     // change of unit system?
-    Settings * settings = Settings.sharedInstance;
-    int oldUnitSystem = settings.unitSystem, oldSpeedUnit = settings.speedUnit;
+//    Settings * settings = Settings.sharedInstance;
+//    int oldUnitSystem = settings.unitSystem, oldSpeedUnit = settings.speedUnit;
     [Settings.sharedInstance reloadUserDefaults];
 //    if (oldUnitSystem != settings.unitSystem) 
     // we choose to do this because this is sort-of a notification for the viewcontrollers...
@@ -69,6 +69,7 @@
      */
     if (ergometerViewController.trackingState==kTrackingStateStopped) 
         [ergometerViewController.tracker.locationManager stopUpdatingLocation];
+    [self saveContext];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -77,8 +78,11 @@
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
-    [ergometerViewController.tracker.locationManager stopUpdatingLocation];
-    [ergometerViewController.tracker stopTimer];
+    if (!Settings.sharedInstance.backgroundTracking) {
+        [ergometerViewController.tracker.locationManager stopUpdatingLocation];
+        [ergometerViewController.tracker stopTimer];
+    }
+    [self saveContext];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -86,9 +90,11 @@
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
-    if (ergometerViewController.trackingState != kTrackingStateStopped) 
-        [ergometerViewController.tracker.locationManager startUpdatingLocation];
-    [ergometerViewController.tracker startTimer];
+    if (!Settings.sharedInstance.backgroundTracking) {
+        if (ergometerViewController.trackingState != kTrackingStateStopped) 
+            [ergometerViewController.tracker.locationManager startUpdatingLocation];
+        [ergometerViewController.tracker startTimer];
+    }
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -106,6 +112,7 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+    [self saveContext];
 }
 
 /*
