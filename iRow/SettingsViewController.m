@@ -30,6 +30,9 @@
         strokeViewSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         strokeViewSwitch.on = settings.showStrokeProfile;
         [strokeViewSwitch addTarget:self action:@selector(strokeSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        trackingInBackgroundSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        trackingInBackgroundSwitch.on = settings.backgroundTracking;
+        [trackingInBackgroundSwitch addTarget:self action:@selector(trackBackgroundSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
@@ -98,7 +101,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 3;
+    return 4;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -110,6 +113,9 @@
             return @"Distances and speed";
             break;
         case 2:
+            return @"Background updating";
+            break;
+        case 3:
             return @"Experimental";
             break;
         default:
@@ -126,7 +132,7 @@
         case 1:
             return @"The speed unit can also be changed by tapping the speed from the ergometer tab."; 
             break;
-        case 2:
+        case 3:
             return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.";
         default:
             break;
@@ -142,7 +148,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString * CellIdentifiers[] = { @"Slider", @"Cell"};
+    NSString * CellIdentifier = CellIdentifiers[indexPath.section>0];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -151,6 +158,8 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     switch (indexPath.section) {
         case 0: {
+//            cell.textLabel.text = nil;
+//            cell.accessoryView = nil;
             UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(10, 0, cell.bounds.size.width-40, cell.bounds.size.height)];
             slider.value = (logSensitivity - kLogSensMin) / (kLogSensMax - kLogSensMin);
             [slider addTarget:self action:@selector(sliderChanged:) forControlEvents:UIControlEventValueChanged];
@@ -186,7 +195,13 @@
             }
             break;
         }
-        case 2:
+        case 2: {
+            cell.textLabel.text = @"Track position while off";
+            cell.accessoryView = trackingInBackgroundSwitch;
+            break;
+        }
+            
+        case 3:
             cell.textLabel.text = @"Stoke profile support";
             cell.accessoryView = strokeViewSwitch;
             break;
@@ -273,6 +288,10 @@
 
 -(void) strokeSwitchChanged:(id)sender {
     settings.showStrokeProfile = strokeViewSwitch.on;
+}
+
+-(void) trackBackgroundSwitchChanged:(id)sender {
+    settings.backgroundTracking = trackingInBackgroundSwitch.on;
 }
 
 #pragma mark UIPickerViewDatasource
