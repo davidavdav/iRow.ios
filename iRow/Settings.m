@@ -16,6 +16,7 @@
 @synthesize speedUnit;
 @synthesize minSpeed;
 @synthesize showStrokeProfile;
+@synthesize backgroundTracking;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -51,6 +52,7 @@
     if ([ud objectForKey:@"stroke_sensitivity"]==nil) logSensitivity = 1.4;
     else logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
     unitSystem = [ud integerForKey:@"unit_system"]; // default 0: metric
+    backgroundTracking = [ud boolForKey:@"backgroundTracking"];
 }
 
 -(void)setObject:(id)object forKey:(NSString *)key {
@@ -153,6 +155,12 @@
 -(void)setShowStrokeProfile:(BOOL)s {
     showStrokeProfile = s;
     [ud setBool:showStrokeProfile forKey:@"showStrokeProfile"];
+    [ud synchronize];
+}
+
+-(void)setBackgroundTracking:(BOOL)b {
+    backgroundTracking = b;
+    [ud setBool:backgroundTracking forKey:@"backgroundTracking"];
     [ud synchronize];
 }
 

@@ -31,6 +31,7 @@ enum {
     int unitSystem;
     double minSpeed; // minimum speed for autostart/stop
     BOOL showStrokeProfile;
+    BOOL backgroundTracking;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -43,6 +44,7 @@ enum {
 @property (nonatomic) int speedUnit;
 @property (nonatomic) double minSpeed;
 @property (nonatomic) BOOL showStrokeProfile;
+@property (nonatomic) BOOL backgroundTracking;
 
 // from the general settings:
 @property (nonatomic) int unitSystem;
