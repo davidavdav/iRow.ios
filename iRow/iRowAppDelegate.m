@@ -38,6 +38,7 @@
     [self.tabBarController.tabBar addSubview:iCloudView];
 
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(persistentStoreReady:) name:kNotificationPersistentStoreSetup object:nil];
     // deal with old bundle...
     NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"]; // May contain Root.plist and en.lproj
     BOOL dir;
