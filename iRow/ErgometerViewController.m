@@ -9,7 +9,7 @@
 #import "ErgometerViewController.h"
 #import "utilities.h"
 
-#define kStrokeAveragingDuration (10.0)
+#define kStrokeAveragingDuration (5.0)
 
 enum {
     kCurrentLocation=0x1,
@@ -187,6 +187,8 @@ enum {
     [self setButtonAppearance];
     [self changeSpeedUnit];
     [self updateValues:kCurrentStroke|kCurrentLocation|kCumulatives];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(persistentStoreReady:) name:kNotificationPersistentStoreSetup object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:kNotificationICloudUpdate object:nil];
 }
 
 - (void)viewDidUnload
@@ -194,6 +196,8 @@ enum {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationPersistentStoreSetup object:nil];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self name:kNotificationICloudUpdate object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -340,11 +344,17 @@ enum {
     }
     lastStrokeTime = now;
     strokeBeat.alpha = 1;
+//    float brightness = [[UIScreen mainScreen] brightness];
+//    [[UIScreen mainScreen] setBrightness:brightness+0.2];
     [UIView animateWithDuration:1.0 animations:^{
         strokeBeat.alpha = 0;
     } completion:^(BOOL finished) {
+//        [[UIScreen mainScreen] setBrightness:brightness];
     }];
 }
+
+
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
