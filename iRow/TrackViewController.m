@@ -35,6 +35,7 @@ enum {
 // range of min speed slider, in m/s
 #define kMinSpeed (0)
 #define kMaxSpeed (24.0/3.6)
+#define kNoGraySpeed (0.1/3.6)
 
 @implementation TrackViewController
 
@@ -448,10 +449,11 @@ enum {
     minSpeedLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
     timeLabel.text = [NSString stringWithFormat:@"%@ m:s",hms(trackData.rowingTime)];
     aveSpeedLabel.text = dispSpeed(trackData.averageRowingSpeed, settings.speedUnit, NO);
-//    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSecStats] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 -(void)minSpeedReleased:(id)sender {
+    if (settings.minSpeed < kNoGraySpeed || minSpeed < kNoGraySpeed)
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSecStats] withRowAnimation:UITableViewRowAnimationNone];
     settings.minSpeed = minSpeed;
 }
 
@@ -551,6 +553,12 @@ enum {
         default:
             break;
     }
+}
+
+// This is the best way to set the background of a cell, for some reason...
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath { 
+    if (indexPath.section == kSecStats && indexPath.row <= kSlider && minSpeed > kMinSpeed)
+        cell.backgroundColor =  [UIColor colorWithWhite:0.9 alpha:1]; 
 }
 
 /*
