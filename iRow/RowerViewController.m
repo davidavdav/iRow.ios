@@ -65,7 +65,7 @@
 }
 
 -(void)savePressed:(id)sender {
-    NSLog(@"rower now %@", rower);
+//    NSLog(@"rower now %@", rower);
     [self restoreButtons];
     NSError * error;
     if (![settings.moc save:&error]) {
@@ -110,7 +110,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    NSLog(@"will disappear");
+//    NSLog(@"will disappear");
 }
 
 /*
@@ -201,7 +201,7 @@
                     break;
                 case 2: {
                     if (rower.birthDate != nil) {
-                        NSLog(@"setting");
+//                        NSLog(@"setting");
                         textField.text = [NSString stringWithFormat:@"%d",[self ageFromDate:rower.birthDate]];
                     } else 
                         textField.text = nil;
@@ -329,6 +329,9 @@
     return [NSNumber numberWithFloat:s.floatValue];
 }
 
+#pragma mark -
+#pragma mark UITextFieldDelegate
+
 -(void)textFieldDidEndEditing:(UITextField *)textField {
     NSLog(@"ended editing %d", textField.tag);
     switch (textField.tag) {
@@ -393,7 +396,10 @@
 	}
 }
 
-// somewhat strage name...
+#pragma mark -
+#pragma mark SelectRowerViewControllerDelegate
+
+// somewhat strange name...
 -(void)selectedCoxswain:(Rower *)r {
     if (r) {
         [settings.moc rollback]; // we don't want to create a new entity, really
@@ -405,7 +411,7 @@
 
 
 #pragma mark -
-#pragma mark peoplePickerDelegate
+#pragma mark ABPeoplePickerNavigationControllerDelegate
 
 // We don't want to continue, as we have everything we want from here
 -(BOOL)peoplePickerNavigationController:(ABPeoplePickerNavigationController *)peoplePicker shouldContinueAfterSelectingPerson:(ABRecordRef)person {

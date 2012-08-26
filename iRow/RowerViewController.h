@@ -16,7 +16,7 @@
 
 typedef void(^newObjectMade) (id new);
 
-@interface RowerViewController : UITableViewController <ABPeoplePickerNavigationControllerDelegate, UITextFieldDelegate,UIPickerViewDelegate, SelectRowerViewControllerDelegate> {
+@interface RowerViewController : UITableViewController <ABPeoplePickerNavigationControllerDelegate, UITextFieldDelegate, SelectRowerViewControllerDelegate> {
 	Settings * settings;
     NSArray * fields;
     UIBarButtonItem * leftBarItem;
