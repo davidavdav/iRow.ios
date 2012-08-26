@@ -8,6 +8,8 @@
 
 #import "PlotAxis.h"
 
+double nicenum(double x, BOOL Round);
+CGFloat textlength(CGContextRef c, char * s);
 
 @implementation PlotAxis
 
