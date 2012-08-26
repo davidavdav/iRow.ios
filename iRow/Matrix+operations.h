@@ -13,4 +13,6 @@
 
 -(Vector*)timesV:(Vector*)y;
 
+-(Vector*)biggestEig:(Vector*)initVector tolerance:(double)tol;
+
 @end
