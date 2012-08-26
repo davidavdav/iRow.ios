@@ -18,3 +18,7 @@ typedef double real_t;
 typedef double sample_t;
 typedef double coef_t;
 #define MALLOC(t,v,s) v=(t*) calloc(s,sizeof(t))
+
+//notification names 
+#define kNotificationPersistentStoreSetup @"persistent store available"
+#define kNotificationICloudUpdate @"iCloud update"
