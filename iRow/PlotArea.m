@@ -8,6 +8,7 @@
 
 #import "PlotArea.h"
 
+void Release(void* object);
 
 @implementation PlotArea
 

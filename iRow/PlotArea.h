@@ -20,7 +20,8 @@
 }
 
 @property (readwrite) CGFloat lineWidth, barWidth;
-@property (readwrite) CGColorRef graphColor, barColor, gradientColor;
+@property (readwrite) CGColorRef graphColor, gradientColor;
+@property (readwrite) CGColorRef barColor;
 @property (readonly) double xmin, xmax, ymin, ymax;
 
 -(void)setLimitsXmin:(double)inxmin Xmax:(double)inxmax Ymin:(double)inymin Ymax:(double)inymax;
