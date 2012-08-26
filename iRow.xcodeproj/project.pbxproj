@@ -40,7 +40,6 @@
 		634A7F781427564C0001BF57 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F771427564C0001BF57 /* MapKit.framework */; };
 		634A7F831427DC8B0001BF57 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F821427DC8B0001BF57 /* CoreMotion.framework */; };
 		634A7F861427DFE90001BF57 /* Stroke.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F851427DFE90001BF57 /* Stroke.m */; };
-		634A7F8C1428B19A0001BF57 /* stroke.filt in Resources */ = {isa = PBXBuildFile; fileRef = 634A7F8B1428B19A0001BF57 /* stroke.filt */; };
 		634A7F8F1428B2240001BF57 /* Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F8E1428B2240001BF57 /* Filter.m */; };
 		634A7F981428B3C10001BF57 /* Vector.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F961428B3C10001BF57 /* Vector.m */; };
 		634A7F9E1429CA880001BF57 /* Matrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 634A7F9D1429CA880001BF57 /* Matrix.m */; };
@@ -67,6 +66,7 @@
 		6386AF0614755A3300F37863 /* SelectRowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF0414755A3200F37863 /* SelectRowerViewController.m */; };
 		6386AF0A1475BCDF00F37863 /* Track.m in Sources */ = {isa = PBXBuildFile; fileRef = 6386AF091475BCDF00F37863 /* Track.m */; };
 		638EC0C114783BC9004B1B02 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 638EC0C014783BC9004B1B02 /* SettingsViewController.m */; };
+		63A8649B15CA9C8500685EA2 /* VectorMA.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A8649A15CA9C8500685EA2 /* VectorMA.m */; };
 		63AE970A1430E48E00C63178 /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = 63AE97091430E48E00C63178 /* Settings.m */; };
 		63AE971A143A5F9300C63178 /* PLBlueMinus@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */; };
 		63AE9720143BA50600C63178 /* UIButtonBarLocate.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE971F143BA50600C63178 /* UIButtonBarLocate.png */; };
@@ -78,6 +78,10 @@
 		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
 		63AE973F14405EF400C63178 /* wait-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973D14405EF100C63178 /* wait-button.png */; };
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
+		63B6D38D15E371590029EF01 /* iCloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D38B15E371590029EF01 /* iCloud.png */; };
+		63B6D38E15E371590029EF01 /* iCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D38C15E371590029EF01 /* iCloud@2x.png */; };
+		63B6D39115E76A340029EF01 /* lowp-10.100.filt in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D39015E76A340029EF01 /* lowp-10.100.filt */; };
+		63B6D39315E76BBC0029EF01 /* stroke.10.filt in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D39215E76BBC0029EF01 /* stroke.10.filt */; };
 		63BC78A214726B9300DF6671 /* Course.m in Sources */ = {isa = PBXBuildFile; fileRef = 63BC78A114726B9300DF6671 /* Course.m */; };
 		63BC78AE14731C6F00DF6671 /* PLCameraButtonRecordOn.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */; };
 		63BC78B314742C2200DF6671 /* volume-slider-fat-knob.png in Resources */ = {isa = PBXBuildFile; fileRef = 63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */; };
@@ -164,7 +168,6 @@
 		634A7F821427DC8B0001BF57 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		634A7F841427DFE90001BF57 /* Stroke.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stroke.h; sourceTree = "<group>"; };
 		634A7F851427DFE90001BF57 /* Stroke.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stroke.m; sourceTree = "<group>"; };
-		634A7F8B1428B19A0001BF57 /* stroke.filt */ = {isa = PBXFileReference; lastKnownFileType = file; path = stroke.filt; sourceTree = "<group>"; };
 		634A7F8D1428B2240001BF57 /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		634A7F8E1428B2240001BF57 /* Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filter.m; sourceTree = "<group>"; };
 		634A7F961428B3C10001BF57 /* Vector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Vector.m; path = ../../iSTI/Vector.m; sourceTree = "<group>"; };
@@ -207,6 +210,8 @@
 		6386AF091475BCDF00F37863 /* Track.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Track.m; sourceTree = "<group>"; };
 		638EC0BF14783BC9004B1B02 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
 		638EC0C014783BC9004B1B02 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
+		63A8649915CA9C8500685EA2 /* VectorMA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VectorMA.h; sourceTree = "<group>"; };
+		63A8649A15CA9C8500685EA2 /* VectorMA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VectorMA.m; sourceTree = "<group>"; };
 		63AE97081430E48E00C63178 /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Settings.h; sourceTree = "<group>"; };
 		63AE97091430E48E00C63178 /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Settings.m; sourceTree = "<group>"; };
 		63AE9719143A5F9300C63178 /* PLBlueMinus@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PLBlueMinus@2x.png"; sourceTree = "<group>"; };
@@ -219,6 +224,10 @@
 		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
 		63AE973D14405EF100C63178 /* wait-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button.png"; sourceTree = "<group>"; };
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
+		63B6D38B15E371590029EF01 /* iCloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iCloud.png; sourceTree = "<group>"; };
+		63B6D38C15E371590029EF01 /* iCloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iCloud@2x.png"; sourceTree = "<group>"; };
+		63B6D39015E76A340029EF01 /* lowp-10.100.filt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lowp-10.100.filt"; sourceTree = "<group>"; };
+		63B6D39215E76BBC0029EF01 /* stroke.10.filt */ = {isa = PBXFileReference; lastKnownFileType = file; path = stroke.10.filt; sourceTree = "<group>"; };
 		63BC78A014726B9300DF6671 /* Course.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Course.h; sourceTree = "<group>"; };
 		63BC78A114726B9300DF6671 /* Course.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Course.m; sourceTree = "<group>"; };
 		63BC78AD14731C6F00DF6671 /* PLCameraButtonRecordOn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PLCameraButtonRecordOn.png; sourceTree = "<group>"; };
@@ -363,6 +372,8 @@
 		6319A67714263D590035EB18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				63B6D39215E76BBC0029EF01 /* stroke.10.filt */,
+				63B6D39015E76A340029EF01 /* lowp-10.100.filt */,
 				637AAA991485978800B60976 /* iRow.entitlements */,
 				637AAA9A14869F5200B60976 /* yacc.10Hz */,
 				63BC78AF14742ABC00DF6671 /* png */,
@@ -378,7 +389,6 @@
 				63F4B3CF1456CA8A00C68809 /* iRow */,
 				63F4B3CD1456C3EA00C68809 /* glow-black.png */,
 				6356115F144CC642005A90E2 /* help */,
-				634A7F8B1428B19A0001BF57 /* stroke.filt */,
 				6319A67814263D590035EB18 /* iRow-Info.plist */,
 				6319A67914263D590035EB18 /* InfoPlist.strings */,
 				6319A67C14263D590035EB18 /* main.m */,
@@ -431,6 +441,8 @@
 				634A7F8E1428B2240001BF57 /* Filter.m */,
 				634A7F9F1429CF5B0001BF57 /* Matrix+operations.h */,
 				634A7FA01429CF5B0001BF57 /* Matrix+operations.m */,
+				63A8649915CA9C8500685EA2 /* VectorMA.h */,
+				63A8649A15CA9C8500685EA2 /* VectorMA.m */,
 			);
 			name = "signal processing";
 			path = iRow;
@@ -470,6 +482,8 @@
 		63BC78AF14742ABC00DF6671 /* png */ = {
 			isa = PBXGroup;
 			children = (
+				63B6D38B15E371590029EF01 /* iCloud.png */,
+				63B6D38C15E371590029EF01 /* iCloud@2x.png */,
 				63BC78B81474682000DF6671 /* volume-slider-fat-knob-red.png */,
 				63BC78BA1474696300DF6671 /* volume-slider-fat-knob-red@2x.png */,
 				63BC78B214742C2100DF6671 /* volume-slider-fat-knob.png */,
@@ -628,7 +642,6 @@
 				6319A68F14263D590035EB18 /* second@2x.png in Resources */,
 				6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */,
 				6319A69514263D590035EB18 /* MapViewController.xib in Resources */,
-				634A7F8C1428B19A0001BF57 /* stroke.filt in Resources */,
 				6354A904142C7CCA00562991 /* start-button.png in Resources */,
 				6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */,
 				6354A909142C7EC800562991 /* stop-button.png in Resources */,
@@ -672,6 +685,10 @@
 				637AAA9B14869F5200B60976 /* yacc.10Hz in Resources */,
 				63C6786714CFEC9100170945 /* help-options.png in Resources */,
 				63C6787014D06D7000170945 /* AppleAccountSettings_icloud.png in Resources */,
+				63B6D38D15E371590029EF01 /* iCloud.png in Resources */,
+				63B6D38E15E371590029EF01 /* iCloud@2x.png in Resources */,
+				63B6D39115E76A340029EF01 /* lowp-10.100.filt in Resources */,
+				63B6D39315E76BBC0029EF01 /* stroke.10.filt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -723,6 +740,7 @@
 				637AAA91147BC5B300B60976 /* Plot.m in Sources */,
 				637AAA92147BC5B300B60976 /* PlotArea.m in Sources */,
 				637AAA93147BC5B300B60976 /* PlotAxis.m in Sources */,
+				63A8649B15CA9C8500685EA2 /* VectorMA.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
