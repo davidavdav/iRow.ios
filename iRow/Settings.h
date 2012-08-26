@@ -32,6 +32,8 @@ enum {
     double minSpeed; // minimum speed for autostart/stop
     BOOL showStrokeProfile;
     BOOL backgroundTracking;
+    BOOL hundredHzSampling;
+    BOOL autoOrientation;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -45,6 +47,7 @@ enum {
 @property (nonatomic) double minSpeed;
 @property (nonatomic) BOOL showStrokeProfile;
 @property (nonatomic) BOOL backgroundTracking;
+@property (nonatomic) BOOL hundredHzSampling, autoOrientation;
 
 // from the general settings:
 @property (nonatomic) int unitSystem;
@@ -52,6 +55,7 @@ enum {
 
 +(Settings*)sharedInstance;
 -(void)reloadUserDefaults;
+-(void)readCurrentCoreDataObjects;
 // normal objects
 -(void)setObject:(id)object forKey:(NSString*)key;
 -(id)loadObjectForKey:(NSString*)key;

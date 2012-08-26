@@ -17,6 +17,7 @@
 @synthesize minSpeed;
 @synthesize showStrokeProfile;
 @synthesize backgroundTracking;
+@synthesize hundredHzSampling, autoOrientation;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -28,12 +29,13 @@
         ud = [NSUserDefaults standardUserDefaults];
         id delegate = UIApplication.sharedApplication.delegate;
         moc = [delegate managedObjectContext];
-        currentCourse = [self loadManagedObject:@"current_course"];
-        currentBoat = [self loadManagedObject:@"currentBoat"];
-        user = [self loadManagedObject:@"user"];
+        [self readCurrentCoreDataObjects];
         speedUnit = [ud integerForKey:@"speedUnit"];
         minSpeed = [ud doubleForKey:@"minSpeed"];
         showStrokeProfile = [ud boolForKey:@"showStrokeProfile"];
+        backgroundTracking = [ud boolForKey:@"backgroundTracking"];
+        hundredHzSampling = [ud boolForKey:@"hundredHzSampling"];
+        autoOrientation = [ud boolForKey:@"autoOrientation"];
         [self reloadUserDefaults];
     }
     
@@ -48,11 +50,18 @@
 	return settings;
 }
 
+// these are settings that can be changed from the out-of-app settings
+// we want to get rid of those...
 -(void)reloadUserDefaults {
     if ([ud objectForKey:@"stroke_sensitivity"]==nil) logSensitivity = 1.4;
     else logSensitivity = [ud doubleForKey:@"stroke_sensitivity"];
-    unitSystem = [ud integerForKey:@"unit_system"]; // default 0: metric
-    backgroundTracking = [ud boolForKey:@"backgroundTracking"];
+    unitSystem = [ud integerForKey:@"unit_system"]; // default 0: metric    
+}
+
+-(void)readCurrentCoreDataObjects {
+    currentCourse = [self loadManagedObject:@"current_course"];
+    currentBoat = [self loadManagedObject:@"currentBoat"];
+    user = [self loadManagedObject:@"user"];
 }
 
 -(void)setObject:(id)object forKey:(NSString *)key {
@@ -162,6 +171,20 @@
     backgroundTracking = b;
     [ud setBool:backgroundTracking forKey:@"backgroundTracking"];
     [ud synchronize];
+}
+
+-(void)setHundredHzSampling:(BOOL)b {
+    hundredHzSampling = b;
+    [ud setBool:hundredHzSampling forKey:@"hundredHzSampling"];
+    [ud synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareSamplingRateChanged" object:nil];
+}
+
+-(void)setAutoOrientation:(BOOL)b {
+    autoOrientation = b;
+    [ud setBool:b forKey:@"autoOrientation"];
+    [ud synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"autoOrientationChanged" object:nil];
 }
 
 @end
