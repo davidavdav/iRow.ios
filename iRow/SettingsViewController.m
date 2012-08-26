@@ -9,6 +9,7 @@
 
 #import "SettingsViewController.h"
 #import "utilities.h"
+// #import "ErgometerViewController.h"
 
 #define kLogSensMin (0)
 #define kLogSensMax (2)
@@ -33,6 +34,12 @@
         trackingInBackgroundSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         trackingInBackgroundSwitch.on = settings.backgroundTracking;
         [trackingInBackgroundSwitch addTarget:self action:@selector(trackBackgroundSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        hundredHzSamplingSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        hundredHzSamplingSwitch.on = settings.hundredHzSampling;
+        [hundredHzSamplingSwitch addTarget:self action:@selector(hundredHzSamplingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        autoOrientationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        autoOrientationSwitch.on = settings.autoOrientation;
+        [autoOrientationSwitch addTarget:self action:@selector(autoOrientationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
@@ -78,6 +85,9 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+//    id delegate = [[UIApplication sharedApplication] delegate];
+//    ErgometerViewController * e = [[[delegate tabBarController] viewControllers] objectAtIndex:0];
+//    hundredHzSamplingSwitch.enabled = e.trackingState == kTrackingStateStopped;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -133,7 +143,7 @@
             return @"The speed unit can also be changed by tapping the speed from the ergometer tab."; 
             break;
         case 3:
-            return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.";
+            return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.  The 100Hz sampling sets the hardware acceleration sampling to 100Hz instead of 10 Hz.";
         default:
             break;
     }
@@ -143,7 +153,8 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 1 + (section==1);
+    static int nsec[4] = {1, 2, 1, 3};
+    return nsec[section];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -201,10 +212,25 @@
             break;
         }
             
-        case 3:
-            cell.textLabel.text = @"Stoke profile support";
-            cell.accessoryView = strokeViewSwitch;
+        case 3: {
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = @"Stoke profile support";
+                    cell.accessoryView = strokeViewSwitch;
+                    break;
+                case 1:
+                    cell.textLabel.text = @"100Hz sampling";
+                    cell.accessoryView = hundredHzSamplingSwitch;
+                    break;
+                case 2:
+                    cell.textLabel.text = @"auto orientation";
+                    cell.accessoryView = autoOrientationSwitch;
+                    break;
+                default:
+                    break;
+            }
             break;
+        }
         default:
             break;
     }
@@ -292,6 +318,15 @@
 
 -(void) trackBackgroundSwitchChanged:(id)sender {
     settings.backgroundTracking = trackingInBackgroundSwitch.on;
+}
+
+-(void) hundredHzSamplingSwitchChanged:(id)sender {
+    settings.hundredHzSampling = hundredHzSamplingSwitch.on;
+}
+
+
+-(void)autoOrientationSwitchChanged:(id)sender {
+    settings.autoOrientation = autoOrientationSwitch.on;
 }
 
 #pragma mark UIPickerViewDatasource
