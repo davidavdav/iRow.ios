@@ -130,9 +130,11 @@ NSFetchedResultsController * fetchedResultController(NSString * object, NSString
     NSFetchRequest * frq = [[NSFetchRequest alloc] init];
     [frq setEntity:[NSEntityDescription entityForName:object inManagedObjectContext:moc]];
     if (sortKey==nil) sortKey=@"name"; // default
+//    NSString * cacheName = [NSString stringWithFormat:@"%@-%@-%d",object,sortKey,ascending];
     NSSortDescriptor * sd = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending];
     NSArray * sds = [NSArray arrayWithObject:sd];
     [frq setSortDescriptors:sds];
+    [frq setPropertiesToFetch:[NSArray arrayWithObject:sortKey]]; // this will limit what we get back from the fetchedresultscontroller when the objects are large
     NSFetchedResultsController * frc = [[NSFetchedResultsController alloc] initWithFetchRequest:frq managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
     NSError * error;
     if (![frc performFetch:&error]) {
