@@ -32,6 +32,11 @@
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:ergometerViewController, mapViewController, nav, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    iCloudView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iCloud"]];
+    iCloudView.center = CGPointMake(self.tabBarController.tabBar.bounds.size.width-10, 20);
+    iCloudView.alpha = 1;
+    [self.tabBarController.tabBar addSubview:iCloudView];
+
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     // deal with old bundle...
     NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"]; // May contain Root.plist and en.lproj
@@ -41,7 +46,7 @@
         NSError * error;
         NSString * old = [NSString stringWithFormat:@"%@.old",settingsBundle];
         if (![[NSFileManager defaultManager] moveItemAtPath:settingsBundle toPath:old error:&error]) {
-              NSLog(@"Error removing defaults: %@", error.localizedDescription);
+              NSLog(@"Error moving defaults: to %@ -- %@", old, error.localizedDescription);
         } else {
             UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Settings" message:@"The external settings (in the iPhone settings App) have been removed, and replaced with setting available from the options tab" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
@@ -115,6 +120,18 @@
     [self saveContext];
 }
 
+-(void)animateIcloud:(BOOL)on {
+    iCloudView.alpha = 1;
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    if (!on) {
+        [UIView animateWithDuration:2.0 animations:^{
+            iCloudView.alpha = 0;
+        } completion:^(BOOL finished){
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        }];    
+    }
+}
+
 /*
 // Optional UITabBarControllerDelegate method.
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
@@ -163,8 +180,24 @@
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
+#if 1
+        NSManagedObjectContext * moc = [NSManagedObjectContext alloc];
+        if ([moc respondsToSelector:@selector(initWithConcurrencyType:)]) {
+            [moc initWithConcurrencyType:NSMainQueueConcurrencyType];
+            [moc performBlockAndWait:^{
+                [moc setPersistentStoreCoordinator:coordinator];
+                // even the post initialization needs to be done within the Block
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];    
+            }];
+        } else { // pre-iOS 5.0
+            [moc init];
+            [moc setPersistentStoreCoordinator:coordinator];
+        }
+        managedObjectContext_ = moc;
+#else 
         managedObjectContext_ = [[NSManagedObjectContext alloc] init];
         [managedObjectContext_ setPersistentStoreCoordinator:coordinator];
+#endif
     }
     return managedObjectContext_;
 }
@@ -202,12 +235,49 @@
     NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
 	// NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"iRow.sqlite"];
     
-    NSError *error = nil;
 	
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+    // do this asynchronously since if this is the first time this particular device is syncing with preexisting
+    // iCloud content it may take a long long time to download
+#if 1
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSDictionary * options;
+        NSURL * iCloudURL;
+        NSFileManager * fm = [NSFileManager defaultManager];
+        NSError * error = nil;
+        if ([fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloudURL = [fm URLForUbiquityContainerIdentifier:nil]) != nil) {
+            NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+            NSLog(@"ubiquity URL %@: %@", iCloudURL, [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[iCloudURL path] error:&error]);
+            options = [NSDictionary dictionaryWithObjectsAndKeys:
+                       [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                       [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
+                       @"iRow", NSPersistentStoreUbiquitousContentNameKey,
+                       iCloudURL, NSPersistentStoreUbiquitousContentURLKey,
+                       nil];
+        } else {    
+            options = [NSDictionary dictionaryWithObjectsAndKeys:
+                       [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+                       [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
+                       nil];
+        }
+        [persistentStoreCoordinator_ lock];
+        if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            NSString * message = @"I am very sorry.  I cannot initialize the measurements database, it is likely due to an upgrade of the iSTI app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing.";
+            UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [a show];
+        }
+        [persistentStoreCoordinator_ unlock];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPersistentStoreSetup object:nil];
+            [self animateIcloud:NO];
+        });
+    });
+#else
     NSFileManager * fm = [NSFileManager defaultManager];
     NSDictionary *options;
     NSURL * iCloud;
+    NSError * error;
     BOOL iCloudAvalable = [fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloud = [fm URLForUbiquityContainerIdentifier:nil]) != nil;
     if (iCloudAvalable) {
         NSLog(@"%@", iCloud);
@@ -251,15 +321,32 @@
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  I cannot initialize the courses/tracks database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  One way out is to re-initialize the database." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Initialize",nil];
         [alert show];
-    }    
+    }
     if (iCloudAvalable) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];
+#endif
     return persistentStoreCoordinator_;
+}
+
+-(void)persistentStoreReady:(NSNotification*)notification {
+    NSLog(@"store OK");
+    [self animateIcloud:NO];
+    [Settings.sharedInstance readCurrentCoreDataObjects];
 }
 
 -(void)iCloudUpdate:(NSNotification*)notification {
     NSLog(@"iCloud triggered");
+#if 1
+    NSManagedObjectContext * moc = self.managedObjectContext;
+    [moc performBlock:^{
+        [self animateIcloud:YES];
+        [moc mergeChangesFromContextDidSaveNotification:notification];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationICloudUpdate object:notification];        
+        [self animateIcloud:NO];
+    }];
+#else 
     [managedObjectContext_ mergeChangesFromContextDidSaveNotification:notification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"iCloud update" object:notification];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationICloudUpdate object:notification];
+#endif 
 }
 
 

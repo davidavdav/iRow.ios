@@ -19,6 +19,7 @@
     NSManagedObjectContext * managedObjectContext_;
     NSManagedObjectModel *managedObjectModel_;
     NSPersistentStoreCoordinator *persistentStoreCoordinator_;
+    UIImageView * iCloudView;
 }
 
 @property (strong, nonatomic) UIWindow *window;
