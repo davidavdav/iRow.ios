@@ -11,6 +11,7 @@
 
 @protocol SelectRowerViewControllerDelegate <NSObject>
 
+@optional
 -(void)selectedRowers:(NSSet*)rowers;
 -(void)selectedCoxswain:(Rower*)rower;
 
