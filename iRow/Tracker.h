@@ -28,6 +28,7 @@
 @property (strong, nonatomic) CLLocationManager * locationManager;
 @property (strong, nonatomic) id<TrackerDelegate> delegate;
 @property (strong, nonatomic) TrackData * track;
+@property (readonly, nonatomic) float period;
 
 -(id)initWithPeriod:(double)period;
 

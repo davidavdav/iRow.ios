@@ -13,6 +13,7 @@
 @synthesize locationManager;
 @synthesize delegate;
 @synthesize track;
+@synthesize period;
 
 - (id)initWithPeriod:(double)p
 {
