@@ -6,6 +6,10 @@
 //  Copyright 2011 strApps. All rights reserved.
 //
 
+// This segmented control behaves differently from the normal one: 
+// - it generates a "value changed" event even if you press the already selected segment control
+// - it generates a "touch up inside" when touch-up happens. 
+
 #import "MySegmentedControl.h"
 
 @implementation MySegmentedControl
@@ -35,6 +39,20 @@
     [super touchesBegan:touches withEvent:event];
     if (current == self.selectedSegmentIndex) 
         [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSInteger current = self.selectedSegmentIndex;
+    [super touchesEnded:touches withEvent:event];
+    if (current == self.selectedSegmentIndex) {
+        for (UITouch * t in touches) {
+            if (CGRectContainsPoint(self.bounds, [t locationInView:self])) {
+                [self sendActionsForControlEvents:UIControlEventTouchUpInside];
+            } else {
+                [self sendActionsForControlEvents:UIControlEventTouchUpOutside];
+            }
+        }
+    }
 }
 
 @end
