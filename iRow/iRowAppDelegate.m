@@ -153,11 +153,6 @@
 	NSManagedObjectContext *managedObjectContext = self.managedObjectContext;
     if (managedObjectContext != nil) {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error]) {
-            /*
-             Replace this implementation with code to handle the error appropriately.
-             
-             abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-             */
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 			UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"I am very sorry.  An error occurred in saving data.  We suggest you close the application, removing it from running in the background as well, and re-starting it." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
@@ -181,7 +176,6 @@
     
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
-#if 1
         NSManagedObjectContext * moc = [NSManagedObjectContext alloc];
         if ([moc respondsToSelector:@selector(initWithConcurrencyType:)]) {
             [moc initWithConcurrencyType:NSMainQueueConcurrencyType];
@@ -195,10 +189,6 @@
             [moc setPersistentStoreCoordinator:coordinator];
         }
         managedObjectContext_ = moc;
-#else 
-        managedObjectContext_ = [[NSManagedObjectContext alloc] init];
-        [managedObjectContext_ setPersistentStoreCoordinator:coordinator];
-#endif
     }
     return managedObjectContext_;
 }
@@ -233,14 +223,13 @@
         return persistentStoreCoordinator_;
     }
     // this is ios 2.0 compatible...
-    NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
-	// NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"iRow.sqlite"];
+    /// NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
+	NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"iRow.sqlite"];
     
 	
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     // do this asynchronously since if this is the first time this particular device is syncing with preexisting
     // iCloud content it may take a long long time to download
-#if 1
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSDictionary * options;
         NSURL * iCloudURL;
@@ -274,57 +263,6 @@
             [self animateIcloud:NO];
         });
     });
-#else
-    NSFileManager * fm = [NSFileManager defaultManager];
-    NSDictionary *options;
-    NSURL * iCloud;
-    NSError * error;
-    BOOL iCloudAvalable = [fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloud = [fm URLForUbiquityContainerIdentifier:nil]) != nil;
-    if (iCloudAvalable) {
-        NSLog(@"%@", iCloud);
-        options = [NSDictionary dictionaryWithObjectsAndKeys:
-                    [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                    [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
-                    // these lines are for possible iCloud support
-                    @"iRow", NSPersistentStoreUbiquitousContentNameKey,
-                    iCloud, NSPersistentStoreUbiquitousContentURLKey,
-                    nil];
-    } else {
-        options = [NSDictionary dictionaryWithObjectsAndKeys:
-                   [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
-                   [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
-                   nil];
-    }
-	if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
-        /*
-         Replace this implementation with code to handle the error appropriately.
-         
-         abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. If it is not possible to recover from the error, display an alert panel that instructs the user to quit the application by pressing the Home button.
-         
-         Typical reasons for an error here include:
-         * The persistent store is not accessible;
-         * The schema for the persistent store is incompatible with current managed object model.
-         Check the error message to determine what the actual problem was.
-         
-         
-         If the persistent store is not accessible, there is typically something wrong with the file path. Often, a file URL is pointing into the application's resources directory instead of a writeable directory.
-         
-         If you encounter schema incompatibility errors during development, you can reduce their frequency by:
-         * Simply deleting the existing store:
-         [[NSFileManager defaultManager] removeItemAtURL:storeURL error:nil]
-         
-         * Performing automatic lightweight migration by passing the following dictionary as the options parameter: 
-         [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES],NSMigratePersistentStoresAutomaticallyOption, [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
-         
-         Lightweight migration will only work for a limited set of schema changes; consult "Core Data Model Versioning and Data Migration Programming Guide" for details.
-         
-         */
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-		UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"I am very sorry.  I cannot initialize the courses/tracks database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  One way out is to re-initialize the database." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Initialize",nil];
-        [alert show];
-    }
-    if (iCloudAvalable) [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];
-#endif
     return persistentStoreCoordinator_;
 }
 
@@ -336,7 +274,6 @@
 
 -(void)iCloudUpdate:(NSNotification*)notification {
     NSLog(@"iCloud triggered");
-#if 1
     NSManagedObjectContext * moc = self.managedObjectContext;
     [moc performBlock:^{
         [self animateIcloud:YES];
@@ -344,10 +281,6 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationICloudUpdate object:notification];        
         [self animateIcloud:NO];
     }];
-#else 
-    [managedObjectContext_ mergeChangesFromContextDidSaveNotification:notification];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationICloudUpdate object:notification];
-#endif 
 }
 
 
