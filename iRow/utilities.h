@@ -37,6 +37,8 @@ NSString * dispSpeed(CLLocationSpeed speed, int speedUnit, BOOL compact);
 NSString * dispMass(NSNumber * weight, BOOL unit);
 NSString * dispPower(NSNumber * power);
 
+NSString * dispMem(NSUInteger bytes);
+
 NSString * defaultName(NSString * name, NSString * def);
 
 NSFetchedResultsController * fetchedResultController(NSString * object, NSString * sortKey, BOOL ascending, NSManagedObjectContext * moc);

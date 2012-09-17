@@ -122,6 +122,19 @@ NSString * dispPower(NSNumber * power) {
     return [NSString stringWithFormat:@"%1.0f W",power.floatValue];
 }
 
+NSString * dispMem(NSUInteger bytes) {
+    if (bytes < 512)
+        return [NSString stringWithFormat:@"%d B",bytes];
+    else if (bytes < 10 * 1024)
+        return [NSString stringWithFormat:@"%3.1f kB", (float)bytes / 1024];
+    else if (bytes < 512 * 1024)
+        return [NSString stringWithFormat:@"%1.0f kB", (float)bytes / 1024];
+    else if (bytes < 10 * 1024 * 1024)
+        return [NSString stringWithFormat:@"%3.1f MB", (float)bytes / (1<<20)];
+    else
+        return [NSString stringWithFormat:@"%1.0f MB", (float)bytes / (1<<20)];
+}
+
 NSString * defaultName(NSString * name, NSString * def) {
     return (name == nil || [name isEqualToString:@""]) ? def : name;
 }
