@@ -18,6 +18,7 @@
 #define kBlockSizeSeconds (100)
 #define kBlockArrayStartsize (100)
 #define kHardwareSamplingRate (100.0)
+#define kNDimAcceldata (4)
 // #define kMaxSamples (1000)
 
 
@@ -66,5 +67,7 @@
 -(void)hundredHzSampling:(BOOL)yes;
 
 -(Vector*)accData:(NSInteger)dim;
+-(BOOL)hasAccData;
+-(NSUInteger)accDataSize;
 
 @end

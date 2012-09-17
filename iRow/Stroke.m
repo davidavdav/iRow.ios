@@ -68,7 +68,7 @@
 
         covbuffersize = lround(duration / period);
         blocksize = lround(kBlockSizeSeconds / period); // Basic unit of accelleration storage, 100s
-        acc = [[Matrix alloc] init:blocksize by:4]; // storage of acceleration information x, y, z, t
+        acc = [[Matrix alloc] init:blocksize by:kNDimAcceldata]; // storage of acceleration information x, y, z, t
         strokeData = [NSMutableArray arrayWithCapacity:kBlockArrayStartsize]; // few hours of stroke data...
         ptr = 0; // next place to be filled
         N = 0; // total number of samples in buffer
@@ -133,7 +133,7 @@
     if (ptr>=blocksize) {
         ptr = 0;
         [strokeData addObject:acc];
-        self.acc = [[Matrix alloc] init:blocksize by:4]; // should release old structure
+        self.acc = [[Matrix alloc] init:blocksize by:kNDimAcceldata]; // should release old structure
     }
     N++;
 }
@@ -198,6 +198,15 @@
 
 -(void)autoOrientationChanged:(id)sender {
     autoOrientation = Settings.sharedInstance.autoOrientation;
+}
+
+// returns the memory required by storing the accelerometer data
+-(NSUInteger)accDataSize {
+    return (strokeData.count*blocksize+ptr)*kNDimAcceldata*sizeof(real_t);
+}
+
+-(BOOL)hasAccData {
+    return self.accDataSize > 0; 
 }
 
 -(Vector*)accData:(NSInteger)dim {
