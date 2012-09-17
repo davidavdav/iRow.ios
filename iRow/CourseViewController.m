@@ -242,6 +242,7 @@
 
 
 // Override to support editing the table view.
+/*
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -252,6 +253,7 @@
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
+ */
 
 
 /*
@@ -272,6 +274,7 @@
 
 #pragma mark - Table view delegate
 
+#if 0
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here. Create and push another view controller.
@@ -282,6 +285,7 @@
      [self.navigationController pushViewController:detailViewController animated:YES];
      */
 }
+#endif
 
 #pragma mark - UITextFieldDelegate
 
