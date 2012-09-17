@@ -11,6 +11,7 @@
 #import "Settings.h"
 #import "Vector.h"
 #import "Filter.h"
+#import "MySlider.h"
 
 enum {
     kPaneMap=0,
@@ -200,8 +201,10 @@ enum {
     [super loadView];
 //    NSLog(@"%f super", CFAbsoluteTimeGetCurrent()-start);
 //    NSLog(@"%d", Settings.sharedInstance.showStrokeProfile);
-    if (Settings.sharedInstance.showStrokeProfile)
+    if (Settings.sharedInstance.showStrokeProfile) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"switch" style:UIBarButtonItemStylePlain target:self action:@selector(switchPressed:)];
+        self.navigationItem.rightBarButtonItem.enabled = stroke.hasAccData;
+    }
     CGFloat h = self.view.bounds.size.height - self.tabBarController.tabBar.bounds.size.height - self.navigationController.navigationBar.bounds.size.height;
     CGFloat w = self.view.frame.size.width;
     CGFloat hSlider = 60, hLabel = 40, hScrollView = h-hLabel-hSlider;
@@ -220,7 +223,7 @@ enum {
     mapView.delegate = self;
 //    NSLog(@"%f mapView", CFAbsoluteTimeGetCurrent()-start);
     //slider below, fixed
-    slider = [[UISlider alloc] initWithFrame:CGRectMake(10, h - hSlider, w-20, hSlider)];
+    slider = [[MySlider alloc] initWithFrame:CGRectMake(10, h - hSlider, w-20, hSlider)];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob-red"] forState:UIControlStateHighlighted];
     [slider setThumbImage:[UIImage imageNamed:@"volume-slider-fat-knob"] forState:UIControlStateNormal];
     [self.view addSubview:slider];
