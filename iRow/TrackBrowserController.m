@@ -12,6 +12,7 @@
 #import "CourseViewController.h"
 #import "TrackViewController.h"
 #import "MapViewController.h"
+#import "LoadTrackViewController.h"
 
 @implementation TrackBrowserController
 
@@ -61,6 +62,8 @@
 {
     [super viewWillAppear:animated];
     self.navigationItem.rightBarButtonItem.enabled = NO;    
+    NSError * error;
+    [frc performFetch:&error];
     [self.tableView reloadData];
 }
 
@@ -90,19 +93,30 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (frc.fetchedObjects.count == 0) return @"You can add a track by pressing 'Save Current Track' from the previous menu.";
-    else return @"You can remove tracks from the database by swiping horizontally.";
+    switch (section) {
+        case 0:
+            if (frc.fetchedObjects.count == 0) return @"You can add a track by pressing 'Save Current Track' from the previous menu.";
+            else return @"You can remove tracks from the database by swiping horizontally.";
+            break;
+        case 1:
+            return @"You can import a track though iTunes File Sharing";
+            break;
+        default:
+            break;
+    }
+    return nil;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return frc.fetchedObjects.count;
+    if (section==0) return frc.fetchedObjects.count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -113,19 +127,26 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
-    Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
-    cell.textLabel.text = defaultName(c.name, @"unnamed track");
-    cell.detailTextLabel.text = dispLength(c.distance.floatValue);
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-//    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-    
-    // Configure the cell...
-    
+    switch (indexPath.section) {
+        case 0: {
+            Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
+            cell.textLabel.text = defaultName(c.name, @"unnamed track");
+            cell.detailTextLabel.text = dispLength(c.distance.floatValue);
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        }
+        case 1: 
+            cell.textLabel.text = @"Load from iTunes";
+            cell.detailTextLabel.text = @"";
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        default:
+            break;
+    }
     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([frc.fetchedObjects objectAtIndex:indexPath.row] == Settings.sharedInstance.currentCourse) {
+    if (indexPath.section==0 && frc.fetchedObjects.count>1 && [frc.fetchedObjects objectAtIndex:indexPath.row] == Settings.sharedInstance.currentCourse) {
         cell.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     }
 }
@@ -142,6 +163,7 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section>0) return;
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
@@ -179,10 +201,23 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:tableView.indexPathForSelectedRow animated:NO];
-    TrackViewController * tvc = [[TrackViewController alloc] initWithStyle:UITableViewStyleGrouped]; 
-    tvc.track = [frc.fetchedObjects objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:tvc animated:YES];
+    switch (indexPath.section) {
+        case 0: {
+            [tableView deselectRowAtIndexPath:tableView.indexPathForSelectedRow animated:NO];
+            TrackViewController * tvc = [[TrackViewController alloc] initWithStyle:UITableViewStyleGrouped]; 
+            tvc.track = [frc.fetchedObjects objectAtIndex:indexPath.row];
+            [self.navigationController pushViewController:tvc animated:YES];
+            break;
+        }
+        case 1: {
+            LoadTrackViewController * ltvc = [[LoadTrackViewController alloc] initWithStyle:UITableViewStylePlain];
+            [self.navigationController pushViewController:ltvc animated:YES];
+            break;
+        }
+        default:
+            break;
+    }
+    
 }
 
 
