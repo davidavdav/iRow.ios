@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
+#import <MessageUI/MessageUI.h>
+
 #import "Settings.h"
 #import "Track.h"
 #import "TrackData.h"
@@ -15,8 +17,13 @@
 #import "SelectRowerViewControllerDelegate.h"
 #import "Stroke.h"
 
+enum ExportTypes {
+    kExportDBitem,
+    kExportKML
+};
 
-@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, SelectRowerViewControllerDelegate> {
+
+@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, SelectRowerViewControllerDelegate, MFMailComposeViewControllerDelegate> {
     UIBarButtonItem * leftBarItem;
     Settings * settings;
     TrackData * trackData;
@@ -29,6 +36,8 @@
     UITableViewCell * rowersCell;
     double minSpeed;
     UILabel * distanceLabel, * minSpeedLabel, * timeLabel, * aveSpeedLabel, * aveStrokeFreqLabel;
+    NSURL * exportFile;
+    enum ExportTypes exportType;
 //    UISlider * slider;
 //    BOOL sliding;
 }

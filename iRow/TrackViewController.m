@@ -13,12 +13,16 @@
 #import "InspectTrackViewController.h"
 #import "BoatBrowserController.h"
 #import "SelectRowerViewController.h"
+#import "Track+Import.h"
+#import "MySegmentedControl.h"
+#import "MySlider.h"
 
 enum {
     kSecDetail=0,
     kSecID,
     kSecStats,
-    kSecRelations
+    kSecRelations,
+    kSecExtra
 };
 
 enum {
@@ -30,7 +34,12 @@ enum {
     kTrackDate,
     kTotalMass,
     kTotalPower,
-}; 
+};
+
+enum {
+    kActionTagStrokeData = 1,
+    kActionTagTrackExport
+};
 
 // range of min speed slider, in m/s
 #define kMinSpeed (0)
@@ -112,6 +121,8 @@ enum {
             track.motion = [NSKeyedArchiver archivedDataWithRootObject:evc.stroke];
         }
         track.boat = settings.currentBoat;
+        track.date = trackData.stopLocation.timestamp;
+        track.period = [NSNumber numberWithFloat:evc.tracker.period];
     } 
     self.editing = YES;
 }
@@ -159,6 +170,7 @@ enum {
     }
     NSMutableIndexSet * is = [NSMutableIndexSet indexSetWithIndex:kSecDetail];
     [is addIndex:kSecStats];
+    [is addIndex:kSecExtra];
     [self.tableView reloadSections:is withRowAnimation:UITableViewRowAnimationTop];
 }
 
@@ -185,7 +197,7 @@ enum {
 //        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];    
         [self setRightBarButtons:YES];
         trackData = [NSKeyedUnarchiver unarchiveObjectWithData:track.track];
-        stroke = [NSKeyedUnarchiver unarchiveObjectWithData:track.motion];
+        stroke = track.motion != nil ? [NSKeyedUnarchiver unarchiveObjectWithData:track.motion] : nil;
     }
     trackData.minSpeed = minSpeed;
     [self setTitleToTrackName];
@@ -238,7 +250,7 @@ enum {
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 4;
+    return 5;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -252,10 +264,18 @@ enum {
         case kSecRelations:
             return @"Composition";
             break;
+        case kSecExtra:
+            return @"Extra";
+            break;
         default:
             break;
     }
     return nil;
+}
+
+-(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section==kSecDetail && stroke.hasAccData) return @"You can delete stroke data for this track by swiping the cell above.";
+    else return nil;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -263,16 +283,19 @@ enum {
     // Return the number of rows in the section.
     switch (section) {
         case kSecDetail:
-            return 1 * (1-editing);
+            return 1 * (!editing);
             break;
         case kSecID:
             return 2;
             break;
         case kSecStats:
-            return 8 * (1-editing);
+            return 8 * (!editing);
             break;
         case kSecRelations:
             return 3;
+            break;
+        case kSecExtra:
+            return 1*(!editing);
             break;
         default:
             break;
@@ -282,22 +305,26 @@ enum {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * CellIdentifiers[4] = {@"Cell", @"Editable", @"Sliding", @"Updateable"};
+    static NSString * CellIdentifiers[5] = {@"Cell", @"Editable", @"Sliding", @"Updateable", @"Segmented"};
     
     int celltype = indexPath.section==kSecID || (indexPath.section==kSecRelations && indexPath.row == 0);
     if (indexPath.section == kSecStats && indexPath.row == kSlider) celltype = 2;
     if (indexPath.section == kSecStats && indexPath.row < kSlider) celltype = 3;
+    if (indexPath.section == kSecExtra) celltype = 4;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifiers[celltype]];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifiers[celltype]];
     }
     cell.accessoryType = UITableViewCellAccessoryNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     switch (indexPath.section) {
         case kSecDetail:
             cell.textLabel.text = @"Inspect track";
-            cell.detailTextLabel.text = nil;
+            cell.detailTextLabel.text = (stroke.hasAccData) ? [NSString stringWithFormat:@"stroke %@",dispMem(stroke.accDataSize)] : nil ;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//            cell.accessoryView = nil; // remove iCloud picture
+            cell.selectionStyle = UITableViewCellSelectionStyleBlue;
             break;
         case kSecID: {
             UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
@@ -310,7 +337,6 @@ enum {
             textField.autocorrectionType = UITextAutocorrectionTypeNo;
             textField.clearButtonMode = editing ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
             cell.accessoryView = textField;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = @"Name";
@@ -328,6 +354,7 @@ enum {
             break;
         }
         case kSecStats:
+ //           if (indexPath.row != kSlider) cell.accessoryView = nil; // remove iCloud picture
             switch (indexPath.row) {
                 case kTrackDate:
                     cell.textLabel.text = @"Date";
@@ -369,9 +396,10 @@ enum {
                     break;
                 }
                 case kSlider: {
-                    UISlider * slider = [[UISlider alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
+                    MySlider * slider = [[MySlider alloc] initWithFrame:CGRectMake(0, 0, 200, 40)];
 //                    slider.value = log(minSpeed/kMinSpeed) / log(kMaxSpeed/kMinSpeed);
                     slider.value = (minSpeed-kMinSpeed) / (kMaxSpeed-kMinSpeed);
+                    slider.moveUpTime = 0.1;
                     cell.accessoryView = slider;
                     cell.textLabel.text = @"min";
                     cell.detailTextLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
@@ -388,7 +416,6 @@ enum {
             switch (indexPath.row) {
                 case 0: {
                     cell.textLabel.text = @"Boat";
-                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
                     UITextField * textField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 150, 22)];   
                     textField.delegate = self;
                     textField.textAlignment = UITextAlignmentRight;
@@ -398,7 +425,7 @@ enum {
                     textField.clearButtonMode = UITextFieldViewModeNever;
                     cell.accessoryView = textField;
                     textField.text = track.boat.name;
-                    textField.placeholder = @"pick a boat";
+                    textField.placeholder = editing ? @"pick a boat" : nil;
                     UIPickerView * pickerView = [[UIPickerView alloc] init];
                     pickerView.showsSelectionIndicator = YES;
                     pickerView.delegate = self;
@@ -420,9 +447,12 @@ enum {
                 }
                 case 2: {
                     cell.textLabel.text = @"Coxswain";
-                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                     cell.detailTextLabel.text = defaultName(track.coxswain.name, @"none");
-                    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                    if (editing) {
+                        cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    } else
+                        cell.accessoryType = UITableViewCellAccessoryNone;
                     break;
                 }                    
                 default:
@@ -430,7 +460,35 @@ enum {
             }
             break;
         }
-        default:
+        case kSecExtra:
+            switch (indexPath.row) {
+                case 0: {
+#if 0 
+                    cell.textLabel.text = @"Resubmit track to iCloud";
+                    cell.detailTextLabel.text = nil;
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"iCloud"]];
+                    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+                    break;
+                case 1: 
+#endif
+                    cell.textLabel.text = @"Export";
+                    cell.detailTextLabel.text = nil;
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    MySegmentedControl * segments = [[MySegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"DB item", @"KML",nil]];
+                    CGFloat margin = 5;
+                    segments.frame = CGRectMake(cell.bounds.size.width/2-margin, margin, cell.bounds.size.width/2, cell.bounds.size.height-2*margin);
+                    segments.momentary = NO;
+                    [segments addTarget:self action:@selector(exportSelected:) forControlEvents:UIControlEventTouchUpInside];
+                    [segments addTarget:self action:@selector(disableSegments:) forControlEvents:UIControlEventTouchUpOutside];
+                    cell.accessoryView = segments;
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
+        default:    
             break;
     }
     
@@ -439,7 +497,7 @@ enum {
 
 
 -(void)minSpeedChanged:(id)sender {
-    UISlider * s = (UISlider*)sender;
+    MySlider * s = (MySlider*)sender;
     // return kMaxStrokeSens * pow(kMinStrokeSens/kMaxStrokeSens,logSensitivity/kLogSensRange);
 //    minSpeed = kMinSpeed * pow(kMaxSpeed/kMinSpeed, s.value);
 //    if (minSpeed < 1.1 * kMinSpeed) minSpeed = 0;
@@ -462,28 +520,80 @@ enum {
     minSpeedLabel.text = dispSpeedOnly(minSpeed, settings.speedUnit);
 }
 
-/*
+-(void)exportSelected:(id)sender {
+    MySegmentedControl * segments = (MySegmentedControl*)sender;
+    NSURL * dir = [[[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByDeletingLastPathComponent] URLByAppendingPathComponent:@"tmp" isDirectory:YES];
+    // we can't always write in this dir?
+    //    NSURL * dir = [NSURL URLWithString:NSTemporaryDirectory()];
+    exportFile = [[dir URLByAppendingPathComponent:track.name] URLByAppendingPathExtension:segments.selectedSegmentIndex ? @"kml" : @"iRow"];
+    NSLog(@"%@", exportFile);
+    NSError * error;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[exportFile path]]) [[NSFileManager defaultManager] removeItemAtURL:exportFile error:&error];
+    BOOL success = NO;
+    switch (segments.selectedSegmentIndex) {
+        case 0: {
+            TrackExport * trackExport = [[TrackExport alloc] initWithTrack:track];
+            success = [NSKeyedArchiver archiveRootObject:trackExport toFile:[exportFile path]];
+            exportType = kExportDBitem;
+            break;
+        }
+        case 1: {
+            success = [track writeKML:exportFile];
+            exportType = kExportKML;
+            break;
+        }
+        default:
+            break;
+    }
+    if (success) {
+        UIActionSheet * a = [[UIActionSheet alloc] initWithTitle:@"Export this track using" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"iTunes import",@"email", nil];
+        a.tag = kActionTagTrackExport;
+        [a showFromTabBar:self.tabBarController.tabBar];
+    } else {
+        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, I could not save this track" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [a show];
+       
+    }
+    segments.selectedSegmentIndex = UISegmentedControlNoSegment;
+}
+
+-(void)disableSegments:(id)sender {
+    MySegmentedControl * segments = (MySegmentedControl*)sender;
+    segments.selectedSegmentIndex = -1;
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView*)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == kSecDetail)
+        return UITableViewCellEditingStyleDelete;
+    else
+        return UITableViewCellEditingStyleNone;
+}
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
-    return YES;
+    return indexPath.section == kSecDetail && track.motion != nil;
 }
-*/
 
-/*
+
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        NSLog(@"delete cell");
+        UIActionSheet * a = [[UIActionSheet alloc] initWithTitle:@"Delete the stroke acceleration data for this track? This cannot be undone." delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Delete" otherButtonTitles:nil];
+        a.tag = kActionTagStrokeData;
+        [a showFromToolbar:self.navigationController.toolbar];
+        // [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
     }   
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
@@ -526,9 +636,11 @@ enum {
                     break;
             }
             break;
- */        case kSecRelations: 
+ */      
+        case kSecRelations: 
             switch (indexPath.row) {
                 case 2: if (!editing) break; 
+                    // fall through here for editing & coxswain
                 case 1: {
                     SelectRowerViewController * srvc = [[SelectRowerViewController alloc] initWithStyle:UITableViewStylePlain];
                     if (editing) {
@@ -541,6 +653,7 @@ enum {
                         NSSortDescriptor * sd = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
                         srvc.rowers = [track.rowers sortedArrayUsingDescriptors:[NSArray arrayWithObject:sd]];
                     }
+                    if ((track.rowers.count==0) & !editing) break;
                     srvc.editing = editing;
                     srvc.delegate = self;
                     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:srvc];
@@ -549,7 +662,62 @@ enum {
                 }
                 default:
                     break;
-            } 
+            }
+            break;
+        case kSecExtra: 
+            switch (indexPath.row) {
+                case 0: {
+#if 0
+                    Track * copy = (Track*)[NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:settings.moc];
+                    copy.date = track.date;
+                    copy.distance = track.distance;
+                    copy.locality = track.locality;
+                    copy.motion = track.motion;
+                    copy.name = [NSString stringWithFormat:@"Copy of %@",track.name];
+                    copy.period = track.period;
+                    copy.strokes = track.strokes;
+                    copy.track = track.track;
+                    copy.waterway = track.waterway;
+                    copy.boat = track.boat;
+                    copy.course = track.course;
+                    copy.rowers = track.rowers;
+                    copy.coxswain = track.coxswain;
+                    NSError * error;
+                    if (![settings.moc save:&error]) {
+                        NSLog(@"Error saving changes)");
+                    } else {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"iCloud" message:@"The track has been re-submitted to iCloud, we hope this time it will appear on your other iDevices" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                        NSLog(@"copy of track saved %@", copy);
+                    }
+                    break;
+                }
+                case 1: {
+#endif
+                    NSURL * dir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+#if 0 
+                    NSString * file = [[[dir URLByAppendingPathComponent:track.name] URLByAppendingPathExtension:@"iRowTrack"] path];
+                    NSLog(@"%@", file);
+                    TrackExport * trackExport = [[TrackExport alloc] initWithTrack:track];
+                    if ([NSKeyedArchiver archiveRootObject:trackExport toFile:file]) {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"The track is saved and can be accessed through iTunes File Sharing" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                    } else {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, I could not save this track" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                    }
+#else 
+                    NSURL * file = [[dir URLByAppendingPathComponent:track.name] URLByAppendingPathExtension:@"kml"];
+                    NSLog(@"%@", track.date);
+//                    TrackExport * trackExport = [[TrackExport alloc] initWithTrack:track];
+                    [track writeKML:file];
+#endif
+                    break;
+                }
+                default:
+                    break;
+            }
+            break;
         default:
             break;
     }
@@ -569,7 +737,8 @@ enum {
         return 40;
 }
 */
-#pragma mark UITextFieldDelegte
+
+#pragma mark  - UITextFieldDelegte
 
 // this make return remove the keyboard
 
@@ -594,7 +763,7 @@ enum {
     }
 }
 
-#pragma mark UIPickerViewDelegate
+#pragma mark - UIPickerViewDelegate
 
 // we encode row = #boats for "unknown" option.
 
@@ -608,7 +777,7 @@ enum {
     boatTextView.text = track.boat.name;
 }
 
-#pragma mark UIPickerViewDataSource
+#pragma mark - UIPickerViewDataSource
 
 -(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
     return 1;
@@ -618,7 +787,7 @@ enum {
     return frcBoats.fetchedObjects.count+1;
 }
 
-#pragma mark SelectRowerViewControllerDelegate
+#pragma mark - SelectRowerViewControllerDelegate
 
 -(void)selectedRowers:(NSSet *)rowers {
     track.rowers = rowers;
@@ -629,5 +798,78 @@ enum {
     track.coxswain = rower;
     [self.tableView reloadData];
 }
+
+#pragma mark - UIActioSheetDelegate
+
+// these are all the action sheets in this view
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    switch (actionSheet.tag) {
+        case kActionTagTrackExport: {
+            NSFileManager * fm = [NSFileManager defaultManager];
+            NSError * error;
+            switch (buttonIndex) {
+                case 0: {
+                    NSURL * dest = [[[fm URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[exportFile lastPathComponent]];
+                    NSLog(@"%@", dest);
+                    if ([fm fileExistsAtPath:[dest path]]) [fm removeItemAtURL:dest error:&error];
+                    if ([fm moveItemAtURL:exportFile toURL:dest error:&error]) {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Saved" message:@"The track is saved and can be accessed through iTunes File Sharing" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                    } else {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, I could not save this track" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                    }
+                    break;
+                }
+                case 1: {
+                    if (![MFMailComposeViewController canSendMail]) {
+                        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, this device has not been set up to send mail" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                        [a show];
+                    }
+                    MFMailComposeViewController * mcvc = [[MFMailComposeViewController alloc] init];
+                    mcvc.mailComposeDelegate = self;
+                    [mcvc setSubject:[NSString stringWithFormat:@"Row Track %@", track.name]];
+                    [mcvc setToRecipients:[NSArray arrayWithObject:[NSString stringWithFormat:@"%@ <%@>",settings.user.name, settings.user.email]]];
+                    NSData * data = [NSData dataWithContentsOfURL:exportFile];
+                    NSString * mimeType = exportType==kExportDBitem ? @"application/vnd.strapps-irow.track" : @"application/vnd.google-earth.kml+xml";
+                    [mcvc addAttachmentData:data mimeType:mimeType fileName:[exportFile lastPathComponent]];
+                    //    if ([self respondsToSelector:@selector(presentModalViewController:animated:completion:)]) {
+                    //        [self presentModalViewController:mcvc animated:YES completion:^{}];
+                    //    } else {
+                    [self presentModalViewController:mcvc animated:YES];
+                    //    }
+                    break;
+                }
+                case 2:
+                    [fm removeItemAtURL:exportFile error:&error];
+                    break;
+                default:
+                    break;
+            } // buttonIndex
+            break;
+        } // TagTrackExport
+        case kActionTagStrokeData: {
+            if (buttonIndex==0) {
+                track.motion = nil; // releases the data (I hope).
+                [(iRowAppDelegate*)[[UIApplication sharedApplication] delegate] saveContext];
+                stroke = nil; // reflect the fact our stoke data is nil
+                [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:kSecDetail] withRowAnimation:UITableViewRowAnimationFade];
+            }
+            break;
+        }
+        default:
+            break;
+    } // actionSheet.tag
+}
+
+#pragma mark - MFMailComposeViewControllerDelegate
+
+-(void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    if (result == MFMailComposeResultFailed) 
+		[[[UIAlertView alloc] initWithTitle:@"Error" message:@"I am sorry, an error occurred in sending the track" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+	[self dismissModalViewControllerAnimated:YES];
+}
+
+
 
 @end
