@@ -23,6 +23,9 @@
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];
         courseData = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] courseData];
+        es = [[ExportSelector alloc] init];
+        es.viewController = self;
+        es.recipients = [NSArray arrayWithObject:[NSString stringWithFormat:@"%@ <%@>",settings.user.name, settings.user.email]];
 //        course = settings.currentCourse;
 //        [self editPressed:self];
     }
@@ -32,6 +35,7 @@
 // if the course is set, we should update our copy of the courseData
 -(void)setCourse:(Course *)c {
     course=c;
+    es.item = course;
     if (c!=nil && c.course != nil) {
         courseData = [NSKeyedUnarchiver unarchiveObjectWithData:c.course];
     }
@@ -43,6 +47,7 @@
     [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
     if (course == nil) {
         course = (Course*)[NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:settings.moc];
+        course.date = [NSDate date];
         if (courseData) {
             course.course = [NSKeyedArchiver archivedDataWithRootObject:courseData];
             course.waterway = courseData.waterway;
@@ -80,11 +85,14 @@
 -(void)setEditing:(BOOL)e {
     editing = e;
     for (UITableViewCell * c in self.tableView.visibleCells) {
-        UITextField * tf = (UITextField*)c.accessoryView;
-        tf.enabled = e;
-        tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
-        tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
-    } 
+        if ([c.accessoryView isKindOfClass:[UITextField class]]) {
+            UITextField * tf = (UITextField*)c.accessoryView;
+            tf.enabled = e;
+            tf.clearButtonMode = e ? UITextFieldViewModeAlways : UITextFieldViewModeNever;
+            tf.borderStyle = editing ? UITextBorderStyleRoundedRect : UITextBorderStyleNone;
+        }
+    }
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)didReceiveMemoryWarning
@@ -123,6 +131,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -151,7 +160,7 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -163,6 +172,8 @@
             break;
         case 1:
             return 2;
+        case 2:
+            return !editing;
         default:
             break;
     }
@@ -222,6 +233,16 @@
                 default:
                     break;
             }
+            break;
+        case 2: {
+            cell.textLabel.text = @"Export";
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            cell.accessoryView = es.segmentedControl;
+            CGFloat margin = 5;
+            es.segmentedControl.frame = CGRectMake(cell.bounds.size.width/2-margin, margin, cell.bounds.size.width/2, cell.bounds.size.height-2*margin);
+            break;
+        }
         default:
             break;
     }

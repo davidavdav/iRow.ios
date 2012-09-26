@@ -10,6 +10,8 @@
 #import "MapViewController.h"
 #import "Course.h"
 #import "Settings.h"
+#import "ExportSelector.h"
+
 
 @interface CourseViewController : UITableViewController <UITextFieldDelegate> {
     UIBarButtonItem * leftBarItem;
@@ -17,6 +19,7 @@
     Course * course;
     CourseData * courseData;
     BOOL editing;
+    ExportSelector * es;
 //    NSString * name;
 //    NSString * waterway;
 }
