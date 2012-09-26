@@ -16,14 +16,9 @@
 #import "ErgometerViewController.h"
 #import "SelectRowerViewControllerDelegate.h"
 #import "Stroke.h"
+#import "ExportSelector.h"
 
-enum ExportTypes {
-    kExportDBitem,
-    kExportKML
-};
-
-
-@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, SelectRowerViewControllerDelegate, MFMailComposeViewControllerDelegate> {
+@interface TrackViewController : UITableViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UIActionSheetDelegate, SelectRowerViewControllerDelegate> {
     UIBarButtonItem * leftBarItem;
     Settings * settings;
     TrackData * trackData;
@@ -36,10 +31,7 @@ enum ExportTypes {
     UITableViewCell * rowersCell;
     double minSpeed;
     UILabel * distanceLabel, * minSpeedLabel, * timeLabel, * aveSpeedLabel, * aveStrokeFreqLabel;
-    NSURL * exportFile;
-    enum ExportTypes exportType;
-//    UISlider * slider;
-//    BOOL sliding;
+    ExportSelector * exportSelector;
 }
 
 @property (strong, nonatomic) Track * track;
