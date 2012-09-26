@@ -8,6 +8,7 @@
 
 #import "iRowAppDelegate.h"
 #import "OptionsViewController.h"
+#import "LoadDBViewController.h"
 
 #import "Settings.h"
 
@@ -20,6 +21,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    NSLog(@"Launch options %@", launchOptions);
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     ergometerViewController = [[ErgometerViewController alloc] initWithNibName:@"ErgometerViewController" bundle:nil];
@@ -37,10 +39,11 @@
     iCloudView.alpha = 1;
     [self.tabBarController.tabBar addSubview:iCloudView];
 
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(persistentStoreReady:) name:kNotificationPersistentStoreSetup object:nil];
-    // deal with old bundle...
-    NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"]; // May contain Root.plist and en.lproj
+    /*
+    // deal with old settings bundle...
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingsChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
+     NSString *settingsBundle = [[NSBundle mainBundle] pathForResource:@"Settings" ofType:@"bundle"]; // May contain Root.plist and en.lproj
     BOOL dir;
     // remove old settings bundle
     if ([[NSFileManager defaultManager] fileExistsAtPath:settingsBundle isDirectory:&dir] && dir) {
@@ -53,6 +56,11 @@
             [a show];
         }
     }
+     */
+    // empty inbox
+    NSURL * inbox = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Inbox" isDirectory:YES];
+    NSError * error;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:inbox.path]) [[NSFileManager defaultManager] removeItemAtURL:inbox error:&error];
     return YES;
 }
 
@@ -237,7 +245,7 @@
         NSError * error = nil;
         if ([fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloudURL = [fm URLForUbiquityContainerIdentifier:nil]) != nil) {
             NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
-            NSLog(@"ubiquity URL %@: %@", iCloudURL, [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[iCloudURL path] error:&error]);
+//            NSLog(@"ubiquity URL %@: %@", iCloudURL, [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[iCloudURL path] error:&error]);
             options = [NSDictionary dictionaryWithObjectsAndKeys:
                        [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
                        [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
@@ -314,5 +322,15 @@
 	return dir;
 }
 
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    NSLog(@"got URL %@ from %@", url, sourceApplication);
+    self.tabBarController.selectedIndex = 2;
+    LoadDBViewController * ldbvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    ldbvc.URL = url;
+    UINavigationController * nav = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:2];
+    nav.topViewController.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonSystemItemCancel target:nil action:nil];
+    [nav pushViewController:ldbvc animated:YES];
+    return YES;
+}
 
 @end
