@@ -12,7 +12,7 @@
 #import "CourseViewController.h"
 #import "TrackViewController.h"
 #import "MapViewController.h"
-#import "LoadTrackViewController.h"
+#import "LoadDBViewController.h"
 
 @implementation TrackBrowserController
 
@@ -210,7 +210,8 @@
             break;
         }
         case 1: {
-            LoadTrackViewController * ltvc = [[LoadTrackViewController alloc] initWithStyle:UITableViewStylePlain];
+            LoadDBViewController * ltvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            ltvc.type = @"Track";
             [self.navigationController pushViewController:ltvc animated:YES];
             break;
         }
