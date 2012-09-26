@@ -7,11 +7,9 @@
 //
 
 #import "Track.h"
-#import "TrackExport.h"
 
-@interface Track (Import)
+@interface Track (Import) <NSCoding>
 
--(void)importFrom:(TrackExport*)orig;
 -(BOOL)writeKML:(NSURL *)file;
 
 @end
