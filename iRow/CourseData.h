@@ -1,5 +1,5 @@
 //
-//  Course.h
+//  CourseData.h
 //  iRow
 //
 //  Created by David van Leeuwen on 26-09-11.
