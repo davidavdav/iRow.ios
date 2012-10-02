@@ -180,6 +180,23 @@
     return 0;
 }
 
+-(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return @"Identification";
+            break;
+        case 1:
+            return @"Statistics";
+            break;
+        case 2:
+            return @"Extra";
+            break;
+        default:
+            break;
+    }
+    return nil;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * cellIdentifiers[2] = { @"Editable",@"Cell"};  
