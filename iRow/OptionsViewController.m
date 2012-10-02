@@ -19,15 +19,18 @@
 #import "RowerBrowserController.h"
 #import "BoatBrowserController.h"
 #import "utilities.h"
+#import "LoadDBViewController.h"
+#import "SaveDBViewController.h"
 
 
-#define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats"
+#define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats", @"Import/Export"
 enum {
     kSectionTrack=0,
     kSectionCourse,
     kSectionHelp, 
     kSectionRowers, 
     kSectionBoats,
+    kSectionExport
 } sectionNumbers;
 
 @implementation OptionsViewController
@@ -133,6 +136,8 @@ enum {
             return 2;
         case kSectionBoats:
             return 1;
+        case kSectionExport:
+            return 2;
         default:
             break;
     }
@@ -189,6 +194,9 @@ enum {
         case kSectionBoats:
             cell.textLabel.text = @"Boat";
             cell.detailTextLabel.text = Settings.sharedInstance.currentBoat.name;
+            break;
+        case kSectionExport:
+            cell.textLabel.text = indexPath.row==0 ? @"Import items from iTunes" : @"Export database";
             break;
         default:
             break;
@@ -330,6 +338,24 @@ enum {
             BoatBrowserController * bbc = [[BoatBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:bbc animated:YES];
             break;
+        }
+        case kSectionExport:
+            switch (indexPath.row) {
+                case 0: {
+                    LoadDBViewController * ldbvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:ldbvc animated:YES];
+                    break;
+                }
+                case 1: {
+                    SaveDBViewController * sdbvc = [[SaveDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    sdbvc.preSelect = YES;
+                    [self.navigationController pushViewController:sdbvc animated:YES];
+                    break;
+                }
+                default:
+                    break;
+            }{
+            
         }
         default:
             break;
