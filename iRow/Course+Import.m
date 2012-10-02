@@ -13,27 +13,36 @@
 #import "RelativeDate.h"
 #import "utilities.h"
 
+#define kdate @"date"
+#define kcourse @"course"
+#define kdistance @"distance"
+#define kname @"name"
+#define kwaterway @"waterway"
+
+#define decode(x) self.x = [dec decodeObjectForKey:k ## x]
+#define encode(x) [enc encodeObject:self.x forKey:k ## x]
+
 @implementation Course (Import)
 
 -(Course*)initWithCoder:(NSCoder*)dec {
     self = (Course*)[NSEntityDescription insertNewObjectForEntityForName:@"Course" inManagedObjectContext:Settings.sharedInstance.moc];
     if (self) {
-        self.date = [dec decodeObjectForKey:@"date"];
-        self.course = [dec decodeObjectForKey:@"course"];
-        self.distance = [dec decodeObjectForKey:@"distance"];
-        self.name = [dec decodeObjectForKey:@"name"];
-        self.waterway = [dec decodeObjectForKey:@"waterway"];
+        decode(date);
+        decode(course);
+        decode(distance);
+        decode(name);
+        decode(waterway);
     }
     return self;
 }
 
 // not encoding other Core Data objecs: boat, rowers, coxswain, course
 -(void)encodeWithCoder:(NSCoder *)enc {
-    [enc encodeObject:self.date forKey:@"date"];
-    [enc encodeObject:self.course forKey:@"course"];
-    [enc encodeObject:self.distance forKey:@"distance"];
-    [enc encodeObject:self.name forKey:@"name"];
-    [enc encodeObject:self.waterway forKey:@"waterway"];
+    encode(date);
+    encode(course);
+    encode(distance);
+    encode(name);
+    encode(waterway);
 }
 
 // This is really an export function, I wil have to rename the class...
@@ -44,8 +53,8 @@
     [x writeStartElement:@"kml"]; {
         [x writeAttribute:@"xmlns" value:@"http://www.opengis.net/kml/2.2"];
         [x writeStartElement:@"Document"]; {
-            [x writeFullElement:@"name" data:self.name];
-            [x writeFullElement:@"description" data:self.waterway];
+            [x writeFullElement:@"name" data:defaultName(self.name, @"Course")];
+            if (self.waterway) [x writeFullElement:@"description" data:self.waterway];
             [x writeStartElement:@"Style"]; {
                 [x writeAttribute:@"id" value:@"trackStyle"];
                 [x writeStartElement:@"LineStyle"];
@@ -56,7 +65,7 @@
             [x writeEndElement]; // Style
             [x writeStartElement:@"Placemark"]; {
                 NSDate * date = self.date!=nil ? self.date : [NSDate date];
-                [x writeFullElement:@"name" data:self.waterway];
+                [x writeFullElement:@"name" data:defaultName(self.waterway, @"Unknown waterway")];
                 [x writeStartElement:@"description"]; {
                     NSString * cdata = [NSString stringWithFormat:@"<p>Distance: %@<br>Date: %@<br>Number of pins: %d</p>",dispLength(self.distance.floatValue),[date mediumshortDateTime], courseData.annotations.count];
                     [x writeCData:cdata];
