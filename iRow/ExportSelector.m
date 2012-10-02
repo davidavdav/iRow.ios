@@ -15,6 +15,7 @@
 @synthesize item;
 @synthesize viewController;
 @synthesize recipients;
+@synthesize exportFile, itemType;
 
 -(id)init {
     self = [super init];
@@ -82,22 +83,22 @@
     NSFileManager * fm = [NSFileManager defaultManager];
     NSError * error;
     switch (buttonIndex) {
-        case 0: {
+        case 0: { // iTunes
             NSURL * dest = [[[fm URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[exportFile lastPathComponent]];
 //            NSLog(@"%@", dest);
             if ([fm fileExistsAtPath:[dest path]]) [fm removeItemAtURL:dest error:&error];
             if ([fm moveItemAtURL:exportFile toURL:dest error:&error]) {
-                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Saved" message:[NSString stringWithFormat:@"The %@ is saved and can be accessed through iTunes File Sharing",itemType] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Saved" message:[NSString stringWithFormat:@"The %@ is saved as “%@” and can be accessed through iTunes File Sharing",itemType,exportFile.lastPathComponent] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [a show];
             } else {
-                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Sorry, I could not save this %@",itemType] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Sorry, I could not save this %@",itemType] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [a show];
             }
             break;
         }
-        case 1: {
+        case 1: { // e-mail
             if (![MFMailComposeViewController canSendMail]) {
-                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, this device has not been set up to send mail" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, this device has not been set up to send mail" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                 [a show];
             }
             MFMailComposeViewController * mcvc = [[MFMailComposeViewController alloc] init];
@@ -124,8 +125,14 @@
     if (result == MFMailComposeResultFailed)
 		[[[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"I am sorry, an error occurred in sending the %@",itemType] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 	[viewController dismissModalViewControllerAnimated:YES];
+    [viewController.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - UIAlertViewDelegate
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [viewController.navigationController popViewControllerAnimated:YES];
+}
 
 
 

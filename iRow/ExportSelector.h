@@ -16,7 +16,7 @@ enum ExportTypes {
     kExportKML
 };
  
-@interface ExportSelector : NSObject <UIActionSheetDelegate, MFMailComposeViewControllerDelegate> {
+@interface ExportSelector : NSObject <UIActionSheetDelegate, MFMailComposeViewControllerDelegate, UIAlertViewDelegate> {
     MySegmentedControl * segmentedControl;
     NSURL * exportFile;
     id item;
@@ -30,5 +30,7 @@ enum ExportTypes {
 @property (strong, nonatomic) id item;
 @property (strong, nonatomic) UIViewController * viewController;
 @property (strong, nonatomic) NSArray * recipients;
+@property (strong, nonatomic) NSURL * exportFile;
+@property (strong, nonatomic) NSString * itemType;
 
 @end
