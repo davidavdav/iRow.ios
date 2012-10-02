@@ -10,6 +10,8 @@
 #import "DBExport.h"
 #import "Settings.h"
 
+#define kTypes @"Track",@"Course",@"Rower", @"Boat"
+
 @interface LoadDBViewController ()
 
 @end
@@ -19,13 +21,14 @@
 @synthesize URL;
 @synthesize type;
 @synthesize dict;
+@synthesize preSelect;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
     if (self) {
         types = [NSMutableArray arrayWithCapacity:4];
-        self.title = @"Select items";
+        self.title = @"Load items";
         // Custom initialization
     }
     return self;
@@ -76,12 +79,13 @@
         [[[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
     }
     // now copy the data structure
-    for (NSString * t in dict.allKeys) [types addObject:t];
+    NSArray * orderedTypes = [NSArray arrayWithObjects:kTypes, nil];
+    for (NSString * t in orderedTypes) if ([dict objectForKey:t] != nil) [types addObject:t];
     selected = calloc(types.count, sizeof(BOOL*));
     for (int i=0; i<types.count; i++) {
         int N = [[dict objectForKey:[types objectAtIndex:i]] count];
         selected[i] = calloc(N, sizeof(BOOL));
-        for (int j=0; j<N; j++) selected[i][j] = YES;
+        for (int j=0; j<N; j++) selected[i][j] = preSelect;
     }
     
     
@@ -91,7 +95,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     loadButton = [[UIBarButtonItem alloc] initWithTitle:@"Load" style:UIBarButtonItemStyleDone target:self action:@selector(loadSelected:)];
     [self.navigationItem setRightBarButtonItem:loadButton animated:YES];
-    loadButton.enabled = types.count>0;
+    loadButton.enabled = preSelect;
 }
 
 -(void)dealloc {
