@@ -14,36 +14,49 @@
 #import "utilities.h"
 #import "Stroke.h"
 
+#define kdate @"date"
+#define kdistance @"distance"
+#define klocality @"locality"
+#define kmotion @"motion"
+#define kname @"name"
+#define kperiod @"period"
+#define kstrokes @"strokes"
+#define ktrack @"track"
+#define kwaterway @"waterway"
+
+#define decode(x) self.x = [dec decodeObjectForKey:k ## x]
+#define encode(x) [enc encodeObject:self.x forKey:k ## x]
+
 @implementation Track (Import)
 
 -(Track*)initWithCoder:(NSCoder*)dec {
 //    NSLog(@"Track initWithCoder");
     self = (Track*)[NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:Settings.sharedInstance.moc];
     if (self) {
-        self.date = [dec decodeObjectForKey:@"date"];
-        self.distance = [dec decodeObjectForKey:@"distance"];
-        self.locality = [dec decodeObjectForKey:@"locality"];
-        self.motion = [dec decodeObjectForKey:@"motion"];
-        self.name = [dec decodeObjectForKey:@"name"];
-        self.period = [dec decodeObjectForKey:@"period"];
-        self.strokes = [dec decodeObjectForKey:@"strokes"];
-        self.track = [dec decodeObjectForKey:@"track"];
-        self.waterway = [dec decodeObjectForKey:@"waterway"];
+        decode(date);
+        decode(distance);
+        decode(locality);
+        decode(motion);
+        decode(name);
+        decode(period);
+        decode(strokes);
+        decode(track);
+        decode(waterway);
     }
     return self;
 }
 
 // not encoding other Core Data objecs: boat, rowers, coxswain, course
 -(void)encodeWithCoder:(NSCoder *)enc {
-    [enc encodeObject:self.date forKey:@"date"];
-    [enc encodeObject:self.distance forKey:@"distance"];
-    [enc encodeObject:self.locality forKey:@"locality"];
-    [enc encodeObject:self.motion forKey:@"motion"];
-    [enc encodeObject:self.name forKey:@"name"];
-    [enc encodeObject:self.period forKey:@"period"];
-    [enc encodeObject:self.strokes forKey:@"strokes"];
-    [enc encodeObject:self.track forKey:@"track"];
-    [enc encodeObject:self.waterway forKey:@"waterway"];
+    encode(date);
+    encode(distance);
+    encode(locality);
+    encode(motion);
+    encode(name);
+    encode(period);
+    encode(strokes);
+    encode(track);
+    encode(waterway);
 }
 
 // This is really an export function, I wil have to rename the class...
