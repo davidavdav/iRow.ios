@@ -13,6 +13,7 @@
 #import "TrackViewController.h"
 #import "MapViewController.h"
 #import "LoadDBViewController.h"
+#import "SaveDBViewController.h"
 
 @implementation TrackBrowserController
 
@@ -103,7 +104,7 @@
             else return @"You can remove tracks from the database by swiping horizontally.";
             break;
         case 1:
-            return @"You can import a track though iTunes File Sharing";
+            return @"You can import/export a track through iTunes File Sharing or e-mail";
             break;
         default:
             break;
@@ -116,7 +117,7 @@
 {
     // Return the number of rows in the section.
     if (section==0) return frc.fetchedObjects.count;
-    return 1;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,8 +137,9 @@
             break;
         }
         case 1: 
-            cell.textLabel.text = @"Load from iTunes";
-            cell.detailTextLabel.text = @"";
+            if (indexPath.row==0)cell.textLabel.text = @"Import from iTunes";
+            else cell.textLabel.text = @"Export track";
+            cell.detailTextLabel.text = nil;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         default:
             break;
@@ -145,12 +147,14 @@
     return cell;
 }
 
+/*
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section==0 && frc.fetchedObjects.count>1 && [frc.fetchedObjects objectAtIndex:indexPath.row] == Settings.sharedInstance.currentCourse) {
         cell.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
     }
 }
-
+*/
+ 
 /*
  // Override to support conditional editing of the table view.
  - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -209,16 +213,28 @@
             [self.navigationController pushViewController:tvc animated:YES];
             break;
         }
-        case 1: {
-            LoadDBViewController * ltvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            ltvc.type = @"Track";
-            [self.navigationController pushViewController:ltvc animated:YES];
-            break;
-        }
+        case 1:
+            switch (indexPath.row) {
+                case 0: {
+                    LoadDBViewController * ldbvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    ldbvc.type = @"Track";
+                    ldbvc.preSelect = NO;
+                    [self.navigationController pushViewController:ldbvc animated:YES];
+                    break;
+                }
+                case 1: {
+                    SaveDBViewController * sdbvc = [[SaveDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    sdbvc.type = @"Track";
+                    sdbvc.preSelect = YES;
+                    [self.navigationController pushViewController:sdbvc animated:YES];
+                    break;
+                }
+                default:
+                    break;
+            }
         default:
             break;
     }
-    
 }
 
 
