@@ -12,6 +12,8 @@
 #import "CourseViewController.h"
 #import "TrackViewController.h"
 #import "MapViewController.h"
+#import "SaveDBViewController.h"
+#import "LoadDBViewController.h"
 
 @implementation CourseBrowserController
 
@@ -59,7 +61,9 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.navigationItem.rightBarButtonItem.enabled = NO;    
+    self.navigationItem.rightBarButtonItem.enabled = NO;
+    NSError * error;
+    [frc performFetch:&error];
     [self.tableView reloadData];
 }
 
@@ -101,12 +105,21 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return 2;
 }
 
 -(NSString*)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (frc.fetchedObjects.count == 0) return @"You can add courses from the Map view by pressing the course button.";
-    else return @"You can remove courses from the database by swiping horizontally.  You can clear a course from the Map view by swiping the active course button.";
+    switch (section) {
+        case 0:
+            if (frc.fetchedObjects.count == 0) return @"You can add courses from the Map view by pressing the course button.";
+            else return @"You can remove courses from the database by swiping horizontally.  You can clear a course from the Map view by swiping the active course button.";
+            break;
+        case 1:
+            return @"You can import/export a course through iTunes File Sharing or e-mail";
+        default:
+            break;
+    }
+    return nil;
 }
 
 
@@ -114,7 +127,16 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return frc.fetchedObjects.count;
+    switch (section) {
+        case 0:
+            return frc.fetchedObjects.count;
+            break;
+        case 1:
+            return 2;
+        default:
+            break;
+    }
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -125,10 +147,22 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
-    Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
-    cell.textLabel.text = defaultName(c.name, @"unnname course");
-    cell.detailTextLabel.text = dispLength(c.distance.floatValue);
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    switch (indexPath.section) {
+        case 0: {
+            Course * c = [frc.fetchedObjects objectAtIndex:indexPath.row];
+            cell.textLabel.text = defaultName(c.name, @"unnamed course");
+            cell.detailTextLabel.text = dispLength(c.distance.floatValue);
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+            break;
+        }
+        case 1: {
+            cell.textLabel.text = indexPath.row==0 ? @"Import from iTunes" : @"Export course";
+            cell.detailTextLabel.text = nil;
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        default:
+            break;
+    }
     
     // Configure the cell...
     
@@ -136,9 +170,11 @@
 }
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([frc.fetchedObjects objectAtIndex:indexPath.row] == Settings.sharedInstance.currentCourse) {
-        cell.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
-    }
+    if (indexPath.section==0) {
+        if ([frc.fetchedObjects objectAtIndex:indexPath.row] == Settings.sharedInstance.currentCourse) {
+            cell.backgroundColor = [UIColor colorWithWhite:0.9 alpha:1];
+        }
+}
 }
 
 /*
@@ -190,8 +226,30 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    selected = indexPath;
-    self.navigationItem.rightBarButtonItem.enabled = YES;
+    switch (indexPath.section) {
+        case 0:
+            selected = indexPath;
+            self.navigationItem.rightBarButtonItem.enabled = YES;
+            break;
+        case 1: switch (indexPath.row) {
+            case 0: {
+                LoadDBViewController * ldbvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                ldbvc.type = @"Course";
+                ldbvc.preSelect = NO;
+                [self.navigationController pushViewController:ldbvc animated:YES];
+                break;
+            }
+            case 1: {
+                SaveDBViewController * sdbvc = [[SaveDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                sdbvc.type = @"Course";
+                sdbvc.preSelect = YES;
+                [self.navigationController pushViewController:sdbvc animated:YES];
+                break;
+            }
+        default:
+            break;
+        }
+    }
 }
 
 -(void)tableView:(UITableView*)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath*)indexPath {
