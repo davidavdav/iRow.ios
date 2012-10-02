@@ -8,13 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		6308E30A1469F721006CF5D8 /* CourseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 6308E3091469F721006CF5D8 /* CourseData.m */; };
+		6313AC8B161A2D9F00A4BFEB /* Rower+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 6313AC8A161A2D9F00A4BFEB /* Rower+Import.m */; };
+		6313AC8F161A4E5300A4BFEB /* ProgressBezel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6313AC8E161A4E5300A4BFEB /* ProgressBezel.m */; };
+		6313AC92161ADA6F00A4BFEB /* WaitBezel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6313AC91161ADA6F00A4BFEB /* WaitBezel.m */; };
 		63157C06144B50250057E1D7 /* MySegmentedControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C05144B50250057E1D7 /* MySegmentedControl.m */; };
 		63157C15144B6C2B0057E1D7 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63157C14144B6C2A0057E1D7 /* InfoViewController.m */; };
 		63157C17144B6DDD0057E1D7 /* info.html in Resources */ = {isa = PBXBuildFile; fileRef = 63157C16144B6DDD0057E1D7 /* info.html */; };
 		63157C19144B910E0057E1D7 /* UIButtonBarInfoDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */; };
 		6316B84D146A74AD00DF48CB /* CourseBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B84C146A74AD00DF48CB /* CourseBrowserController.m */; };
 		6316B84F146AE6C800DF48CB /* CourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B84E146AE6C800DF48CB /* CourseViewController.m */; };
-		6316B85C1470049A00DF48CB /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B85B1470049A00DF48CB /* TrackViewController.m */; };
+		6316B85C1470049A00DF48CB /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B85B1470049A00DF48CB /* - files */; };
 		6316B8651470246200DF48CB /* RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B8641470246100DF48CB /* RelativeDate.m */; };
 		6316B8681471838F00DF48CB /* TrackBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B8671471838F00DF48CB /* TrackBrowserController.m */; };
 		6316B86B14718E4E00DF48CB /* InspectTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B86A14718E4E00DF48CB /* InspectTrackViewController.m */; };
@@ -36,6 +39,7 @@
 		632D8E1F1612DFE40092F884 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632D8E1E1612DFE40092F884 /* Default-568h@2x.png */; };
 		632D8E2B1612FB7E0092F884 /* ExportSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2A1612FB7D0092F884 /* ExportSelector.m */; };
 		632D8E2E161313930092F884 /* Course+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2D161313930092F884 /* Course+Import.m */; };
+		6330DBF61613781700923BFF /* SaveDBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6330DBF51613781700923BFF /* SaveDBViewController.m */; };
 		63351FCB14682547000E759A /* RowerBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FCA14682547000E759A /* RowerBrowserController.m */; };
 		63351FD8146878E6000E759A /* MyDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FD7146878E5000E759A /* MyDatePicker.m */; };
 		634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F68142647270001BF57 /* CoreLocation.framework */; };
@@ -53,6 +57,7 @@
 		6354A90A142C7EC800562991 /* stop-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 6354A908142C7EC800562991 /* stop-button-highlight.png */; };
 		63561162144CC67D005A90E2 /* help-start-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561161144CC67D005A90E2 /* help-start-button.png */; };
 		63561166144CCD36005A90E2 /* help-map.png in Resources */ = {isa = PBXBuildFile; fileRef = 63561165144CCD36005A90E2 /* help-map.png */; };
+		6356D5141619646100653F08 /* Boat+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356D5131619646100653F08 /* Boat+Import.m */; };
 		635C332B1461CCAC007C273F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635C332A1461CCAC007C273F /* CoreData.framework */; };
 		635C332F1461CCF0007C273F /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 635C332D1461CCF0007C273F /* OptionsViewController.m */; };
 		635C33321461CDB1007C273F /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 635C33301461CDB1007C273F /* DataModel.xcdatamodeld */; };
@@ -64,6 +69,7 @@
 		637052F2144CDB80004B25A0 /* help-UIButtonBarContactAdd.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */; };
 		637052F4144CDD58004B25A0 /* help-course-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F3144CDD58004B25A0 /* help-course-selected.png */; };
 		637052F6144CE137004B25A0 /* help-finish.png in Resources */ = {isa = PBXBuildFile; fileRef = 637052F5144CE137004B25A0 /* help-finish.png */; };
+		637A822B161B513C00002ED1 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 637A822A161B513C00002ED1 /* MBProgressHUD.m */; };
 		637AAA91147BC5B300B60976 /* Plot.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8C147BC5B200B60976 /* Plot.m */; };
 		637AAA92147BC5B300B60976 /* PlotArea.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA8E147BC5B200B60976 /* PlotArea.m */; };
 		637AAA93147BC5B300B60976 /* PlotAxis.m in Sources */ = {isa = PBXBuildFile; fileRef = 637AAA90147BC5B200B60976 /* PlotAxis.m */; };
@@ -126,6 +132,12 @@
 /* Begin PBXFileReference section */
 		6308E3081469F721006CF5D8 /* CourseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CourseData.h; sourceTree = "<group>"; };
 		6308E3091469F721006CF5D8 /* CourseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CourseData.m; sourceTree = "<group>"; };
+		6313AC89161A2D9F00A4BFEB /* Rower+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Rower+Import.h"; sourceTree = "<group>"; };
+		6313AC8A161A2D9F00A4BFEB /* Rower+Import.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Rower+Import.m"; sourceTree = "<group>"; };
+		6313AC8D161A4E5300A4BFEB /* ProgressBezel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBezel.h; sourceTree = "<group>"; };
+		6313AC8E161A4E5300A4BFEB /* ProgressBezel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProgressBezel.m; sourceTree = "<group>"; };
+		6313AC90161ADA6E00A4BFEB /* WaitBezel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaitBezel.h; sourceTree = "<group>"; };
+		6313AC91161ADA6F00A4BFEB /* WaitBezel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WaitBezel.m; sourceTree = "<group>"; };
 		63157C04144B50250057E1D7 /* MySegmentedControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySegmentedControl.h; sourceTree = "<group>"; };
 		63157C05144B50250057E1D7 /* MySegmentedControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySegmentedControl.m; sourceTree = "<group>"; };
 		63157C13144B6C2A0057E1D7 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
@@ -170,6 +182,8 @@
 		632D8E2A1612FB7D0092F884 /* ExportSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportSelector.m; sourceTree = "<group>"; };
 		632D8E2C161313930092F884 /* Course+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Course+Import.h"; sourceTree = "<group>"; };
 		632D8E2D161313930092F884 /* Course+Import.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Course+Import.m"; sourceTree = "<group>"; };
+		6330DBF41613781700923BFF /* SaveDBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveDBViewController.h; sourceTree = "<group>"; };
+		6330DBF51613781700923BFF /* SaveDBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveDBViewController.m; sourceTree = "<group>"; };
 		63351FC914682547000E759A /* RowerBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowerBrowserController.h; sourceTree = "<group>"; };
 		63351FCA14682547000E759A /* RowerBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowerBrowserController.m; sourceTree = "<group>"; };
 		63351FD6146878E5000E759A /* MyDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDatePicker.h; sourceTree = "<group>"; };
@@ -196,6 +210,8 @@
 		6354A908142C7EC800562991 /* stop-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "stop-button-highlight.png"; path = "lib/stop-button-highlight.png"; sourceTree = SOURCE_ROOT; };
 		63561161144CC67D005A90E2 /* help-start-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-start-button.png"; sourceTree = "<group>"; };
 		63561165144CCD36005A90E2 /* help-map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-map.png"; sourceTree = "<group>"; };
+		6356D5121619646100653F08 /* Boat+Import.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Boat+Import.h"; sourceTree = "<group>"; };
+		6356D5131619646100653F08 /* Boat+Import.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Boat+Import.m"; sourceTree = "<group>"; };
 		635C332A1461CCAC007C273F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		635C332D1461CCF0007C273F /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
 		635C332E1461CCF0007C273F /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
@@ -210,6 +226,8 @@
 		637052F1144CDB80004B25A0 /* help-UIButtonBarContactAdd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-UIButtonBarContactAdd.png"; sourceTree = "<group>"; };
 		637052F3144CDD58004B25A0 /* help-course-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-course-selected.png"; sourceTree = "<group>"; };
 		637052F5144CE137004B25A0 /* help-finish.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "help-finish.png"; sourceTree = "<group>"; };
+		637A8229161B513C00002ED1 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
+		637A822A161B513C00002ED1 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		637AAA8B147BC5B200B60976 /* Plot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Plot.h; sourceTree = "<group>"; };
 		637AAA8C147BC5B200B60976 /* Plot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Plot.m; sourceTree = "<group>"; };
 		637AAA8D147BC5B200B60976 /* PlotArea.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlotArea.h; sourceTree = "<group>"; };
@@ -364,6 +382,8 @@
 		6319A66F14263D590035EB18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				637A8229161B513C00002ED1 /* MBProgressHUD.h */,
+				637A822A161B513C00002ED1 /* MBProgressHUD.m */,
 				635C52C515FE1FCC003BC1D8 /* MessageUI.framework */,
 				63E3ADE91466E265009FAECE /* AddressBook.framework */,
 				63E3ADEA1466E266009FAECE /* AddressBookUI.framework */,
@@ -547,14 +567,20 @@
 		63D0B24C1607AA96002537A7 /* Export */ = {
 			isa = PBXGroup;
 			children = (
-				63B8CD4215F9625100B31518 /* Track+Import.h */,
-				63B8CD4315F9625100B31518 /* Track+Import.m */,
-				63B8CD5815FA980300B31518 /* XMLWriter.h */,
-				63B8CD5715FA980300B31518 /* XMLWriter.m */,
 				63D0B24E1607AB36002537A7 /* DBExport.h */,
 				63D0B24F1607AB36002537A7 /* DBExport.m */,
+				63B8CD5815FA980300B31518 /* XMLWriter.h */,
+				63B8CD5715FA980300B31518 /* XMLWriter.m */,
+				63B8CD4215F9625100B31518 /* Track+Import.h */,
+				63B8CD4315F9625100B31518 /* Track+Import.m */,
 				632D8E2C161313930092F884 /* Course+Import.h */,
 				632D8E2D161313930092F884 /* Course+Import.m */,
+				6356D5121619646100653F08 /* Boat+Import.h */,
+				6356D5131619646100653F08 /* Boat+Import.m */,
+				6313AC89161A2D9F00A4BFEB /* Rower+Import.h */,
+				6313AC8A161A2D9F00A4BFEB /* Rower+Import.m */,
+				6313AC8D161A4E5300A4BFEB /* ProgressBezel.h */,
+				6313AC8E161A4E5300A4BFEB /* ProgressBezel.m */,
 			);
 			name = Export;
 			sourceTree = "<group>";
@@ -566,6 +592,8 @@
 				635C332D1461CCF0007C273F /* OptionsViewController.m */,
 				635DE9CE161255D200ACD63B /* LoadDBViewController.h */,
 				635DE9CF161255D200ACD63B /* LoadDBViewController.m */,
+				6330DBF41613781700923BFF /* SaveDBViewController.h */,
+				6330DBF51613781700923BFF /* SaveDBViewController.m */,
 				632D8E291612FB7D0092F884 /* ExportSelector.h */,
 				632D8E2A1612FB7D0092F884 /* ExportSelector.m */,
 				6316B8591470043C00DF48CB /* Track */,
@@ -579,6 +607,8 @@
 				6316B8641470246100DF48CB /* RelativeDate.m */,
 				63DE73DA1603B1D7000D2A4B /* MySlider.h */,
 				63DE73DB1603B1D7000D2A4B /* MySlider.m */,
+				6313AC90161ADA6E00A4BFEB /* WaitBezel.h */,
+				6313AC91161ADA6F00A4BFEB /* WaitBezel.m */,
 			);
 			name = Options;
 			sourceTree = "<group>";
@@ -799,6 +829,12 @@
 				635DE9D0161255D200ACD63B /* LoadDBViewController.m in Sources */,
 				632D8E2B1612FB7E0092F884 /* ExportSelector.m in Sources */,
 				632D8E2E161313930092F884 /* Course+Import.m in Sources */,
+				6330DBF61613781700923BFF /* SaveDBViewController.m in Sources */,
+				6356D5141619646100653F08 /* Boat+Import.m in Sources */,
+				6313AC8B161A2D9F00A4BFEB /* Rower+Import.m in Sources */,
+				6313AC8F161A4E5300A4BFEB /* ProgressBezel.m in Sources */,
+				6313AC92161ADA6F00A4BFEB /* WaitBezel.m in Sources */,
+				637A822B161B513C00002ED1 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
