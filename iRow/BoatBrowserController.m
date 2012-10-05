@@ -67,6 +67,11 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addBoat:)];
 }
 
+// when iCloud gives an update
+-(void)newData {
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];

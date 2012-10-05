@@ -16,4 +16,6 @@
     NSIndexPath * selected;
 }
 
+-(void)newData;
+
 @end
