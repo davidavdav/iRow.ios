@@ -9,6 +9,7 @@
 #import "LoadDBViewController.h"
 #import "DBExport.h"
 #import "Settings.h"
+#import "MBProgressHUD.h"
 
 #define kTypes @"Track",@"Course",@"Rower", @"Boat"
 
@@ -104,22 +105,29 @@
 }
 
 -(void)loadSelected:(id)sender {
-    for (int i=0; i<types.count; i++) {
-        NSString * t = [types objectAtIndex:i];
-        NSArray * array = [dict objectForKey:t];
-        for (int j=0; j<array.count; j++) if (selected[i][j]) {
-            NSData * data = [[array objectAtIndex:j] objectForKey:@"data"];
-            id item = [NSKeyedUnarchiver unarchiveObjectWithData:data]; // this inserts the item in the store
-            NSLog(@"New item loaded named %@",  [item name]);
+    [[MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES] setLabelText:@"Loading"];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (int i=0; i<types.count; i++) {
+            NSString * t = [types objectAtIndex:i];
+            NSArray * array = [dict objectForKey:t];
+            for (int j=0; j<array.count; j++) if (selected[i][j]) {
+                NSData * data = [[array objectAtIndex:j] objectForKey:@"data"];
+                id item = [NSKeyedUnarchiver unarchiveObjectWithData:data]; // this inserts the item in the store
+                NSLog(@"New item loaded named %@",  [item name]);
+            }
         }
-    }
-    NSError * error;
-    if (![Settings.sharedInstance.moc save:&error]) {
-        NSString * message = [NSString stringWithFormat:@"I'm sorry, I could not save all items, system message: %@", [error localizedDescription]];
-        UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [a show];
-    };
-    [self.navigationController popViewControllerAnimated:YES];
+        NSError * error;
+        BOOL OK = [Settings.sharedInstance.moc save:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!OK) {
+                NSString * message = [NSString stringWithFormat:@"I'm sorry, I could not save all items, system message: %@", [error localizedDescription]];
+                UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                [a show];
+            };
+            [MBProgressHUD hideAllHUDsForView:self.tabBarController.view animated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    });
 }
 
 
