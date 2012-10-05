@@ -17,6 +17,8 @@
 
 @implementation TrackBrowserController
 
+@synthesize frc;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -24,6 +26,7 @@
         // Custom initialization
         self.title = @"Tracks";
         moc = Settings.sharedInstance.moc;
+        frc=nil;
     }
     return self;
 }
@@ -36,13 +39,15 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+// before the view loads, you can set the fetched results controller. 
+
 #pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    frc = fetchedResultController(@"Track", @"date", NO, moc);
+    if (frc==nil) self.frc = fetchedResultController(@"Track", @"date", NO, moc);
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -66,6 +71,12 @@
     NSError * error;
     [frc performFetch:&error];
     [self.tableView reloadData];
+}
+
+// when iCloud gives an update
+-(void)newData {
+    NSLog(@"New data");
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)viewDidAppear:(BOOL)animated

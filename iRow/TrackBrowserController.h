@@ -14,4 +14,8 @@
     NSFetchedResultsController * frc;
 }
 
+-(void)newData;
+
+@property (strong,nonatomic) NSFetchedResultsController * frc;
+
 @end
