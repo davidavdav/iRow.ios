@@ -15,4 +15,8 @@
     NSMutableArray * rowers;
 }
 
+-(void)newData;
+
+@property (strong,nonatomic) NSFetchedResultsController * frc;
+
 @end

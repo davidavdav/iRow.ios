@@ -14,6 +14,8 @@
 
 @implementation RowerBrowserController
 
+@synthesize frc;
+
 -(void)fetchOtherRowers {
     NSError * error;
     if (![frc performFetch:&error]) {
@@ -32,8 +34,7 @@
         // Custom initialization
         self.title = @"Rowing mates";
         moc = Settings.sharedInstance.moc;
-        frc = fetchedResultController(@"Rower", @"name", YES, moc);
-//        frc.delegate = (id) self;
+        frc = nil;
 //        [self fetchOtherRowers];
     }
     return self;
@@ -59,6 +60,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (frc==nil) self.frc = fetchedResultController(@"Rower", @"name", YES, moc);
+
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -66,6 +69,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addPressed:)];
+}
+
+// when iCloud gives an update
+-(void)newData {
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)viewDidUnload
