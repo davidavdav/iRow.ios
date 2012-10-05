@@ -17,6 +17,8 @@
 
 @implementation CourseBrowserController
 
+@synthesize frc;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -24,7 +26,7 @@
         // Custom initialization
         self.title = @"Courses";
         moc = Settings.sharedInstance.moc;
-        frc = fetchedResultController(@"Course", @"name", YES, moc);        
+        frc = nil;
     }
     return self;
 }
@@ -42,6 +44,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (frc==nil) self.frc = fetchedResultController(@"Course", @"name", YES, moc);
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -49,6 +52,12 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"load" style:UIBarButtonItemStyleDone target:self action:@selector(loadPressed:)];
+}
+
+// when iCloud gives an update
+-(void)newData {
+    NSLog(@"New data");
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 }
 
 - (void)viewDidUnload

@@ -15,4 +15,8 @@
     NSIndexPath * selected;
 }
 
+-(void)newData;
+
+@property (strong,nonatomic) NSFetchedResultsController * frc;
+
 @end
