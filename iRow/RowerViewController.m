@@ -382,6 +382,7 @@
                     srvc.editing = YES;
                     srvc.multiple = NO;
                     srvc.delegate = self;
+                    srvc.title = @"Find yourself";
                     UINavigationController * nav = [[UINavigationController alloc] initWithRootViewController:srvc];
                     [self.navigationController presentModalViewController:nav animated:YES];
                     break;
