@@ -13,7 +13,7 @@
 @interface OptionsViewController : UITableViewController {
     NSArray * sectionTitles;
     NSManagedObjectContext * moc;
-    NSFetchedResultsController * frcRower;
+    NSFetchedResultsController * frcRower, * frcTrack, *frcCourse;
     Settings * settings;
 }
 

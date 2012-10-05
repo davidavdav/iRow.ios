@@ -47,6 +47,8 @@ enum {
         moc = settings.moc;
         // rower database
         frcRower = fetchedResultController(@"Rower", @"name", YES, moc);
+        frcTrack = fetchedResultController(@"Track", @"date", NO, moc);
+        frcCourse = fetchedResultController(@"Course", @"date", NO, moc);
     }
     return self;
 }
@@ -71,6 +73,7 @@ enum {
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:kNotificationICloudUpdate object:nil];
     
 }
 
@@ -79,6 +82,7 @@ enum {
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,6 +90,23 @@ enum {
     [super viewWillAppear:animated];
     NSError * error;
     [frcRower performFetch:&error];
+    [frcTrack performFetch:&error];
+    [frcCourse performFetch:&error];
+    [self.tableView reloadData];
+}
+
+-(void)iCloudUpdate:(NSNotification *) notification {
+    NSLog(@"Received update");
+    NSError * error;
+    [frcRower performFetch:&error];
+    [frcTrack performFetch:&error];
+    [frcCourse performFetch:&error];
+    id top = self.navigationController.topViewController;
+    if ([top isKindOfClass:[UITableViewController class]] && [top respondsToSelector:@selector(newData)])
+        [top performSelector:@selector(newData)];
+}
+
+-(void)newData {
     [self.tableView reloadData];
 }
 
@@ -163,6 +184,7 @@ enum {
                     break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"Browse %@s", [sectionTitles objectAtIndex:indexPath.section]];
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%d", indexPath.section==kSectionTrack ? frcTrack.fetchedObjects.count : frcCourse.fetchedObjects.count];
                     break;
             }
             break;
@@ -253,7 +275,7 @@ enum {
         case kSectionTrack:
             switch (indexPath.row) {
                 case 0: {
-                ErgometerViewController * evc = (ErgometerViewController*)[self.tabBarController.viewControllers objectAtIndex:0];
+                    ErgometerViewController * evc = (ErgometerViewController*)[self.tabBarController.viewControllers objectAtIndex:0];
                     if (evc.tracker.track.count<2) {
                         UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Sorry" message:@"You must have recorded a track.  You can do that in the Ergometer view." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
                         [a show];
@@ -266,6 +288,7 @@ enum {
                 }
                 case 1: {
                     TrackBrowserController * tbc = [[TrackBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    tbc.frc = frcTrack;
                     [self.navigationController pushViewController:tbc animated:YES];
                     break;
                 }
@@ -291,6 +314,7 @@ enum {
                 }    
                 case 1: {
                     CourseBrowserController * cbc = [[CourseBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    cbc.frc = frcCourse;
                     [self.navigationController pushViewController:cbc animated:YES];
                     break;
                 }
@@ -326,6 +350,7 @@ enum {
                 }
                 case 1: {
                     RowerBrowserController * rbc = [[RowerBrowserController alloc] initWithStyle:UITableViewStyleGrouped];
+                    rbc.frc = frcRower;
                     [self.navigationController pushViewController:rbc animated:YES];
                     break;
                 }
