@@ -9,6 +9,7 @@
 #import "iRowAppDelegate.h"
 #import "OptionsViewController.h"
 #import "LoadDBViewController.h"
+#import "MBProgressHUD.h"
 
 #import "Settings.h"
 
@@ -58,7 +59,7 @@
     }
      */
     // empty inbox
-    NSURL * inbox = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"Inbox" isDirectory:YES];
+    NSURL * inbox = [[self applicationDocumentsDirectory:YES] URLByAppendingPathComponent:@"Inbox" isDirectory:YES];
     NSError * error;
     if ([[NSFileManager defaultManager] fileExistsAtPath:inbox.path]) [[NSFileManager defaultManager] removeItemAtURL:inbox error:&error];
     return YES;
@@ -182,7 +183,7 @@
         return managedObjectContext_;
     }
     
-    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    NSPersistentStoreCoordinator * coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         NSManagedObjectContext * moc = [NSManagedObjectContext alloc];
         if ([moc respondsToSelector:@selector(initWithConcurrencyType:)]) {
@@ -190,7 +191,7 @@
             [moc performBlockAndWait:^{
                 [moc setPersistentStoreCoordinator:coordinator];
                 // even the post initialization needs to be done within the Block
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:persistentStoreCoordinator_];    
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(iCloudUpdate:) name:NSPersistentStoreDidImportUbiquitousContentChangesNotification object:coordinator];
             }];
         } else { // pre-iOS 5.0
             [moc init];
@@ -230,11 +231,21 @@
     if (persistentStoreCoordinator_ != nil) {
         return persistentStoreCoordinator_;
     }
-    // this is ios 2.0 compatible...
-    /// NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
-	NSURL * storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"iRow.sqlite"];
+    BOOL hideDB = YES; // if yes: sqlite DB moving to Library/ insread of Documents/
+    NSURL * oldURL = [[self applicationDocumentsDirectory:hideDB] URLByAppendingPathComponent:@"iRow.sqlite"];
+	NSURL * storeURL = [[self applicationDocumentsDirectory:!hideDB] URLByAppendingPathComponent:@"iRow.sqlite"];
     
-	
+    BOOL oldExists = [[NSFileManager defaultManager] fileExistsAtPath:[oldURL path]];
+    BOOL storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
+    
+    if (!storeExists && oldExists) {
+        NSError * error;
+        [[NSFileManager defaultManager] moveItemAtURL:oldURL toURL:storeURL error:&error];
+        NSLog(@"simply moved, error: %@", [error localizedDescription]);
+        oldExists = [[NSFileManager defaultManager] fileExistsAtPath:[oldURL path]];
+        storeExists = [[NSFileManager defaultManager] fileExistsAtPath:[storeURL path]];
+    }
+    
     persistentStoreCoordinator_ = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     // do this asynchronously since if this is the first time this particular device is syncing with preexisting
     // iCloud content it may take a long long time to download
@@ -243,9 +254,15 @@
         NSURL * iCloudURL;
         NSFileManager * fm = [NSFileManager defaultManager];
         NSError * error = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
+            hud.labelText = @"initializing iCloud";
+        });
         if ([fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloudURL = [fm URLForUbiquityContainerIdentifier:nil]) != nil) {
-            NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
-//            NSLog(@"ubiquity URL %@: %@", iCloudURL, [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[iCloudURL path] error:&error]);
+//            NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+//            [[NSFileManager defaultManager] removeItemAtPath:iCloudURL.path error:&error];
+//            NSLog(@"Removed iCloudURL %@", [error localizedDescription]);
+            NSLog(@"ubiquity URL %@, content:\n %@", iCloudURL, [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:[iCloudURL path] error:&error]);
             options = [NSDictionary dictionaryWithObjectsAndKeys:
                        [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
                        [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
@@ -259,15 +276,27 @@
                        nil];
         }
         [persistentStoreCoordinator_ lock];
-        if (![persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+        if (! storeExists && oldExists) {
+            NSLog(@"Moving store from %@ to %@", oldURL, storeURL);
+            NSPersistentStore * oldStore = [persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldURL options:options error:&error];
+            NSLog(@"1: Error %@", [error localizedDescription]);
+            NSPersistentStore * newStore = [persistentStoreCoordinator_ migratePersistentStore:oldStore toURL:storeURL options:options withType:NSSQLiteStoreType error:&error];
+            NSLog(@"2: Error %@", [error localizedDescription]);
+            NSLog(@"new store now %@", newStore);
+        } else if ([persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+            // this should be the second time, and presumably without problems
+            if (oldExists && ![[NSFileManager defaultManager] removeItemAtURL:oldURL error:&error])
+                NSLog(@"3: Error %@", [error localizedDescription]);
+        } else {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
-            NSString * message = @"I am very sorry.  I cannot initialize the measurements database, it is likely due to an upgrade of the iSTI app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing.";
+            NSString * message = @"I am very sorry.  I cannot initialize the database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing.";
             UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [a show];
         }
         [persistentStoreCoordinator_ unlock];
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPersistentStoreSetup object:nil];
+            [MBProgressHUD hideAllHUDsForView:self.tabBarController.view animated:YES];
             [self animateIcloud:NO];
         });
     });
@@ -294,7 +323,7 @@
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex==0) return;
-    NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory]];
+    NSURL *storeURL = [NSURL URLWithString:@"iRow.sqlite" relativeToURL:[self applicationDocumentsDirectory:NO]];
     NSError *error = nil;
     NSURL * destURL = [storeURL URLByAppendingPathExtension:@"old"];
     [[NSFileManager defaultManager] removeItemAtURL:destURL error:nil]; //  first remove old old version
@@ -315,11 +344,9 @@
 /**
  Returns the URL to the application's Documents directory.
  */
-- (NSURL *)applicationDocumentsDirectory {
-	NSURL * dir;
-    // ios 4.0
-    dir = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-	return dir;
+- (NSURL *)applicationDocumentsDirectory:(BOOL)old
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:(old ? NSDocumentDirectory : NSLibraryDirectory) inDomains:NSUserDomainMask] lastObject];
 }
 
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
