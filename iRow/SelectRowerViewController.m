@@ -48,7 +48,7 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
     if (editing) [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
-    self.title = multiple ? (editing ? @"Select rowers" : @"Rowers") : @"Select coxswain";
+    if (self.title==nil) self.title = multiple ? (editing ? @"Select rowers" : @"Rowers") : @"Select coxswain";
 }
 
 -(void)setCoxswain:(Rower *)rower {
