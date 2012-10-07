@@ -21,6 +21,7 @@
 #import "utilities.h"
 #import "LoadDBViewController.h"
 #import "SaveDBViewController.h"
+#import "FeedbackViewController.h"
 
 
 #define kSectionTitles @"Track", @"Course", @"Help", @"Rowing mates", @"Boats", @"Import/Export"
@@ -152,7 +153,7 @@ enum {
             return 2;
             break;
         case kSectionHelp:
-            return 2;
+            return 3;
         case kSectionRowers:
             return 2;
         case kSectionBoats:
@@ -181,6 +182,7 @@ enum {
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"Save Current %@", [sectionTitles objectAtIndex:indexPath.section]];
+                    if (settings.autoSave) cell.detailTextLabel.text = @"Autosaving";
                     break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"Browse %@s", [sectionTitles objectAtIndex:indexPath.section]];
@@ -191,10 +193,14 @@ enum {
         case kSectionHelp:
             switch (indexPath.row) {
                 case 0:
-                    cell.textLabel.text = @"Quick help";
+                    cell.textLabel.text = @"Settings";
                     break;
                 case 1:
-                    cell.textLabel.text = @"Settings";
+                    cell.textLabel.text = @"Quick help";
+                    break;
+                case 2:
+                    cell.textLabel.text = @"Feedback";
+                    break;
                 default:
                     break;
             }
@@ -325,14 +331,19 @@ enum {
         case kSectionHelp:
             switch (indexPath.row) {
                 case 0: {
+                    SettingsViewController * svc = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:svc animated:YES];
+                    break;
+                }
+                case 1: {
                     ;
                     InfoViewController * ivc = [[InfoViewController alloc] init];
                     [self.navigationController pushViewController:ivc animated:YES];
                     break;
                 }
-                case 1: {
-                    SettingsViewController * svc = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                    [self.navigationController pushViewController:svc animated:YES];
+                case 2: {
+                    FeedbackViewController * fbvc = [[FeedbackViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                    [self.navigationController pushViewController:fbvc animated:YES];
                     break;
                 }
             }
