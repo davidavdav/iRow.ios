@@ -276,6 +276,7 @@
                        nil];
         }
         [persistentStoreCoordinator_ lock];
+ /*
         if (! storeExists && oldExists) {
             NSLog(@"Moving store from %@ to %@", oldURL, storeURL);
             NSPersistentStore * oldStore = [persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:oldURL options:options error:&error];
@@ -283,10 +284,14 @@
             NSPersistentStore * newStore = [persistentStoreCoordinator_ migratePersistentStore:oldStore toURL:storeURL options:options withType:NSSQLiteStoreType error:&error];
             NSLog(@"2: Error %@", [error localizedDescription]);
             NSLog(@"new store now %@", newStore);
-        } else if ([persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
+        } else
+ */
+        if ([persistentStoreCoordinator_ addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:options error:&error]) {
             // this should be the second time, and presumably without problems
+/*
             if (oldExists && ![[NSFileManager defaultManager] removeItemAtURL:oldURL error:&error])
                 NSLog(@"3: Error %@", [error localizedDescription]);
+ */
         } else {
             NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
             NSString * message = @"I am very sorry.  I cannot initialize the database, it is likely due to an upgrade of the iRow app, and somehow the old data model cannot be migrated to the new one.  The only way out seems to be removal of this application, and reinstall from iTunes.  Please proceed by removing this app and re-installing.";
@@ -354,6 +359,7 @@
     self.tabBarController.selectedIndex = 2;
     LoadDBViewController * ldbvc = [[LoadDBViewController alloc] initWithStyle:UITableViewStyleGrouped];
     ldbvc.URL = url;
+    ldbvc.preSelect = YES;
     UINavigationController * nav = (UINavigationController*)[self.tabBarController.viewControllers objectAtIndex:2];
     nav.topViewController.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"cancel" style:UIBarButtonSystemItemCancel target:nil action:nil];
     [nav pushViewController:ldbvc animated:YES];
