@@ -24,8 +24,15 @@
 #define ktrack @"track"
 #define kwaterway @"waterway"
 
+#define kboat @"boat"
+#define kcourse @"course"
+#define kcoxswain @"coxswain"
+#define krowers @"rowers"
+
 #define decode(x) self.x = [dec decodeObjectForKey:k ## x]
 #define encode(x) [enc encodeObject:self.x forKey:k ## x]
+
+#define encodeLink(x) [enc encodeObject:self.x.name forKey: k ## x]
 
 @implementation Track (Import)
 
@@ -42,6 +49,7 @@
         decode(strokes);
         decode(track);
         decode(waterway);
+        // We might want to try to link some of the data here...
     }
     return self;
 }
@@ -57,6 +65,12 @@
     encode(strokes);
     encode(track);
     encode(waterway);
+    encodeLink(boat);
+    encodeLink(course);
+    encodeLink(coxswain);
+    NSMutableSet * rowersNames = [NSMutableSet setWithCapacity:self.rowers.count];
+    for (Rower * r in self.rowers) [rowersNames addObject:r.name];
+    [enc encodeObject:rowersNames forKey:krowers];
 }
 
 // This is really an export function, I wil have to rename the class...
