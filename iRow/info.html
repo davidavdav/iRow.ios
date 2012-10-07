@@ -76,7 +76,7 @@
         <p> A track is a record of a rowing trip or excercise.  It stores the location, time, and stroke profile information.  Additionally, you can add  information about the boat used and the people in the boat.  
             <ul>
                 <li>In the "Save Current Track" menu you can name the track and location, and specify the boat and the people in it.  You can always update or change this information later.</li>
-                <li>In the "Browse Tracks" menu you can select previously saved tracks, and get global statistics or view the detailed rowing speed profile.</li>
+                <li>In the "Browse Tracks" menu you can select previously saved tracks, and get global statistics or view the detailed rowing speed profile. </li>
             </ul>
     <h4>Course</h4>
         <p>A course is a fixed route that can be rowed, which allows automatic start/stop of the track statistics. You can create a course form the Map tab  by dropping pins (see above).  
@@ -93,17 +93,26 @@
             <li>Stroke sensitivity.  The stroke detection sensitivity should be set normally at about 70%&mdash;the acceleration threshold value 0.10 should show up in the title.  If you experience spurious strokes, move the slider a little to the left, if your strokes are not detected well, move the slider a little to the right.</li>
             <li>Unit system for speed and distance.  You can choose between metric (m, km, km/h) and imperial (yd, mile, mph).</li>
             <li>Speed Units.  You can choose between <i>time</i>/500m, m/s and km/h (or mph in the case of imperial units).  Note that you can also cycle through these options from the Ergometer tab view, by tapping any of the speeds shown in the display. </li>
-            <li>Stroke Profile.  Turning on the experimental support for stoke profile inspection allows you to inspect the acceleration profile of the boat during the track.  This can be done from the Options tab / Browse Tracks / <i>track</i> / Inspect Track page by pressing the "switch" button.  Note that this still is experimental as we need more stroke profile data from different rowers and different boats to make the stroke alignment algorithm better.</li>
+            <li>Track position while off. This allows for registering your track when you have turned the screen off, or when iRow is running in the background.  Normally, when a track is recorded, the auto-lock feature of the device is disabled, so that the information on the display is shown even if you don't operate the app.  If you turn the screen off manually this option might be useful, but please note that the stroke detection cannot function when another app is running in the foreground or when the screen is turned off.</li>
+            <li>Auto save tracks.  With this switched on, a track is saved every time a track recording is finished.  This can be either be because the "Finish" button is tapped, or because the finish line is crossed in course more.</li>
+            <li>Stroke Profile.  Turning on the experimental support for stroke profile inspection allows you to inspect the acceleration profile of the boat during the track.  This can be done from the Options tab / Browse Tracks / <i>track</i> / Inspect Track page by pressing the "switch" button.  Note that this still is experimental as we need more stroke profile data from different rowers and different boats to make the stroke alignment algorithm better.</li>
+            <li>100Hz sampling.  This option causes the frequency of data acquisition from the accelerometers to be 100 Hz, which appears to be the hardware limit of the accelerometers in the iPhone.  This may result in less noisy stroke profile recording, but may also drain the batteries quicker.  Note that even with this option on, the accelerometer data is stored at 10Hz.</li>
+            <li>Auto orientation.  This option alows you to position the device in any orientation.  After a couple of strokes the direction of movement should be picked up automatically.  Note that the stroke profile display still only shows the acceleration along the length-direction of the iPhone.</li>
         </ul>
     
     <h4>Rowing Mates</h4>
         <p>By keeping a small database of the people you regularly row with, you can easily specify who was participating in each track you store.  This then allows for computing statistics such as total mass, available power etc.  You are one of the people in the database, but you have a separate entry.  While adding a person to the database, it is possible to choose someone from the Addressbook app in your iDevice.  
 
     <h4>Boats</h4>
-        <p>You can also enter the boats you row in the database, and specify the name, type, weight and build date.  You can indicate which boat you used when storing a track. 
+        <p>You can also enter the boats you row in the database, and specify the name, type, weight and build date.  You can indicate which boat you used when storing a track.</p>
+    <h4>Import/Export</h4>
+        <p> You can import tracks, courses, rowing mates and boats from iTunes or e-mail.  If you connect the device to iTunes, select the decive, go to the "Apps" tab, scroll down to "File Sharing," and click the iRow icon. Under "Documents" you can then add files of the type "iRow" that you may receive from other users of the iRow app.  If the files are sent to you by e-mail, you can directly open these in iRow from the e-mail App.  All data base items found are shown, and you can select which ones to import in the database by tapping them.  Note that importing one or several items does not link the relations in the database, e.g., when you import your friend's track that was rowed in her boat, the "boat" entry is left blank because you may not have that boat in your database.</p>
+        <p>You can export iRow database items (tracks, courses, rowing mates and boats) by tapping "Export database."  You can choose between iTunes and e-mail.  With iTunes, the data base files show up under "Documents" of your App's File Sharing proerties in iTunes.  You can also select e-mail to send the file to yourself or a rowing mate by e-mail. </p>
+        <p>In the various sub-menus there are separate import/export options as well.  In "Browse Tracks" and "Browse course" you have the option to save the track or course in Google Earth's <tt>kml</tt> format.  You can export this <tt>kml</tt> by e-mail or though iTunes.</p>
+        
   <h3>iCloud support</h3>
     <img src="AppleAccountSettings_icloud.png">
-    <p> The database (tracks, courses, rowers and boats) is automatically synchonized with iCloud if you have activated iCloud.  When you install this app on another iDevice (e.g., an iPad) the existing iCloud database is downloaded and further kept synchonized.
+    <p> The database (tracks, courses, rowers and boats) is automatically synchonized with iCloud if you have activated iCloud.  When you install this app on another iDevice (e.g., an iPad) the existing iCloud database is downloaded and further kept synchronized.
         
 <p>
 Copyright &copy; 2011&ndash;2012 strApps. All rights reserved.
