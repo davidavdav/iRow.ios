@@ -17,7 +17,7 @@
 		63157C19144B910E0057E1D7 /* UIButtonBarInfoDark.png in Resources */ = {isa = PBXBuildFile; fileRef = 63157C18144B910E0057E1D7 /* UIButtonBarInfoDark.png */; };
 		6316B84D146A74AD00DF48CB /* CourseBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B84C146A74AD00DF48CB /* CourseBrowserController.m */; };
 		6316B84F146AE6C800DF48CB /* CourseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B84E146AE6C800DF48CB /* CourseViewController.m */; };
-		6316B85C1470049A00DF48CB /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B85B1470049A00DF48CB /* - files */; };
+		6316B85C1470049A00DF48CB /* TrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B85B1470049A00DF48CB /* TrackViewController.m */; };
 		6316B8651470246200DF48CB /* RelativeDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B8641470246100DF48CB /* RelativeDate.m */; };
 		6316B8681471838F00DF48CB /* TrackBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B8671471838F00DF48CB /* TrackBrowserController.m */; };
 		6316B86B14718E4E00DF48CB /* InspectTrackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6316B86A14718E4E00DF48CB /* InspectTrackViewController.m */; };
@@ -40,6 +40,8 @@
 		632D8E2B1612FB7E0092F884 /* ExportSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2A1612FB7D0092F884 /* ExportSelector.m */; };
 		632D8E2E161313930092F884 /* Course+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2D161313930092F884 /* Course+Import.m */; };
 		6330DBF61613781700923BFF /* SaveDBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6330DBF51613781700923BFF /* SaveDBViewController.m */; };
+		633296211621E03D001ECF8A /* Track+New.m in Sources */ = {isa = PBXBuildFile; fileRef = 633296201621E03D001ECF8A /* Track+New.m */; };
+		6332962416221A01001ECF8A /* FeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6332962316221A01001ECF8A /* FeedbackViewController.m */; };
 		63351FCB14682547000E759A /* RowerBrowserController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FCA14682547000E759A /* RowerBrowserController.m */; };
 		63351FD8146878E6000E759A /* MyDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 63351FD7146878E5000E759A /* MyDatePicker.m */; };
 		634A7F69142647270001BF57 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634A7F68142647270001BF57 /* CoreLocation.framework */; };
@@ -184,6 +186,10 @@
 		632D8E2D161313930092F884 /* Course+Import.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Course+Import.m"; sourceTree = "<group>"; };
 		6330DBF41613781700923BFF /* SaveDBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaveDBViewController.h; sourceTree = "<group>"; };
 		6330DBF51613781700923BFF /* SaveDBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaveDBViewController.m; sourceTree = "<group>"; };
+		6332961F1621E03D001ECF8A /* Track+New.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Track+New.h"; sourceTree = "<group>"; };
+		633296201621E03D001ECF8A /* Track+New.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Track+New.m"; sourceTree = "<group>"; };
+		6332962216221A01001ECF8A /* FeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackViewController.h; sourceTree = "<group>"; };
+		6332962316221A01001ECF8A /* FeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackViewController.m; sourceTree = "<group>"; };
 		63351FC914682547000E759A /* RowerBrowserController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RowerBrowserController.h; sourceTree = "<group>"; };
 		63351FCA14682547000E759A /* RowerBrowserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RowerBrowserController.m; sourceTree = "<group>"; };
 		63351FD6146878E5000E759A /* MyDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDatePicker.h; sourceTree = "<group>"; };
@@ -441,6 +447,8 @@
 				6319A67914263D590035EB18 /* InfoPlist.strings */,
 				6319A67C14263D590035EB18 /* main.m */,
 				6319A67E14263D590035EB18 /* iRow-Prefix.pch */,
+				6332961F1621E03D001ECF8A /* Track+New.h */,
+				633296201621E03D001ECF8A /* Track+New.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -463,6 +471,8 @@
 				63157C14144B6C2A0057E1D7 /* InfoViewController.m */,
 				638EC0BF14783BC9004B1B02 /* SettingsViewController.h */,
 				638EC0C014783BC9004B1B02 /* SettingsViewController.m */,
+				6332962216221A01001ECF8A /* FeedbackViewController.h */,
+				6332962316221A01001ECF8A /* FeedbackViewController.m */,
 			);
 			name = Info;
 			sourceTree = "<group>";
@@ -835,6 +845,8 @@
 				6313AC8F161A4E5300A4BFEB /* ProgressBezel.m in Sources */,
 				6313AC92161ADA6F00A4BFEB /* WaitBezel.m in Sources */,
 				637A822B161B513C00002ED1 /* MBProgressHUD.m in Sources */,
+				633296211621E03D001ECF8A /* Track+New.m in Sources */,
+				6332962416221A01001ECF8A /* FeedbackViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
