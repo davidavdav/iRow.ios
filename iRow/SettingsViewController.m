@@ -40,6 +40,9 @@
         autoOrientationSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
         autoOrientationSwitch.on = settings.autoOrientation;
         [autoOrientationSwitch addTarget:self action:@selector(autoOrientationSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+        autoSaveSwitch = [[UISwitch alloc] initWithFrame:CGRectZero];
+        autoSaveSwitch.on = settings.autoSave;
+        [autoSaveSwitch addTarget:self action:@selector(autoSaveSwitchChanged:) forControlEvents:UIControlEventValueChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(unitsChanged:) name:@"unitsChanged" object:nil];
     }
     return self;
@@ -126,7 +129,7 @@
             return @"Background updating";
             break;
         case 3:
-            return @"Experimental";
+            return @"Extra";
             break;
         default:
             break;
@@ -143,7 +146,7 @@
             return @"The speed unit can also be changed by tapping the speed from the ergometer tab."; 
             break;
         case 3:
-            return @"The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  This is an experimental feature.  The 100Hz sampling sets the hardware acceleration sampling to 100Hz instead of 10 Hz.";
+            return @"The following settings are experimental: The stroke profile is available from the 'inspect track' selection while browsing stored tracks.  You can see the acceleration profile for three consecutive strokes.  The 100Hz sampling sets the hardware acceleration sampling to 100Hz instead of 10 Hz, the samples are still recorded at 10Hz.  Auto orientation means that you do not need to position the iPhone along the leng direction.";
         default:
             break;
     }
@@ -153,7 +156,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    static int nsec[4] = {1, 2, 1, 3};
+    static int nsec[4] = {1, 2, 1, 4};
     return nsec[section];
 }
 
@@ -215,15 +218,19 @@
         case 3: {
             switch (indexPath.row) {
                 case 0:
+                    cell.textLabel.text = @"Auto save tracks";
+                    cell.accessoryView = autoSaveSwitch;
+                    break;
+                case 1:
                     cell.textLabel.text = @"Stoke profile support";
                     cell.accessoryView = strokeViewSwitch;
                     break;
-                case 1:
+                case 2:
                     cell.textLabel.text = @"100Hz sampling";
                     cell.accessoryView = hundredHzSamplingSwitch;
                     break;
-                case 2:
-                    cell.textLabel.text = @"auto orientation";
+                case 3:
+                    cell.textLabel.text = @"Auto orientation";
                     cell.accessoryView = autoOrientationSwitch;
                     break;
                 default:
@@ -290,13 +297,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
 }
 
 #pragma mark - UI events
@@ -327,6 +327,10 @@
 
 -(void)autoOrientationSwitchChanged:(id)sender {
     settings.autoOrientation = autoOrientationSwitch.on;
+}
+
+-(void)autoSaveSwitchChanged:(id)sender {
+    settings.autoSave = autoSaveSwitch.on;
 }
 
 #pragma mark UIPickerViewDatasource

@@ -15,7 +15,7 @@
     double logSensitivity;
     NSArray * unitSystems;
     UITextField * unitSystemTextField;
-    UISwitch * strokeViewSwitch, *trackingInBackgroundSwitch, *hundredHzSamplingSwitch, *autoOrientationSwitch;
+    UISwitch * strokeViewSwitch, *trackingInBackgroundSwitch, *hundredHzSamplingSwitch, *autoOrientationSwitch, *autoSaveSwitch;
     UITextField * speedUnitTextField;
 }
 
