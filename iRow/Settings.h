@@ -34,6 +34,7 @@ enum {
     BOOL backgroundTracking;
     BOOL hundredHzSampling;
     BOOL autoOrientation;
+    BOOL autoSave;
 }
 
 @property (nonatomic, readonly) NSManagedObjectContext * moc;
@@ -47,7 +48,7 @@ enum {
 @property (nonatomic) double minSpeed;
 @property (nonatomic) BOOL showStrokeProfile;
 @property (nonatomic) BOOL backgroundTracking;
-@property (nonatomic) BOOL hundredHzSampling, autoOrientation;
+@property (nonatomic) BOOL hundredHzSampling, autoOrientation, autoSave;
 
 // from the general settings:
 @property (nonatomic) int unitSystem;

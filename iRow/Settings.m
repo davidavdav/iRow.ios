@@ -17,7 +17,7 @@
 @synthesize minSpeed;
 @synthesize showStrokeProfile;
 @synthesize backgroundTracking;
-@synthesize hundredHzSampling, autoOrientation;
+@synthesize hundredHzSampling, autoOrientation, autoSave;
 
 // we can't init the courseDaa objet, because it needs the sharedSettings instace. 
 // this would lead to a recursive loop. 
@@ -36,6 +36,7 @@
         backgroundTracking = [ud boolForKey:@"backgroundTracking"];
         hundredHzSampling = [ud boolForKey:@"hundredHzSampling"];
         autoOrientation = [ud boolForKey:@"autoOrientation"];
+        autoSave = [ud boolForKey:@"autoSave"];
         [self reloadUserDefaults];
     }
     
@@ -185,6 +186,12 @@
     [ud setBool:b forKey:@"autoOrientation"];
     [ud synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"autoOrientationChanged" object:nil];
+}
+
+-(void)setAutoSave:(BOOL)b {
+    autoSave = b;
+    [ud setBool:b forKey:@"autoSave"];
+    [ud synchronize];
 }
 
 @end
