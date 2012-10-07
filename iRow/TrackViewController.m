@@ -15,6 +15,7 @@
 #import "SelectRowerViewController.h"
 #import "DBExport.h"
 #import "MySlider.h"
+#import "Track+New.h"
 
 enum {
     kSecDetail=0,
@@ -54,6 +55,7 @@ enum {
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
+        mvc = (MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1];
         frcBoats = fetchedResultController(@"Boat", @"name", YES, settings.moc);
         frcRowers = fetchedResultController(@"Rower", @"name", YES, settings.moc);
         minSpeed = settings.minSpeed;
@@ -116,21 +118,11 @@ enum {
     [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(savePressed:)] animated:YES];
     [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPressed:)] animated:YES];
     if (track == nil) {
-        track = (Track*)[NSEntityDescription insertNewObjectForEntityForName:@"Track" inManagedObjectContext:settings.moc];
-        if (trackData) {
-            track.track = [NSKeyedArchiver archivedDataWithRootObject:trackData];
-            track.distance = [NSNumber numberWithFloat:trackData.totalDistance];
-            track.locality = trackData.locality;
-            track.name = [trackData.startLocation.timestamp mediumshortDateTime];
-        }
-        if (evc.stroke) {
-            track.strokes = [NSNumber numberWithInt:evc.stroke.strokes];
-            track.motion = [NSKeyedArchiver archivedDataWithRootObject:evc.stroke];
-        }
+        track = [Track newTrackWithTrackdata:trackData stroke:evc.stroke inManagedObjectContext:settings.moc];
         track.boat = settings.currentBoat;
-        track.date = trackData.stopLocation.timestamp;
         track.period = [NSNumber numberWithFloat:evc.tracker.period];
-    } 
+        if (mvc.courseMode && mvc.courseData.isValid) track.course = settings.currentCourse;
+    }
     self.editing = YES;
 }
 

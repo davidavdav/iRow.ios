@@ -14,6 +14,7 @@
 #import "Track.h"
 #import "TrackData.h"
 #import "ErgometerViewController.h"
+#import "MapViewController.h"
 #import "SelectRowerViewControllerDelegate.h"
 #import "Stroke.h"
 #import "ExportSelector.h"
@@ -25,6 +26,7 @@
     Track * track;
     Stroke * stroke;
     ErgometerViewController * evc;
+    MapViewController * mvc;
     BOOL editing;
     NSFetchedResultsController * frcBoats, *frcRowers;
     UITextField * boatTextView;
