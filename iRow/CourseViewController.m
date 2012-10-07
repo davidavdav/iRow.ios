@@ -52,6 +52,7 @@
             course.course = [NSKeyedArchiver archivedDataWithRootObject:courseData];
             course.waterway = courseData.waterway;
             course.distance = [NSNumber numberWithFloat:courseData.length];
+            course.author = [NSSet setWithObject:settings.user]; // bug in data model?
         }
     } 
     self.editing = YES;
