@@ -8,6 +8,7 @@
 
 #import "ErgometerViewController.h"
 #import "utilities.h"
+#import "Track+New.h"
 
 #define kStrokeAveragingDuration (5.0)
 
@@ -316,12 +317,31 @@ enum {
             [mapViewController copyTrackPins];
             [[Settings sharedInstance] setObject:tracker.track forKey:@"lastTrack"];
             [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+            if (settings.autoSave) {
+                Track * newTrack = [Track newTrackWithTrackdata:tracker.track stroke:stroke inManagedObjectContext:settings.moc];
+                newTrack.boat = settings.currentBoat;
+                newTrack.period = [NSNumber numberWithFloat:tracker.period];
+                if (mapViewController.courseMode && cc.isValid) newTrack.course = settings.currentCourse;
+                NSError * error;
+                if ([settings.moc save:&error]) {
+                    UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Saved" message:[NSString stringWithFormat:@"This track has been saved with name %@",newTrack.name] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [self performSelector:@selector(dismissMessage:) withObject:a afterDelay:2.0];
+                    [a show];
+                } else {
+                    UIAlertView * a = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Sorry, I could not save this track" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                    [a show];
+                }
+            }
             break;
         default:
             break;
     }
     
     [self setButtonAppearance];
+}
+
+-(void)dismissMessage:(UIAlertView *)alertView {
+    if (alertView != nil) [alertView dismissWithClickedButtonIndex:0 animated:YES];
 }
 
 -(void)sensitivityChanged:(NSNotification*)notification {
@@ -352,9 +372,6 @@ enum {
 //        [[UIScreen mainScreen] setBrightness:brightness];
     }];
 }
-
-
-
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
