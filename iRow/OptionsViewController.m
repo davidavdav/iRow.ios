@@ -182,7 +182,7 @@ enum {
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = [NSString stringWithFormat:@"Save Current %@", [sectionTitles objectAtIndex:indexPath.section]];
-                    if (settings.autoSave) cell.detailTextLabel.text = @"Autosaving";
+                    if (indexPath.section==kSectionTrack && settings.autoSave) cell.detailTextLabel.text = @"Autosaving";
                     break;
                 case 1:
                     cell.textLabel.text = [NSString stringWithFormat:@"Browse %@s", [sectionTitles objectAtIndex:indexPath.section]];
