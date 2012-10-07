@@ -19,8 +19,12 @@
 #define kname @"name"
 #define kwaterway @"waterway"
 
+#define kauthor @"author"
+
 #define decode(x) self.x = [dec decodeObjectForKey:k ## x]
 #define encode(x) [enc encodeObject:self.x forKey:k ## x]
+
+#define encodeLink(x) [enc encodeObject:self.x.name forKey: k ## x]
 
 @implementation Course (Import)
 
