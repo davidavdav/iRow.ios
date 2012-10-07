@@ -262,7 +262,7 @@
 //            NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
 //            [[NSFileManager defaultManager] removeItemAtPath:iCloudURL.path error:&error];
 //            NSLog(@"Removed iCloudURL %@", [error localizedDescription]);
-            NSLog(@"ubiquity URL %@, content:\n %@", iCloudURL, [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:[iCloudURL path] error:&error]);
+//            NSLog(@"ubiquity URL %@, content:\n %@", iCloudURL, [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:[iCloudURL path] error:&error]);
             options = [NSDictionary dictionaryWithObjectsAndKeys:
                        [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
                        [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, 
