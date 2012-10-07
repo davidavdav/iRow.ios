@@ -29,7 +29,7 @@
 -(id)init {
     self = [super init];
     if (self) {
-        self.title = @"Info";
+        self.title = @"Help";
         self.tabBarItem.image = [UIImage imageNamed:@"UIButtonBarInfoDark"];
         
     }
