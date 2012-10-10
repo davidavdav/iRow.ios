@@ -9,7 +9,7 @@
 #import "iRowAppDelegate.h"
 #import "OptionsViewController.h"
 #import "LoadDBViewController.h"
-#import "MBProgressHUD.h"
+//#import "MBProgressHUD.h"
 
 #import "Settings.h"
 
@@ -254,10 +254,9 @@
         NSURL * iCloudURL;
         NSFileManager * fm = [NSFileManager defaultManager];
         NSError * error = nil;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            MBProgressHUD * hud = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
-            hud.labelText = @"initializing iCloud";
-        });
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [[MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES] setLabelText:@"initializing iCloud"];
+//        });
         if ([fm respondsToSelector:@selector(URLForUbiquityContainerIdentifier:)] && (iCloudURL = [fm URLForUbiquityContainerIdentifier:nil]) != nil) {
 //            NSURL * iCloudURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
 //            [[NSFileManager defaultManager] removeItemAtPath:iCloudURL.path error:&error];
@@ -301,7 +300,7 @@
         [persistentStoreCoordinator_ unlock];
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationPersistentStoreSetup object:nil];
-            [MBProgressHUD hideAllHUDsForView:self.tabBarController.view animated:YES];
+//            [MBProgressHUD hideAllHUDsForView:self.tabBarController.view animated:YES];
             [self animateIcloud:NO];
         });
     });
