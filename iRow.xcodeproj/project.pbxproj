@@ -31,7 +31,6 @@
 		6319A68414263D590035EB18 /* ErgometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68314263D590035EB18 /* ErgometerViewController.m */; };
 		6319A68614263D590035EB18 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68514263D590035EB18 /* first.png */; };
 		6319A68814263D590035EB18 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68714263D590035EB18 /* first@2x.png */; };
-		6319A68B14263D590035EB18 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6319A68A14263D590035EB18 /* MapViewController.m */; };
 		6319A68D14263D590035EB18 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68C14263D590035EB18 /* second.png */; };
 		6319A68F14263D590035EB18 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68E14263D590035EB18 /* second@2x.png */; };
 		6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* ErgometerViewController.xib */; };
@@ -90,6 +89,7 @@
 		63AE9738143CF9D300C63178 /* gray-disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE9735143CF9D300C63178 /* gray-disabled.png */; };
 		63AE973F14405EF400C63178 /* wait-button.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973D14405EF100C63178 /* wait-button.png */; };
 		63AE974014405EF400C63178 /* wait-button-highlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 63AE973E14405EF300C63178 /* wait-button-highlight.png */; };
+		63B2C50C162BDBDA00B17906 /* MMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B2C50B162BDBDA00B17906 /* MMapViewController.m */; };
 		63B6D38D15E371590029EF01 /* iCloud.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D38B15E371590029EF01 /* iCloud.png */; };
 		63B6D38E15E371590029EF01 /* iCloud@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D38C15E371590029EF01 /* iCloud@2x.png */; };
 		63B6D39115E76A340029EF01 /* lowp-10.100.filt in Resources */ = {isa = PBXBuildFile; fileRef = 63B6D39015E76A340029EF01 /* lowp-10.100.filt */; };
@@ -172,8 +172,6 @@
 		6319A68314263D590035EB18 /* ErgometerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ErgometerViewController.m; sourceTree = "<group>"; };
 		6319A68514263D590035EB18 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		6319A68714263D590035EB18 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		6319A68914263D590035EB18 /* MapViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		6319A68A14263D590035EB18 /* MapViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		6319A68C14263D590035EB18 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		6319A68E14263D590035EB18 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
 		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ErgometerViewController.xib; sourceTree = "<group>"; };
@@ -263,6 +261,8 @@
 		63AE9735143CF9D300C63178 /* gray-disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "gray-disabled.png"; sourceTree = "<group>"; };
 		63AE973D14405EF100C63178 /* wait-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button.png"; sourceTree = "<group>"; };
 		63AE973E14405EF300C63178 /* wait-button-highlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wait-button-highlight.png"; sourceTree = "<group>"; };
+		63B2C50A162BDBDA00B17906 /* MMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMapViewController.h; sourceTree = "<group>"; };
+		63B2C50B162BDBDA00B17906 /* MMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMapViewController.m; sourceTree = "<group>"; };
 		63B6D38B15E371590029EF01 /* iCloud.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = iCloud.png; sourceTree = "<group>"; };
 		63B6D38C15E371590029EF01 /* iCloud@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "iCloud@2x.png"; sourceTree = "<group>"; };
 		63B6D39015E76A340029EF01 /* lowp-10.100.filt */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lowp-10.100.filt"; sourceTree = "<group>"; };
@@ -642,8 +642,8 @@
 		63E3ADC51462072B009FAECE /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				6319A68914263D590035EB18 /* MapViewController.h */,
-				6319A68A14263D590035EB18 /* MapViewController.m */,
+				63B2C50A162BDBDA00B17906 /* MMapViewController.h */,
+				63B2C50B162BDBDA00B17906 /* MMapViewController.m */,
 				63192D721443509A001FB831 /* ShiftButton.h */,
 				63192D731443509A001FB831 /* ShiftButton.m */,
 				63696BAE144A28480069FC9C /* CrossHair.h */,
@@ -789,7 +789,6 @@
 				6319A67D14263D590035EB18 /* main.m in Sources */,
 				6319A68114263D590035EB18 /* iRowAppDelegate.m in Sources */,
 				6319A68414263D590035EB18 /* ErgometerViewController.m in Sources */,
-				6319A68B14263D590035EB18 /* MapViewController.m in Sources */,
 				634A7F711427311F0001BF57 /* Tracker.m in Sources */,
 				634A7F861427DFE90001BF57 /* Stroke.m in Sources */,
 				634A7F8F1428B2240001BF57 /* Filter.m in Sources */,
@@ -843,6 +842,7 @@
 				637A822B161B513C00002ED1 /* MBProgressHUD.m in Sources */,
 				633296211621E03D001ECF8A /* Track+New.m in Sources */,
 				6332962416221A01001ECF8A /* FeedbackViewController.m in Sources */,
+				63B2C50C162BDBDA00B17906 /* MMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
