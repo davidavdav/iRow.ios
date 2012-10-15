@@ -55,7 +55,7 @@ enum {
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];        
         evc = (ErgometerViewController*)[delegate.tabBarController.viewControllers objectAtIndex:0];
-        mvc = (MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1];
+        mvc = (MMapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1];
         frcBoats = fetchedResultController(@"Boat", @"name", YES, settings.moc);
         frcRowers = fetchedResultController(@"Rower", @"name", YES, settings.moc);
         minSpeed = settings.minSpeed;

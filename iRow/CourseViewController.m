@@ -22,7 +22,7 @@
         // Custom initialization
         settings = Settings.sharedInstance;
         iRowAppDelegate * delegate = (iRowAppDelegate*)[[UIApplication sharedApplication] delegate];
-        courseData = [(MapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] courseData];
+        courseData = [(MMapViewController*)[delegate.tabBarController.viewControllers objectAtIndex:1] courseData];
         es = [[ExportSelector alloc] init];
         es.viewController = self;
         es.recipients = [NSArray arrayWithObject:[NSString stringWithFormat:@"%@ <%@>",settings.user.name, settings.user.email]];

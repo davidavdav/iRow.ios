@@ -11,7 +11,7 @@
 #import "utilities.h"
 #import "CourseViewController.h"
 #import "TrackViewController.h"
-#import "MapViewController.h"
+#import "MMapViewController.h"
 #import "LoadDBViewController.h"
 #import "SaveDBViewController.h"
 

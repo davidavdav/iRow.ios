@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MapViewController.h"
+#import "MMapViewController.h"
 #import "Course.h"
 #import "Settings.h"
 #import "ExportSelector.h"
