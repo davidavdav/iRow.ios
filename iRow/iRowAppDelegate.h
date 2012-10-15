@@ -10,12 +10,12 @@
 #import <CoreData/CoreData.h>
 
 #import "ErgometerViewController.h"
-#import "MapViewController.h"
+#import "MMapViewController.h"
 
 
 @interface iRowAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate, UIAlertViewDelegate> {
     ErgometerViewController * ergometerViewController;
-    MapViewController * mapViewController;
+    MMapViewController * mapViewController;
     NSManagedObjectContext * managedObjectContext_;
     NSManagedObjectModel *managedObjectModel_;
     NSPersistentStoreCoordinator *persistentStoreCoordinator_;

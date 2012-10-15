@@ -25,8 +25,9 @@
 //    NSLog(@"Launch options %@", launchOptions);
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
+//    NSLog(@"screen height %4.1f", self.window.bounds.size.height);
     ergometerViewController = [[ErgometerViewController alloc] initWithNibName:@"ErgometerViewController" bundle:nil];
-    mapViewController = [[MapViewController alloc] initWithNibName:@"MapViewController" bundle:nil];
+    mapViewController = [[MMapViewController alloc] init];
     ergometerViewController.mapViewController = mapViewController;
     mapViewController.ergometerViewController = ergometerViewController;
     OptionsViewController * settingsViewController = [[OptionsViewController alloc] initWithStyle:UITableViewStyleGrouped];
