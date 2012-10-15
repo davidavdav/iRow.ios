@@ -12,7 +12,7 @@
 
 #import "Tracker.h"
 #import "Stroke.h"
-#import "MapViewController.h"
+#import "MMapViewController.h"
 #import "Settings.h"
 
 enum {
@@ -34,7 +34,7 @@ enum {
     IBOutlet UILabel * distanceUnitLabel;
     IBOutlet UILabel * totalOrLeft;
     UIView * strokeBeat;
-    MapViewController * mapViewController;
+    MMapViewController * mapViewController;
     // button colors/images
     UIImage * buttonImage[6];
     // location
@@ -76,7 +76,7 @@ enum {
 @property (strong, nonatomic) Tracker * tracker;
 @property (readonly) int trackingState;
 
-@property (strong, nonatomic) MapViewController * mapViewController;
+@property (strong, nonatomic) MMapViewController * mapViewController;
 
 -(IBAction)startPressed:(id)sender;
 

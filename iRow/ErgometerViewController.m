@@ -35,7 +35,9 @@ enum {
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+//    NSLog(@"Nibname %@", nibBundleOrNil);
+   if (self) {
+//        NSLog(@"Ergometer height %4.1f", self.view.frame.size.height);
         self.title = NSLocalizedString(@"Ergometer", @"Ergometer");
         self.tabBarItem.image = [UIImage imageNamed:@"first"];
         settings = Settings.sharedInstance;
