@@ -35,7 +35,6 @@
 		6319A68D14263D590035EB18 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68C14263D590035EB18 /* second.png */; };
 		6319A68F14263D590035EB18 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6319A68E14263D590035EB18 /* second@2x.png */; };
 		6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69014263D590035EB18 /* ErgometerViewController.xib */; };
-		6319A69514263D590035EB18 /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6319A69314263D590035EB18 /* MapViewController.xib */; };
 		632D8E1F1612DFE40092F884 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 632D8E1E1612DFE40092F884 /* Default-568h@2x.png */; };
 		632D8E2B1612FB7E0092F884 /* ExportSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2A1612FB7D0092F884 /* ExportSelector.m */; };
 		632D8E2E161313930092F884 /* Course+Import.m in Sources */ = {isa = PBXBuildFile; fileRef = 632D8E2D161313930092F884 /* Course+Import.m */; };
@@ -178,7 +177,6 @@
 		6319A68C14263D590035EB18 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		6319A68E14263D590035EB18 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
 		6319A69114263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ErgometerViewController.xib; sourceTree = "<group>"; };
-		6319A69414263D590035EB18 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MapViewController.xib; sourceTree = "<group>"; };
 		632D8E1E1612DFE40092F884 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../../Default-568h@2x.png"; sourceTree = "<group>"; };
 		632D8E291612FB7D0092F884 /* ExportSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExportSelector.h; sourceTree = "<group>"; };
 		632D8E2A1612FB7D0092F884 /* ExportSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExportSelector.m; sourceTree = "<group>"; };
@@ -646,7 +644,6 @@
 			children = (
 				6319A68914263D590035EB18 /* MapViewController.h */,
 				6319A68A14263D590035EB18 /* MapViewController.m */,
-				6319A69314263D590035EB18 /* MapViewController.xib */,
 				63192D721443509A001FB831 /* ShiftButton.h */,
 				63192D731443509A001FB831 /* ShiftButton.m */,
 				63696BAE144A28480069FC9C /* CrossHair.h */,
@@ -700,7 +697,7 @@
 		6319A66314263D590035EB18 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = strApps;
 			};
 			buildConfigurationList = 6319A66614263D590035EB18 /* Build configuration list for PBXProject "iRow" */;
@@ -731,7 +728,6 @@
 				6319A68D14263D590035EB18 /* second.png in Resources */,
 				6319A68F14263D590035EB18 /* second@2x.png in Resources */,
 				6319A69214263D590035EB18 /* ErgometerViewController.xib in Resources */,
-				6319A69514263D590035EB18 /* MapViewController.xib in Resources */,
 				6354A904142C7CCA00562991 /* start-button.png in Resources */,
 				6354A905142C7CCA00562991 /* start-button-highlight.png in Resources */,
 				6354A909142C7EC800562991 /* stop-button.png in Resources */,
@@ -867,14 +863,6 @@
 				6319A69114263D590035EB18 /* en */,
 			);
 			name = ErgometerViewController.xib;
-			sourceTree = "<group>";
-		};
-		6319A69314263D590035EB18 /* MapViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6319A69414263D590035EB18 /* en */,
-			);
-			name = MapViewController.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
