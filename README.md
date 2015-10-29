@@ -1,6 +1,8 @@
 # iRow.ios
 An app for rowing, with tracking and performance stats.
 
+![logo](iRow/iRow/Icon@2x.png)
+
 ## History
 
 This app has been in the app store until September 2013, with reasonable reviews.  I've taken it out
